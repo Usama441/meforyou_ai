@@ -1,0 +1,31 @@
+<main class="edit-container">
+  <div class="edit-box">
+    <h1>Edit Profile</h1>
+    <%= form_for(resource, as: :user, url: registration_path(:user), html: { method: :put }) do |form| %>
+      <%= render 'devise/shared/error_messages', resource: resource %>
+
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+
+      <%= form.label :ai_name %>
+      <%= form.text_field :ai_name %>
+
+      <%= form.label :relationship %>
+      <%= form.select :relationship, ["friend", "mother", "partner", "mentor", "assistant"], prompt: "Select one" %>
+
+      <%= form.label :email %>
+      <%= form.email_field :email %>
+
+      <%= form.label :password, "New password (leave blank if you don't want to change it)" %>
+      <%= form.password_field :password %>
+
+      <%= form.label :password_confirmation %>
+      <%= form.password_field :password_confirmation %>
+
+      <%= form.label :current_password, "Current password (required to update profile)" %>
+      <%= form.password_field :current_password %>
+
+      <%= form.submit "Update" %>
+    <% end %>
+  </div>
+</main>

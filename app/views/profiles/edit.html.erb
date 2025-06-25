@@ -1,0 +1,20 @@
+<h2>Customize Your Experience</h2>
+
+<%= form_for current_user, url: profile_path, method: :patch do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :ai_name, "AI Name" %>
+    <%= f.text_field :ai_name %>
+  </div>
+
+  <div>
+    <%= f.label :relationship %>
+    <%= f.select :relationship, ["friend", "mother", "partner", "mentor", "assistant"] %>
+  </div>
+
+  <%= f.submit "Save Preferences", class: "bg-blue-600 text-white px-4 py-2 rounded" %>
+<% end %>

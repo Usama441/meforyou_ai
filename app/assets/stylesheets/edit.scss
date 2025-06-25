@@ -1,0 +1,15 @@
+.edit-container {
+  @include flex-center;
+  background: #eef2f8;
+  min-height: 100vh;
+}
+
+.edit-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
