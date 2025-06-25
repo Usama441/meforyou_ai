@@ -1,0 +1,18 @@
+.login-container {
+  @include flex-center;
+  background: #fdfdfd;
+  min-height: 100vh;
+}
+
+.login-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background-color: cadetblue;
+}

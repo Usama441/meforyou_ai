@@ -1,0 +1,12 @@
+@import "auth_buttons";
+@import "mixins";
+@import "custom";
+@import "signup";
+@import "login";
+@import "edit";
+
+// Base style
+body {
+  background: #f5f5f5;
+  font-family: sans-serif;
+}

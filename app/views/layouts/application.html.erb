@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for(:title) || "Meforyou Ai" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= yield :head %>
+
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</head>
+
+<body>
+<main class="container mx-auto mt-28 px-5 flex flex-col items-center space-y-2">
+  <%= yield %>
+
+
+  <% if user_signed_in? %>
+    <!-- ✅ Show logout when signed in -->
+    <%= button_to "Logout", destroy_user_session_path,
+                  method: :delete,
+                  form: { data: { turbo: false } },
+                  class:"auth-button" %>
+
+<% else %>
+    <!-- ✅ Show login unless already on login page -->
+    <% unless controller_name == "sessions" %>
+      <%= link_to "Login", new_user_session_path,
+                  class:"auth-button"%>
+    <% end %>
+
+    <!-- ✅ Show signup unless already on signup page -->
+    <% unless controller_name == "registrations" %>
+      <%= link_to "Sign Up", new_user_registration_path,
+                  class: "auth-button" %>
+    <% end %>
+  <% end %>
+</main>
+</body>
+</html>

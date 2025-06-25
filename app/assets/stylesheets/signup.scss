@@ -1,0 +1,14 @@
+.signup-container {
+  @include flex-center;
+  background: #f0f4ff;
+  min-height: 100vh;
+}
+
+.signup-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}

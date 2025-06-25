@@ -1,0 +1,29 @@
+<main class="signup-container">
+  <div class="signup-box">
+    <h1>Create Account</h1>
+    <%= form_for(resource, as: :user, url: registration_path(:user)) do |form| %>
+      <%= render 'devise/shared/error_messages', resource: resource %>
+
+      <%= form.label :name %>
+      <%= form.text_field :name, required: true %>
+
+      <%= form.label :ai_name, "Your AI's Name" %>
+      <%= form.text_field :ai_name, required: true %>
+
+      <%= form.label :relationship, "Your Relationship with AI" %>
+      <%= form.select :relationship, ["friend", "mother", "partner", "mentor", "assistant"], prompt: "Select one" %>
+
+      <%= form.label :email %>
+      <%= form.email_field :email, required: true %>
+
+      <%= form.label :password %>
+      <%= form.password_field :password, required: true %>
+
+      <%= form.label :password_confirmation %>
+      <%= form.password_field :password_confirmation, required: true %>
+
+      <%= form.submit "Sign up" %>
+    <% end %>
+    <%= link_to "Log in", new_user_session_path %>
+  </div>
+</main>
