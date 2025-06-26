@@ -1,9 +1,12 @@
-@import "auth_buttons";
+// app/assets/stylesheets/application.scss
 @import "mixins";
+@import "auth_buttons";
 @import "custom";
-@import "signup";
 @import "login";
+@import "signup";
 @import "edit";
+@import "chat";
+
 
 // Base style
 body {

@@ -1,29 +1,45 @@
 <main class="signup-container">
   <div class="signup-box">
-    <h1>Create Account</h1>
+    <h1>👋 Create Your AI Account</h1>
     <%= form_for(resource, as: :user, url: registration_path(:user)) do |form| %>
       <%= render 'devise/shared/error_messages', resource: resource %>
 
-      <%= form.label :name %>
-      <%= form.text_field :name, required: true %>
+      <div class="form-group">
+        <%= form.label :name %>
+        <%= form.text_field :name, required: true, class: "form-input" %>
+      </div>
 
-      <%= form.label :ai_name, "Your AI's Name" %>
-      <%= form.text_field :ai_name, required: true %>
+      <div class="form-group">
+        <%= form.label :ai_name, "Your AI's Name" %>
+        <%= form.text_field :ai_name, required: true, class: "form-input" %>
+      </div>
 
-      <%= form.label :relationship, "Your Relationship with AI" %>
-      <%= form.select :relationship, ["friend", "mother", "partner", "mentor", "assistant"], prompt: "Select one" %>
+      <div class="form-group">
+        <%= form.label :relationship, "Relationship with AI" %>
+        <%= form.select :relationship, ["friend", "mother", "partner", "mentor", "assistant"], prompt: "Select", class: "form-input" %>
+      </div>
 
-      <%= form.label :email %>
-      <%= form.email_field :email, required: true %>
+      <div class="form-group">
+        <%= form.label :email %>
+        <%= form.email_field :email, required: true, class: "form-input" %>
+      </div>
 
-      <%= form.label :password %>
-      <%= form.password_field :password, required: true %>
+      <div class="form-group">
+        <%= form.label :password %>
+        <%= form.password_field :password, required: true, class: "form-input" %>
+      </div>
 
-      <%= form.label :password_confirmation %>
-      <%= form.password_field :password_confirmation, required: true %>
+      <div class="form-group">
+        <%= form.label :password_confirmation %>
+        <%= form.password_field :password_confirmation, required: true, class: "form-input" %>
+      </div>
 
-      <%= form.submit "Sign up" %>
+      <%= form.submit "🚀 Sign up", class: "submit-btn" %>
     <% end %>
-    <%= link_to "Log in", new_user_session_path %>
+
+    <p class="form-footer">
+      Already have an account?
+      <%= link_to "Log in", new_user_session_path, class: "login-link" %>
+    </p>
   </div>
 </main>
