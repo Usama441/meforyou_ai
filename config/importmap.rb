@@ -1,2 +1,3 @@
-pin "@rails/ujs",
-    to: "rails-ujs.js"
+# Pin npm packages by running ./bin/importmap
+
+pin "application"
