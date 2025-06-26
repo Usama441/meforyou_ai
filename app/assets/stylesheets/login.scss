@@ -1,3 +1,4 @@
+@import "mixins";
 .login-container {
   @include flex-center;
   background: #fdfdfd;
@@ -15,4 +16,89 @@
 
 body {
   background-color: cadetblue;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  background-color: #f9f9f9;
+}
+
+.auth-card {
+  background-color: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-width: 320px;
+}
+
+.auth-card h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+}
+.login-button{
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #3b82f6; // blue-500
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2563eb; // blue-600
+  }
+}
+
+.signup-button{
+  display: block;
+  width: 94%;
+  padding: 10px;
+  background-color: #3b82f6; // blue-500
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  margin-top: 10px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2563eb; // blue-600
+  }
 }

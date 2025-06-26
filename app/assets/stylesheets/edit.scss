@@ -1,3 +1,8 @@
+// app/assets/stylesheets/edit.scss
+@import "mixins";
+
+
+
 .edit-container {
   @include flex-center;
   background: #eef2f8;
