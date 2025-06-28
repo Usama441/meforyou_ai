@@ -16,6 +16,7 @@
 
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= javascript_include_tag "chat_stream", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 </head>
 
@@ -26,17 +27,14 @@
 
   <% if user_signed_in? %>
     <!-- ✅ Show logout when signed in -->
-    <%= button_to "Logout", destroy_user_session_path,
-                  method: :delete,
-                  form: { data: { turbo: false } },
-                  class: "auth-button" %>
+
 
 <% else %>
     <!-- ✅ Show login unless already on login page -->
     <% unless controller_name == "sessions" %>
       <%= link_to "Login", new_user_session_path,
                    class: "auth-button", data: { turbo: false } %>
-    <% end %>
+    <% end %> -->
 
     <!-- ✅ Show signup unless already on signup page -->
 

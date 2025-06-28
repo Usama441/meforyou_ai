@@ -5,9 +5,12 @@ Rails.application.routes.draw do
     sign_up: 'signup'
   }
 
-  root to: 'chat#new'  # homepage
-  get "chat", to: "chat#new"  # Allow visiting /chat
-  post "chat", to: "chat#create"  # Form submits here
+
+
+  root to: 'chat#new'
+  get "chat", to: "chat#new"
+  post "chat", to: "chat#create"
+  post '/chat/stream', to: 'chat#stream'
 
   get "profiles/edit", to: "profiles#edit", as: :profiles_edit
   get "profiles/update", to: "profiles#update", as: :profiles_update
