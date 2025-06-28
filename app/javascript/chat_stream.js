@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("chat-form");
     const chatInput = document.getElementById("chatInput");
     const chatHistory = document.getElementById("chatHistory");
+    const aiName = window.currentAIName || "AI";  // ← from embedded Ruby script tag
 
     if (!form || !chatInput || !chatHistory) {
         console.warn("Chat form or history not found.");
@@ -15,33 +16,36 @@ document.addEventListener("DOMContentLoaded", function () {
         if (message === "") return;
 
         const userBubble = `
-      <div class="chat-bubble user">
-        <div class="avatar">👤</div>
-        <div>
-          <p><strong>You:</strong> ${message}</p>
-          <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-        </div>
-      </div>
-    `;
+          <div class="chat-bubble user">
+            <div class="avatar">👤</div>
+            <div>
+              <p><strong>You:</strong> ${message}</p>
+              <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          </div>
+        `;
         chatHistory.insertAdjacentHTML("beforeend", userBubble);
 
         const aiBubble = document.createElement("div");
         aiBubble.className = "chat-bubble bot";
         aiBubble.innerHTML = `
-      <div class="avatar">🤖</div>
-      <div>
-        <p><strong>AI:</strong> <span id="streamedText">AI is typing</span></p>
-        <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-      </div>
-    `;
+          <div class="avatar">🤖</div>
+          <div>
+            <p><strong>${aiName}:</strong> <span id="streamedText">${aiName} is typing</span></p>
+            <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+        `;
         chatHistory.appendChild(aiBubble);
         const streamedText = aiBubble.querySelector("#streamedText");
 
-        // Typing animation
+        // Typing animation with AI name
         let dots = "";
+        let startedStreaming = false;
         const dotInterval = setInterval(() => {
-            dots = dots.length < 3 ? dots + "." : "";
-            streamedText.textContent = "AI is typing" + dots;
+            if (!startedStreaming) {
+                dots = dots.length < 3 ? dots + "." : "";
+                streamedText.textContent = `is typing${dots}`;
+            }
         }, 400);
 
         chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -83,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 function read() {
                     reader.read().then(({ done, value }) => {
                         if (done) {
-                            clearInterval(dotInterval); // Stop dots when finished
+                            clearInterval(dotInterval);
                             return;
                         }
 
@@ -96,7 +100,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                 try {
                                     const json = JSON.parse(line.replace("data:", "").trim());
                                     if (json.response) {
-                                        clearInterval(dotInterval); // Stop typing dots once response starts
+                                        // First response chunk received → stop animation and overwrite
+                                        if (!startedStreaming) {
+                                            streamedText.textContent = "";
+                                            startedStreaming = true;
+                                            clearInterval(dotInterval);
+                                        }
                                         displayBuffer += json.response;
                                         scheduleRender();
                                     }
@@ -113,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 read();
             })
             .catch(error => {
-                clearInterval(dotInterval); // Stop dots on error
+                clearInterval(dotInterval);
                 console.error("Fetch error:", error);
                 streamedText.textContent = "Error: " + error.message;
             });

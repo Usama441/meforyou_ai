@@ -26,6 +26,10 @@ class ChatController < ApplicationController
 
     if reply.present?
       Chat.create!(user: current_user, role: current_user.relationship, message: params[:message], reply: reply)
+
+      # ✅ Terminal logs
+      Rails.logger.info "🧑 User: #{params[:message]}"
+      Rails.logger.info "🤖 AI: #{reply}"
     end
 
     redirect_to root_path, notice: "AI replied successfully."
@@ -62,14 +66,14 @@ class ChatController < ApplicationController
           if data["response"].present?
             full_text += data["response"]
             response.stream.write("data: #{ { response: data["response"] }.to_json }\n\n")
+            Rails.logger.info "Chunk: #{data["response"]}"  # ✅ Logging each chunk
           end
         rescue => e
-          Rails.logger.error("Stream JSON error: #{e.message}")
+          Rails.logger.error("Chunk parse error: #{e.message}")
         end
       end
     end
 
-    # ✅ Save full response to DB after generation
     if full_text.present?
       Chat.create!(
         user: current_user,
@@ -77,6 +81,10 @@ class ChatController < ApplicationController
         message: params[:message],
         reply: full_text
       )
+
+      # ✅ Log stream result to terminal
+      Rails.logger.info "🧑 (Streamed) User: #{params[:message]}"
+      Rails.logger.info "🤖 (Streamed) AI: #{full_text}"
     end
   rescue => e
     Rails.logger.error("Stream failed: #{e.message}")
@@ -84,7 +92,6 @@ class ChatController < ApplicationController
   ensure
     response.stream.close
   end
-
 
   private
 
