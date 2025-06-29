@@ -14,6 +14,13 @@
   <link rel="apple-touch-icon" href="/icon.png">
   <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.js"></script>
 
+  <%= favicon_link_tag 'favicons/favicon.ico' %>
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= asset_path('favicons/apple-touch-icon.png') %>">
+  <link rel="icon" type="image/png" sizes="32x32" href="<%= asset_path('favicons/favicon-32x32.png') %>">
+  <link rel="icon" type="image/png" sizes="16x16" href="<%= asset_path('favicons/favicon-16x16.png') %>">
+  <link rel="manifest" href="<%= asset_path('favicons/site.webmanifest') %>">
+  <meta name="theme-color" content="#ffffff">
+
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= javascript_include_tag "chat_stream", "data-turbo-track": "reload" %>
@@ -34,7 +41,7 @@
     <% unless controller_name == "sessions" %>
       <%= link_to "Login", new_user_session_path,
                    class: "auth-button", data: { turbo: false } %>
-    <% end %> -->
+    <% end %>
 
     <!-- ✅ Show signup unless already on signup page -->
 
