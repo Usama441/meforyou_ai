@@ -1,43 +1,46 @@
 @import "mixins";
+body{
+  background-color: #f2f4f7;
+}
+
 .login-container {
-  @include flex-center;
-  background: #fdfdfd;
-  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f4f6;
+  min-height: 90vh;
+  padding: 2rem;
 }
 
 .login-box {
   background: white;
   padding: 2rem;
   border-radius: 1rem;
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-body {
-  background-color: cadetblue;
-}
+.logo-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 90vh;
-  background-color: #f9f9f9;
+  .login-logo {
+    width: 60px;
+    height: auto;
+  }
 }
 
 .auth-card {
-  background-color: white;
-  padding: 2rem 3rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  min-width: 320px;
-}
+  margin-top: 3rem;
 
-.auth-card h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-  text-align: center;
+  h2 {
+    text-align: center;
+    color: #2563eb;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .form-group {
@@ -47,58 +50,91 @@ body {
 .form-input {
   width: 100%;
   padding: 0.6rem;
-  border: 1px solid #ccc;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
 }
 
-.auth-button {
-  width: 100%;
-  padding: 0.7rem;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #1d4ed8;
-  }
-}
-.login-button{
+.login-button,
+.signup-button {
   display: block;
   width: 100%;
   padding: 12px;
-  background-color: #3b82f6; // blue-500
+  background-color: #3b82f6;
   color: white;
   font-weight: bold;
-  text-align: center;
   border: none;
   border-radius: 6px;
   margin-top: 10px;
+  text-align: center;
   text-decoration: none;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #2563eb; // blue-600
+    background-color: #2563eb;
+  }
+}
+.futuristic-footer {
+  background: #fff;
+  color: #cfcfcf;
+  padding: 30px 40px 10px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  //border-top: 1px solid #222;
+  box-shadow: 0 -2px 8px rgba(0, 255, 255, 0.1);
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-column {
+    flex: 1 1 300px;
+    min-width: 250px;
+
+    h4 {
+      font-size: 14px;
+      color: black;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    p, a {
+      font-size: 13px;
+      color: black;
+      margin-bottom: 6px;
+      text-decoration: none;
+
+      &:hover {
+        color: red;
+        text-shadow: 0 0 5px #00ffff;
+      }
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  }
+
+  .footer-logo {
+    width: 90px;
+    height: auto;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 4px #00ffff);
+  }
+
+  .footer-bottom {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+    border-top: 1px solid #222;
+    padding-top: 10px;
   }
 }
 
-.signup-button{
-  display: block;
-  width: 94%;
-  padding: 10px;
-  background-color: #3b82f6; // blue-500
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  border: none;
-  border-radius: 6px;
-  margin-top: 10px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: #2563eb; // blue-600
-  }
-}

@@ -5,3 +5,4 @@
 //= link_tree ../../javascript .js
 //= link_tree ../../../vendor/javascript .js
 //= link chat_stream.js
+//= link logo.png
