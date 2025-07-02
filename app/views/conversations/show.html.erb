@@ -1,0 +1,31 @@
+<div class="chat-container">
+  <aside class="sidebar">
+    <h2>ME</h2>
+
+    <%= form_with model: @conversation, url: conversations_path do |f| %>
+      <%= f.text_field :title, placeholder: "New Chat Title" %>
+      <%= f.submit "Start" %>
+    <% end %>
+
+    <% @conversations.each do |convo| %>
+      <div>
+        <%= link_to convo.title, conversation_path(convo) %>
+      </div>
+    <% end %>
+  </aside>
+
+  <main class="chat-main">
+    <div class="messages">
+      <% @conversation.messages.each do |msg| %>
+        <div class="message <%= msg.role %>">
+          <%= msg.role.capitalize %>: <%= msg.content %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= form_with model: [@conversation, @message], local: true do |f| %>
+      <%= f.text_field :content, placeholder: "Type a message..." %>
+      <%= f.submit "Send" %>
+    <% end %>
+  </main>
+</div>

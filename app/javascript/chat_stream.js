@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("chat-form");
     const chatInput = document.getElementById("chatInput");
     const chatHistory = document.getElementById("chatHistory");
-    const aiName = window.currentAIName || "AI";  // ← from embedded Ruby script tag
+    const aiName = window.currentAIName || "AI";
+    const conversationId = form?.dataset.conversationId;
 
     if (!form || !chatInput || !chatHistory) {
         console.warn("Chat form or history not found.");
@@ -38,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
         chatHistory.appendChild(aiBubble);
         const streamedText = aiBubble.querySelector("#streamedText");
 
-        // Typing animation with AI name
         let dots = "";
         let startedStreaming = false;
         const dotInterval = setInterval(() => {
@@ -51,13 +51,16 @@ document.addEventListener("DOMContentLoaded", function () {
         chatHistory.scrollTop = chatHistory.scrollHeight;
         chatInput.value = "";
 
+        // ✅ Pass conversation_id along with message
+        const body = `message=${encodeURIComponent(message)}&conversation_id=${encodeURIComponent(conversationId)}`;
+
         fetch("/chat/stream", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
             },
-            body: `message=${encodeURIComponent(message)}`
+            body: body
         })
             .then(response => {
                 const reader = response.body.getReader();
@@ -100,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 try {
                                     const json = JSON.parse(line.replace("data:", "").trim());
                                     if (json.response) {
-                                        // First response chunk received → stop animation and overwrite
                                         if (!startedStreaming) {
                                             streamedText.textContent = "";
                                             startedStreaming = true;

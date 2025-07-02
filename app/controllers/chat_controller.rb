@@ -6,40 +6,55 @@ class ChatController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @chats = current_user.chats.order(created_at: :asc)
+    @conversations = current_user.conversations.order(created_at: :desc)
+    @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last
+    @chats = @conversation.present? ? @conversation.chats.order(:created_at) : []
+    @messages = @conversation&.messages || []
+    @ai_name = @conversation.ai_name
+
   end
 
   def create
-    session_id = current_user.chat_sessions.last&.id
+    conversation = current_user.conversations.find_by(id: params[:conversation_id]) ||
+                   current_user.conversations.create(title: params[:ai_name], ai_name: params[:ai_name], relationship: params[:relationship])
 
+    conversation.messages.create(content: params[:prompt], role: "user")
+    conversation.messages.create(content: "AI is replying to: #{params[:prompt]}", role: "bot")
+
+    session_id = current_user.chat_sessions.last&.id
     if TopicClassifier.new_topic?(current_user, params[:message])
       new_session = ChatSession.create!(user: current_user, topic: "auto-generated")
       session_id = new_session.id
     end
 
-    memory = RedisMemoryManager.new(current_user, session_id)
-    memory.store_message("user", params[:message])
+    memory = RedisMemoryService.new(conversation.id)
+    memory.add_message(role: "user", content: params[:message])
 
-    tone = current_user.relationship.to_s.downcase
+    tone = conversation.try(:relationship).presence || current_user.try(:relationship).presence || "neutral"
+    ai_name = conversation.try(:ai_name).presence || current_user.try(:ai_name).presence || "AI"
+    tone = tone.to_s.downcase
+
     PersonaManager.new(current_user).set("tone", tone)
+    PersonaManager.new(current_user).set("ai_name", ai_name)
 
     persona = PersonaManager.new(current_user).all.map { |k, v| "#{k}: #{v}" }.join("\n")
-    history = memory.get_history(20).map { |m| "#{m['role']}: #{m['content']}" }.join("\n")
+    history = memory.get_prompt_context
 
     prompt = "#{persona}\n\nConversation:\n#{history}\n\nUser: #{params[:message]}\nAI:"
     reply = local_llama_response(prompt)
 
-    memory.store_message("ai", reply)
+    memory.add_message(role: "ai", content: reply)
 
     Chat.create!(
       user: current_user,
       chat_session_id: session_id,
-      role: current_user.relationship,
+      conversation: conversation,
+      role: tone,
       message: params[:message],
       reply: reply
     )
 
-    redirect_to root_path, notice: "AI replied successfully."
+    redirect_to chat_path(id: conversation.id), notice: "AI replied successfully."
   end
 
   def stream
@@ -48,16 +63,21 @@ class ChatController < ApplicationController
     response.headers['X-Accel-Buffering'] = 'no'
 
     start_time = Time.now
-
+    conversation = current_user.conversations.find_by(id: params[:conversation_id]) || current_user.conversations.last
     session_id = current_user.chat_sessions.last&.id
-    memory = RedisMemoryManager.new(current_user, session_id)
-    memory.store_message("user", params[:message])
 
-    tone = current_user.relationship.to_s.downcase
+    memory = RedisMemoryService.new(conversation.id)
+    memory.add_message(role: "user", content: params[:message])
+
+    tone = conversation.try(:relationship).presence || current_user.try(:relationship).presence || "neutral"
+    ai_name = conversation.try(:ai_name).presence || current_user.try(:ai_name).presence || "AI"
+    tone = tone.to_s.downcase
+
     PersonaManager.new(current_user).set("tone", tone)
+    PersonaManager.new(current_user).set("ai_name", ai_name)
 
     persona = PersonaManager.new(current_user).all.map { |k, v| "#{k}: #{v}" }.join("\n")
-    history = memory.get_history(100).map { |m| "#{m['role']}: #{m['content']}" }.join("\n")
+    history = memory.get_prompt_context
 
     prompt = "#{persona}\n\nConversation:\n#{history}\n\nUser: #{params[:message]}\nAI:"
     Rails.logger.info "🔍 Streamed Prompt Sent:\n#{prompt}"
@@ -87,26 +107,21 @@ class ChatController < ApplicationController
 
     http.request(req) do |res|
       res.read_body do |chunk|
-        begin
-          chunk.gsub!("data: ", "")
-          Rails.logger.debug("🧩 Raw Chunk: #{chunk}")
+        chunk.lines.each do |line|
+          next unless line.start_with?("data:")
+          json_str = line.sub("data:", "").strip
+          next if json_str == "[DONE]"
 
-          next if chunk.strip == "[DONE]"
+          begin
+            data = JSON.parse(json_str)
+            delta = data.dig("choices", 0, "delta", "content")
+            next if delta.nil? || delta.strip.empty?
 
-          data = JSON.parse(chunk)
-
-          # 🛡 Safety check
-          delta = data.dig("choices", 0, "delta", "content")
-
-          if delta.present?
             full_text += delta
             response.stream.write("data: #{ { response: delta }.to_json }\n\n")
-          else
-            Rails.logger.warn("⚠️ Unexpected data format: #{data.inspect}")
+          rescue => e
+            Rails.logger.error("Stream parse error: #{e.message} | Chunk: #{json_str}")
           end
-
-        rescue => e
-          Rails.logger.error("Stream parse error: #{e.message}")
         end
       end
     end
@@ -114,12 +129,13 @@ class ChatController < ApplicationController
     Rails.logger.info "⏱ Streamed Response time: #{Time.now - start_time}s"
 
     if full_text.present?
-      memory.store_message("ai", full_text)
+      memory.add_message(role: "ai", content: full_text)
 
       Chat.create!(
         user: current_user,
         chat_session_id: session_id,
-        role: current_user.relationship,
+        conversation: conversation,
+        role: tone,
         message: params[:message],
         reply: full_text
       )
@@ -157,11 +173,8 @@ class ChatController < ApplicationController
     }.to_json
 
     full_response = ""
-
     begin
-      http.request(req) do |response|
-        response.read_body { |chunk| full_response += chunk }
-      end
+      http.request(req) { |response| response.read_body { |chunk| full_response += chunk } }
       json = JSON.parse(full_response) rescue nil
       json["choices"][0]["message"]["content"] || "Error: No content"
     rescue => e
@@ -170,10 +183,8 @@ class ChatController < ApplicationController
   end
 
   def summarize_memory
-    session_id = params[:session_id] || "default"
-    summarizer = Summarizer.new(current_user, session_id)
-    summarizer.summarize
-
-    redirect_to chat_path, notice: "Memory summarized successfully."
+    conversation_id = params[:conversation_id]
+    RedisMemoryService.new(conversation_id).reset!
+    redirect_to chat_path(id: conversation_id), notice: "Memory reset successfully."
   end
 end

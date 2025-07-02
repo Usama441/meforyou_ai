@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_01_210533) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_02_022955) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,17 +31,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_210533) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "chat_session_id"
+    t.bigint "conversation_id"
     t.index ["chat_session_id"], name: "index_chats_on_chat_session_id"
+    t.index ["conversation_id"], name: "index_chats_on_conversation_id"
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
   create_table "conversations", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "name"
-    t.string "relationship"
+    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "relationship"
+    t.string "ai_name"
     t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.integer "role"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
   end
 
   create_table "prompts", force: :cascade do |t|
@@ -72,7 +84,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_210533) do
 
   add_foreign_key "chat_sessions", "users"
   add_foreign_key "chats", "chat_sessions"
+  add_foreign_key "chats", "conversations"
   add_foreign_key "chats", "users"
   add_foreign_key "conversations", "users"
+  add_foreign_key "messages", "conversations"
   add_foreign_key "prompts", "users"
 end

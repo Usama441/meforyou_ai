@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "messages/create"
+  get "conversations/index"
+  get "conversations/show"
+  get "conversations/create"
+
   devise_for :users, path: '', path_names: {
     sign_in: 'login',
     sign_out: 'logout',
@@ -6,7 +11,6 @@ Rails.application.routes.draw do
   }
 
   post "/chat/summarize_memory", to: "chat#summarize_memory", as: :summarize_memory
-
 
   root to: 'chat#new'
   get "chat", to: "chat#new"
@@ -17,4 +21,9 @@ Rails.application.routes.draw do
   get "profiles/update", to: "profiles#update", as: :profiles_update
 
   get "up", to: "rails/health#show", as: :rails_health_check
+
+  # ✅ Add this block for conversations + messages
+  resources :conversations, only: [:index, :show, :create] do
+    resources :messages, only: [:create]
+  end
 end

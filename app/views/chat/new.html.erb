@@ -1,61 +1,107 @@
-<main class="chat-wrapper">
-  <div class="chat-box">
-    <%= button_to "Logout", destroy_user_session_path,
-                  method: :delete,
-                  form: { data: { turbo: false } },
-                  class: "auth-button" %>
+<div class="chat-container">
+  <!-- ✅ LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Conversations</h2>
 
-    <div class="chat-header">
-      <h1>MeForYou.AI</h1>
-    </div>
+    <button type="button" class="chat-send" onclick="openNewChatModal()">Start New Chat</button>
 
-    <p class="greeting">
-      Hello <%= current_user.name.present? ? current_user.name.capitalize : "there" %>, ask something to your AI companion:
-    </p>
-
-    <div class="chat-history" id="chatHistory">
-      <% @chats.each do |chat| %>
-        <div class="chat-bubble user">
-          <div class="avatar">👤</div>
-          <div>
-            <p><strong>You:</strong> <%= chat.message %></p>
-            <span class="timestamp"><%= chat.created_at.strftime("%H:%M") %></span>
-          </div>
-        </div>
-        <div class="chat-bubble bot">
-          <div class="avatar">🤖</div>
-          <div>
-            <p><strong><%= current_user.ai_name || "AI" %>:</strong> <%= chat.reply %></p>
-            <span class="timestamp"><%= chat.updated_at.strftime("%H:%M") %></span>
-          </div>
-        </div>
+    <div class="conversation-list">
+      <% @conversations.each do |convo| %>
+        <%= link_to convo.title, chat_path(id: convo.id), class: "conversation-item #{'active' if @conversation&.id == convo.id}" %>
       <% end %>
     </div>
+  </aside>
 
-    <%# Optional: Session and Tone dropdowns %>
-    <div class="chat-options">
-      <%= form_with url: "/chat/stream", method: :post, local: false, html: { id: "chat-form" }, class: "chat-form" do %>
-        <%= hidden_field_tag :session_id, params[:session_id] || "default" %>
+  <!-- ✅ YOUR EXISTING CHAT UI (Unchanged) -->
+  <main class="chat-wrapper">
+    <div class="chat-box">
+      <%= button_to "Logout", destroy_user_session_path,
+                    method: :delete,
+                    form: { data: { turbo: false } },
+                    class: "auth-button" %>
 
-        <div class="emoji-input-wrapper">
-          <%= text_field_tag :message, nil, placeholder: "Type your message...", class: "chat-input", id: "chatInput", autocomplete: "off" %>
-          <%= submit_tag "Send", class: "chat-send" %>
-        </div>
-      <% end %>
+      <div class="chat-header">
+        <h1>MeForYou.AI</h1>
+      </div>
+
+      <p class="greeting">
+        Hello <%= current_user.name.present? ? current_user.name.capitalize : "there" %>, ask something to your AI companion:
+      </p>
+
+      <div class="chat-history" id="chatHistory">
+        <% @chats.each do |chat| %>
+          <div class="chat-bubble user">
+            <div class="avatar">👤</div>
+            <div>
+              <p><strong>You:</strong> <%= chat.message %></p>
+              <span class="timestamp"><%= chat.created_at.strftime("%H:%M") %></span>
+            </div>
+          </div>
+          <div class="chat-bubble bot">
+            <div class="avatar">🤖</div>
+            <div>
+              <p><strong><%= @ai_name || "AI" %>:</strong> <%= chat.reply %></p>
+              <span class="timestamp"><%= chat.updated_at.strftime("%H:%M") %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="chat-options">
+        <%= form_with url: "/chat/stream", method: :post, local: false, html: { id: "chat-form", data: { conversation_id: @conversation&.id } } do |f| %>
+
+      <%= hidden_field_tag :session_id, params[:session_id] || "default" %>
+
+          <div class="emoji-input-wrapper">
+            <%= text_field_tag :message, nil, placeholder: "Type your message...", class: "chat-input", id: "chatInput", autocomplete: "off" %>
+            <%= submit_tag "Send", class: "chat-send" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="memory-summary">
+        <%= button_to "Summarize Memory", summarize_memory_path(session_id: params[:session_id] || "default"), method: :post, class: "memory-summary-btn" %>
+      </div>
     </div>
+  </main>
+</div>
 
-    <%# Optional: Memory summarization trigger %>
-    <div class="memory-summary">
-      <%= button_to "Summarize Memory", summarize_memory_path(session_id: params[:session_id] || "default"), method: :post, class: "memory-summary-btn" %>
-    </div>
+<!-- ✅ Modal for Creating New Conversation -->
+<div id="newChatModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2>Create New Chat</h2>
+    <%= form_with url: conversations_path, method: :post, local: true do |f| %>
+
+      <div class="form-group">
+        <%= label_tag :ai_name, "AI Name" %>
+        <%= text_field_tag :ai_name, current_user.ai_name, required: true %>
+      </div>
+      <div class="form-group">
+        <%= label_tag :relationship, "Relationship" %>
+        <%= text_field_tag :relationship, current_user.relationship, required: true %>
+      </div>
+      <div class="form-group">
+        <%= f.submit "Create", class: "chat-send" %>
+        <button type="button" class="chat-send" onclick="closeNewChatModal()">Cancel</button>
+      </div>
+    <% end %>
   </div>
-</main>
+</div>
 
+<!-- ✅ JavaScript -->
 <script>
     document.addEventListener("turbo:load", function () {
         const chatHistory = document.getElementById("chatHistory");
         if (chatHistory) chatHistory.scrollTop = chatHistory.scrollHeight;
     });
+
+    function openNewChatModal() {
+        document.getElementById("newChatModal").style.display = "flex";
+    }
+
+    function closeNewChatModal() {
+        document.getElementById("newChatModal").style.display = "none";
+    }
 
     window.currentAIName = "<%= current_user.ai_name %>";
 </script>
