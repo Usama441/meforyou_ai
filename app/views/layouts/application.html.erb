@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= yield :head %>
 
+  <!-- ✅ Favicon & Icons -->
   <link rel="icon" href="/icon.png" type="image/png">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/icon.png">
-  <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@latest/dist/index.min.js"></script>
-
   <%= favicon_link_tag 'favicons/favicon.ico' %>
   <link rel="apple-touch-icon" sizes="180x180" href="<%= asset_path('favicons/apple-touch-icon.png') %>">
   <link rel="icon" type="image/png" sizes="32x32" href="<%= asset_path('favicons/favicon-32x32.png') %>">
@@ -21,30 +21,23 @@
   <link rel="manifest" href="<%= asset_path('favicons/site.webmanifest') %>">
   <meta name="theme-color" content="#ffffff">
 
+  <!-- ✅ Rails Asset Pipeline -->
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= javascript_include_tag "chat_stream", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+  <%= javascript_importmap_tags %>
 </head>
 
 <body>
 <main class="container mx-auto mt-28 px-5 flex flex-col items-center space-y-2">
   <%= yield %>
 
-
   <% if user_signed_in? %>
-    <!-- ✅ Show logout when signed in -->
-
-
-<% else %>
-    <!-- ✅ Show login unless already on login page -->
+    <!-- ✅ Show logout or other user nav if needed -->
+  <% else %>
     <% unless controller_name == "sessions" %>
-      <%= link_to "Login", new_user_session_path,
-                   class: "auth-button", data: { turbo: false } %>
+      <%= link_to "Login", new_user_session_path, class: "auth-button", data: { turbo: false } %>
     <% end %>
-
-    <!-- ✅ Show signup unless already on signup page -->
-
   <% end %>
 </main>
 </body>
