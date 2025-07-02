@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const toggle = document.getElementById('darkModeToggle');
+//= require chat_stream
+
+const toggle = document.getElementById('darkModeToggle');
     const body = document.body;
 
     // Load previous theme
@@ -36,10 +37,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }).join('');
     });
 
-    emojiPicker.addEventListener('click', function (e) {
-        if (e.target.classList.contains('emoji-item')) {
-            chatInput.value += e.target.textContent;
-            chatInput.focus();
-        }
-    });
-});
+

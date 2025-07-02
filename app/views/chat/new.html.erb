@@ -7,101 +7,26 @@
 
     <div class="conversation-list">
       <% @conversations.each do |convo| %>
-        <%= link_to convo.title, chat_path(id: convo.id), class: "conversation-item #{'active' if @conversation&.id == convo.id}" %>
+        <%= link_to convo.name, chat_path(id: convo.id), data: { turbo_frame: "chat_frame" }, class: "conversation-item #{'active' if @conversation&.id == convo.id}" %>
       <% end %>
     </div>
   </aside>
 
-  <!-- ✅ YOUR EXISTING CHAT UI (Unchanged) -->
+  <!-- ✅ Hidden AI name for JS to use -->
+  <div id="chatMetadata" data-ai-name="<%= @ai_name %>" style="display: none;"></div>
+
+  <!-- ✅ CHAT AREA -->
   <main class="chat-wrapper">
-    <div class="chat-box">
-      <%= button_to "Logout", destroy_user_session_path,
-                    method: :delete,
-                    form: { data: { turbo: false } },
-                    class: "auth-button" %>
-
-      <div class="chat-header">
-        <h1>MeForYou.AI</h1>
-      </div>
-
-      <p class="greeting">
-        Hello <%= current_user.name.present? ? current_user.name.capitalize : "there" %>, ask something to your AI companion:
-      </p>
-
-      <div class="chat-history" id="chatHistory">
-        <% @chats.each do |chat| %>
-          <div class="chat-bubble user">
-            <div class="avatar">👤</div>
-            <div>
-              <p><strong>You:</strong> <%= chat.message %></p>
-              <span class="timestamp"><%= chat.created_at.strftime("%H:%M") %></span>
-            </div>
-          </div>
-          <div class="chat-bubble bot">
-            <div class="avatar">🤖</div>
-            <div>
-              <p><strong><%= @ai_name || "AI" %>:</strong> <%= chat.reply %></p>
-              <span class="timestamp"><%= chat.updated_at.strftime("%H:%M") %></span>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="chat-options">
-        <%= form_with url: "/chat/stream", method: :post, local: false, html: { id: "chat-form", data: { conversation_id: @conversation&.id } } do |f| %>
-
-      <%= hidden_field_tag :session_id, params[:session_id] || "default" %>
-
-          <div class="emoji-input-wrapper">
-            <%= text_field_tag :message, nil, placeholder: "Type your message...", class: "chat-input", id: "chatInput", autocomplete: "off" %>
-            <%= submit_tag "Send", class: "chat-send" %>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="memory-summary">
-        <%= button_to "Summarize Memory", summarize_memory_path(session_id: params[:session_id] || "default"), method: :post, class: "memory-summary-btn" %>
-      </div>
-    </div>
+    <turbo-frame id="chat_frame">
+      <%= render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation } %>
+    </turbo-frame>
   </main>
 </div>
 
-<!-- ✅ Modal for Creating New Conversation -->
-<div id="newChatModal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <h2>Create New Chat</h2>
-    <%= form_with url: conversations_path, method: :post, local: true do |f| %>
+<!-- ✅ Modal for new conversation (unchanged) -->
+<%= render partial: "chat/modal" %>
 
-      <div class="form-group">
-        <%= label_tag :ai_name, "AI Name" %>
-        <%= text_field_tag :ai_name, current_user.ai_name, required: true %>
-      </div>
-      <div class="form-group">
-        <%= label_tag :relationship, "Relationship" %>
-        <%= text_field_tag :relationship, current_user.relationship, required: true %>
-      </div>
-      <div class="form-group">
-        <%= f.submit "Create", class: "chat-send" %>
-        <button type="button" class="chat-send" onclick="closeNewChatModal()">Cancel</button>
-      </div>
-    <% end %>
-  </div>
-</div>
-
-<!-- ✅ JavaScript -->
+<!-- ✅ Chat JavaScript -->
 <script>
-    document.addEventListener("turbo:load", function () {
-        const chatHistory = document.getElementById("chatHistory");
-        if (chatHistory) chatHistory.scrollTop = chatHistory.scrollHeight;
-    });
 
-    function openNewChatModal() {
-        document.getElementById("newChatModal").style.display = "flex";
-    }
-
-    function closeNewChatModal() {
-        document.getElementById("newChatModal").style.display = "none";
-    }
-
-    window.currentAIName = "<%= current_user.ai_name %>";
 </script>

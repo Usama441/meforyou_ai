@@ -4,21 +4,22 @@ require 'json'
 class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
-
   def new
     @conversations = current_user.conversations.order(created_at: :desc)
-    @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last
+    @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
+    @chats = @conversation.persisted? ? @conversation.chats.order(:created_at) : []
+    @messages = @conversation&.messages || []
+    @chats = Chat.where(conversation_id: @conversation.id).order(:created_at)
+    @ai_name = @conversation.name.presence
 
-    if @conversation.present?
-      @chats = @conversation.chats.order(:created_at)
-      @messages = @conversation.messages
-      @ai_name = @conversation.ai_name
+    # 👇 Add this condition
+    if request.headers["Turbo-Frame"]
+      render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
     else
-      @chats = []
-      @messages = []
-      @ai_name = "AI" # fallback default name
+      render :new
     end
   end
+
 
   def create
     conversation = current_user.conversations.find_by(id: params[:conversation_id]) ||
@@ -51,12 +52,21 @@ class ChatController < ApplicationController
 
     memory.add_message(role: "ai", content: reply)
 
+    # ✅ Save USER message
     Chat.create!(
       user: current_user,
       chat_session_id: session_id,
       conversation: conversation,
-      role: tone,
-      message: params[:message],
+      role: "user",
+      message: params[:message]
+    )
+
+    # ✅ Save AI message with correct name
+    Chat.create!(
+      user: current_user,
+      chat_session_id: session_id,
+      conversation: conversation,
+      role: tone, # this can be "friend", "mother", etc.
       reply: reply
     )
 
@@ -137,12 +147,21 @@ class ChatController < ApplicationController
     if full_text.present?
       memory.add_message(role: "ai", content: full_text)
 
+      # ✅ Save USER message
       Chat.create!(
         user: current_user,
         chat_session_id: session_id,
         conversation: conversation,
-        role: tone,
-        message: params[:message],
+        role: "user",
+        message: params[:message]
+      )
+
+      # ✅ Save AI message
+      Chat.create!(
+        user: current_user,
+        chat_session_id: session_id,
+        conversation: conversation,
+        role: tone, # "mother", "AI", etc.
         reply: full_text
       )
     end

@@ -1,118 +1,75 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("chat-form");
-    const chatInput = document.getElementById("chatInput");
-    const chatHistory = document.getElementById("chatHistory");
-    const aiName = window.currentAIName || "AI";
-    const conversationId = form?.dataset.conversationId;
+function getCSRFToken() {
+    const meta = document.querySelector("meta[name='csrf-token']");
+    return meta && meta.getAttribute("content");
+}
 
-    if (!form || !chatInput || !chatHistory) {
-        console.warn("Chat form or history not found.");
-        return;
-    }
+function attachChatListener() {
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("chat-input");
+    const chatHistory = document.getElementById("chatHistory");
+
+    if (!form || !input || !chatHistory) return;
+
+    const conversationId = form.dataset.conversationId;
+    const aiName = document.getElementById("chatMetadata")?.dataset.aiName || "AI";
 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const message = chatInput.value.trim();
-        if (message === "") return;
+        const message = input.value.trim();
+        if (!message) return;
 
-        const userBubble = `
-          <div class="chat-bubble user">
-            <div class="avatar">👤</div>
-            <div>
-              <p><strong>You:</strong> ${message}</p>
-              <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            </div>
-          </div>
-        `;
-        chatHistory.insertAdjacentHTML("beforeend", userBubble);
+        input.value = "";
 
-        const aiBubble = document.createElement("div");
-        aiBubble.className = "chat-bubble bot";
-        aiBubble.innerHTML = `
-          <div class="avatar">🤖</div>
-          <div>
-            <p><strong>${aiName}:</strong> <span id="streamedText">${aiName} is typing</span></p>
-            <span class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-          </div>
-        `;
-        chatHistory.appendChild(aiBubble);
-        const streamedText = aiBubble.querySelector("#streamedText");
-
-        let dots = "";
-        let startedStreaming = false;
-        const dotInterval = setInterval(() => {
-            if (!startedStreaming) {
-                dots = dots.length < 3 ? dots + "." : "";
-                streamedText.textContent = `is typing${dots}`;
-            }
-        }, 400);
-
+        // Show user's message
+        const userBubble = document.createElement("div");
+        userBubble.classList.add("chat-bubble", "user");
+        userBubble.innerHTML = `<div><p><strong>You:</strong> ${message}</p></div>`;
+        chatHistory.appendChild(userBubble);
         chatHistory.scrollTop = chatHistory.scrollHeight;
-        chatInput.value = "";
 
-        // ✅ Pass conversation_id along with message
-        const body = `message=${encodeURIComponent(message)}&conversation_id=${encodeURIComponent(conversationId)}`;
+        // Bot response placeholder
+        const aiBubble = document.createElement("div");
+        aiBubble.classList.add("chat-bubble", "bot");
+        const aiPara = document.createElement("p");
+        aiBubble.appendChild(aiPara);
+        chatHistory.appendChild(aiBubble);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
 
+        // Streaming fetch
         fetch("/chat/stream", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+                "Content-Type": "application/json",
+                Accept: "text/event-stream",
+                "X-CSRF-Token": getCSRFToken()
             },
-            body: body
+            body: JSON.stringify({
+                conversation_id: conversationId,
+                message: message
+            })
         })
             .then(response => {
                 const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = "";
-                let displayBuffer = "";
-                let isRendering = false;
-
-                function renderChunk() {
-                    if (displayBuffer.length > 0) {
-                        streamedText.textContent += displayBuffer;
-                        displayBuffer = "";
-                        chatHistory.scrollTop = chatHistory.scrollHeight;
-                        requestAnimationFrame(renderChunk);
-                    } else {
-                        isRendering = false;
-                    }
-                }
-
-                function scheduleRender() {
-                    if (!isRendering) {
-                        isRendering = true;
-                        requestAnimationFrame(renderChunk);
-                    }
-                }
+                const decoder = new TextDecoder("utf-8");
+                let fullText = "";
 
                 function read() {
                     reader.read().then(({ done, value }) => {
-                        if (done) {
-                            clearInterval(dotInterval);
-                            return;
-                        }
+                        if (done) return;
 
-                        buffer += decoder.decode(value, { stream: true });
-                        const lines = buffer.split("\n");
-                        buffer = lines.pop();
-
-                        lines.forEach(line => {
-                            if (line.trim().startsWith("data:")) {
+                        const chunk = decoder.decode(value, { stream: true });
+                        chunk.split("data: ").forEach(line => {
+                            if (line.trim()) {
                                 try {
-                                    const json = JSON.parse(line.replace("data:", "").trim());
+                                    const json = JSON.parse(line.trim());
                                     if (json.response) {
-                                        if (!startedStreaming) {
-                                            streamedText.textContent = "";
-                                            startedStreaming = true;
-                                            clearInterval(dotInterval);
-                                        }
-                                        displayBuffer += json.response;
-                                        scheduleRender();
+                                        fullText += json.response;
+                                        aiPara.textContent = `🤖 ${aiName}: ${fullText}`;
+                                        chatHistory.scrollTop = chatHistory.scrollHeight;
                                     }
                                 } catch (err) {
-                                    console.warn("Invalid JSON:", line);
+                                    console.error("Invalid JSON:", err);
                                 }
                             }
                         });
@@ -122,11 +79,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 read();
-            })
-            .catch(error => {
-                clearInterval(dotInterval);
-                console.error("Fetch error:", error);
-                streamedText.textContent = "Error: " + error.message;
             });
     });
-});
+}
+
+// Initial and turbo-frame load trigger
+document.addEventListener("DOMContentLoaded", attachChatListener);
+document.addEventListener("turbo:frame-load", attachChatListener);

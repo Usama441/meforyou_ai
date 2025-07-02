@@ -13,16 +13,30 @@ class ConversationsController < ApplicationController
   end
 
   def create
-    current_user.update(ai_name: params[:ai_name], relationship: params[:relationship])
+    puts "===== DEBUG: Entered ConversationsController#create ====="
 
-    # ✅ Also store ai_name and relationship in the conversation itself
-    convo = current_user.conversations.create(
-      title: params[:ai_name],
-      ai_name: params[:ai_name],
-      relationship: params[:relationship]
-    )
+    puts "Params received:"
+    puts params.inspect
 
-    redirect_to chat_path(id: convo.id)
+    @conversation = current_user.conversations.new(conversation_params)
+
+    puts "Conversation object after assignment:"
+    puts @conversation.inspect
+
+    if @conversation.save
+      puts "✅ Conversation saved successfully! ID: #{@conversation.id}"
+      render json: { id: @conversation.id }
+    else
+      puts "❌ Failed to save conversation"
+      puts @conversation.errors.full_messages
+      render json: { errors: @conversation.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
+  private
+
+  def conversation_params
+    params.require(:conversation).permit(:name, :relationship, :ai_status, :ai_gender, :ai_age, :description)
+
+  end
 end

@@ -9,7 +9,7 @@
 
     <% @conversations.each do |convo| %>
       <div>
-        <%= link_to convo.title, conversation_path(convo) %>
+        <%= link_to convo.name, conversation_path(convo) %>
       </div>
     <% end %>
   </aside>

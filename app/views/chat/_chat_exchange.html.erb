@@ -1,0 +1,40 @@
+<div class="chat-box">
+  <div class="chat-header">
+    <h1>MeForYou.AI</h1>
+  </div>
+
+  <p class="greeting">
+    Hello <%= current_user.name.present? ? current_user.name.capitalize : "there" %>, ask something to your AI companion:
+  </p>
+
+  <div class="chat-history" id="chatHistory">
+    <% chats.each do |chat| %>
+      <% if chat.role == "user" %>
+        <div class="chat-bubble user">
+          <div class="avatar">👤</div>
+          <div>
+            <p><strong>You:</strong> <%= chat.message %></p>
+            <span class="timestamp"><%= chat.created_at.strftime("%H:%M") %></span>
+          </div>
+        </div>
+      <% else %>
+        <div class="chat-bubble bot">
+          <div class="avatar">🤖</div>
+          <div>
+            <p><strong><%= @ai_name %>:</strong> <%= chat.reply %></p>
+            <span class="timestamp"><%= chat.created_at.strftime("%H:%M") %></span>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <!-- ✅ Only one form (no duplicate) -->
+  <div class="chat-options">
+    <form id="chat-form" data-conversation-id="<%= @conversation.id %>">
+      <input type="text" id="chat-input" name="message" placeholder="Type your message..." />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</div>
