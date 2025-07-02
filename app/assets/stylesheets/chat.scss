@@ -22,7 +22,70 @@
   height: 90vh;
 }
 
+/* --- 🆕 WhatsApp-style layout --- */
+.chat-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
 
+.sidebar {
+  width: 300px;
+  background: #111;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.5rem;
+    background: #222;
+    border: none;
+    border-radius: 8px;
+    color: white;
+  }
+
+  .conversation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .conversation-item {
+      padding: 0.75rem;
+      background: #222;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #333;
+      }
+
+      &.active {
+        background: #444;
+      }
+    }
+  }
+}
+
+.chat-main {
+  flex: 1;
+  background: #f4f4f4;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --- ✅ Existing styles --- */
 .chat-header {
   display: flex;
   justify-content: space-between;
@@ -125,7 +188,7 @@
   z-index: 100;
 }
 
-/* Dark Mode */
+/* --- 🌙 Dark Mode --- */
 body.dark-mode {
   background-color: #121212;
 }
@@ -162,6 +225,29 @@ body.dark-mode .chat-input {
 body.dark-mode .chat-send,
 body.dark-mode #emojiBtn {
   background-color: #0d6efd;
+}
+
+body.dark-mode .sidebar {
+  background: #181818;
+
+  .conversation-item {
+    background: #1f1f1f;
+    color: white;
+  }
+
+  .conversation-item:hover {
+    background: #2a2a2a;
+  }
+
+  .conversation-item.active {
+    background: #333;
+  }
+
+  .search-input {
+    background: #222;
+    border: none;
+    color: white;
+  }
 }
 
 /* Toggle Switch */
@@ -211,4 +297,81 @@ input:checked + .slider:before {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.modal-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  text-align: center;
+  color: #007bff;
+}
+
+.modal-content .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-content label {
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-content input[type="text"] {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.modal-content .chat-send {
+  padding: 0.75rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.modal-content .chat-send:hover {
+  background: #0056b3;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

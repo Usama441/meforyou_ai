@@ -1,0 +1,21 @@
+<div class="chat-container">
+  <aside class="sidebar">
+    <h2>ME</h2>
+
+    <%= form_with model: @conversation, url: conversations_path do |f| %>
+      <%= f.text_field :title, placeholder: "New Chat Title" %>
+      <%= f.submit "Start" %>
+    <% end %>
+
+    <% @conversations.each do |convo| %>
+      <div>
+        <%= link_to convo.title, conversation_path(convo) %>
+      </div>
+    <% end %>
+  </aside>
+
+  <main class="chat-main">
+    <h1>Welcome to ME Chat</h1>
+    <p>Choose a conversation or start a new one.</p>
+  </main>
+</div>
