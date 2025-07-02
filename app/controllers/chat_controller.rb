@@ -8,10 +8,16 @@ class ChatController < ApplicationController
   def new
     @conversations = current_user.conversations.order(created_at: :desc)
     @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last
-    @chats = @conversation.present? ? @conversation.chats.order(:created_at) : []
-    @messages = @conversation&.messages || []
-    @ai_name = @conversation.ai_name
 
+    if @conversation.present?
+      @chats = @conversation.chats.order(:created_at)
+      @messages = @conversation.messages
+      @ai_name = @conversation.ai_name
+    else
+      @chats = []
+      @messages = []
+      @ai_name = "AI" # fallback default name
+    end
   end
 
   def create

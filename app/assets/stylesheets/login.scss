@@ -1,6 +1,8 @@
-@import "mixins";
-body{
+body {
   background-color: #f2f4f7;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .login-container {
@@ -8,8 +10,9 @@ body{
   justify-content: center;
   align-items: center;
   background: #f3f4f6;
-  min-height: 90vh;
+  min-height: 100vh;
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .login-box {
@@ -20,6 +23,7 @@ body{
   width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   position: relative;
+  box-sizing: border-box;
 }
 
 .logo-top-right {
@@ -52,33 +56,38 @@ body{
   padding: 0.6rem;
   border: 1px solid #d1d5db;
   border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .login-button,
 .signup-button {
   display: block;
   width: 100%;
-  padding: 12px;
+  padding: 0.75rem;
+  font-size: 1rem;
   background-color: #3b82f6;
   color: white;
   font-weight: bold;
+  text-align: center;
+  text-decoration: none;
   border: none;
   border-radius: 6px;
   margin-top: 10px;
-  text-align: center;
-  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #2563eb;
   }
 }
+
 .futuristic-footer {
   background: #fff;
   color: #cfcfcf;
   padding: 30px 40px 10px;
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  //border-top: 1px solid #222;
   box-shadow: 0 -2px 8px rgba(0, 255, 255, 0.1);
 
   .footer-content {
@@ -137,4 +146,40 @@ body{
   }
 }
 
+/* ✅ Mobile responsive tweaks */
+@media (max-width: 480px) {
+  .login-box {
+    padding: 1.2rem;
+  }
 
+  .form-input {
+    font-size: 0.95rem;
+  }
+
+  .login-button,
+  .signup-button {
+    font-size: 1rem;
+  }
+
+  .footer-column {
+    min-width: 100%;
+  }
+}
+.separator-line {
+  text-align: center;
+  color: #888;
+  margin: 1.5rem 0;
+  font-size: 0.85rem;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    display: inline-block;
+    height: 1px;
+    width: 40%;
+    background: #ccc;
+    vertical-align: middle;
+    margin: 0 10px;
+  }
+}
