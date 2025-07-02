@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   # Associations (if any)
   has_many :chats, dependent: :destroy
+  has_many :chat_sessions
 
   # Validations
   validates :relationship, presence: true

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     sign_up: 'signup'
   }
 
+  post "/chat/summarize_memory", to: "chat#summarize_memory", as: :summarize_memory
 
 
   root to: 'chat#new'
