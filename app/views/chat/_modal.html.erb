@@ -1,0 +1,53 @@
+<!-- app/views/chat/_modal.html.erb -->
+<div id="newChatModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <% if @conversation&.errors&.any? %>
+      <div class="alert-danger">
+        <ul>
+          <% @conversation.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <h2>Create New AI Chat</h2>
+
+    <%= form_with model: @conversation, url: conversations_path, method: :post, data: { turbo: false }, html: { id: "new-convo-form" } do |f| %>
+      <div class="form-group">
+        <%= f.label :name, "AI Name" %>
+        <%= f.text_field :name, class: "form-control", placeholder: "e.g. Dad, Sarah" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :relationship, "Relationship Type" %>
+        <%= f.select :relationship, ChatHelper::RELATIONSHIP_OPTIONS, {}, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ai_status, "AI Status" %>
+        <%= f.select :ai_status, ['Alive', 'Deceased'], {}, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ai_gender, "AI Gender" %>
+        <%= f.select :ai_gender, ['Male', 'Female', 'Non-binary'], {}, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ai_age, "AI Age" %>
+        <%= f.number_field :ai_age, class: "form-control", min: 1 %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, "Memory Description" %>
+        <%= f.text_area :description, rows: 3, class: "form-control", placeholder: "Shared memories or AI personality" %>
+      </div>
+
+      <div class="form-group" style="text-align: center;">
+        <%= f.submit "Create", class: "chat-send" %>
+        <button type="button" class="chat-send" onclick="closeNewChatModal()">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</div>

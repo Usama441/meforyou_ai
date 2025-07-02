@@ -24,42 +24,22 @@
   <!-- ✅ Rails Asset Pipeline -->
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-  <%= javascript_include_tag "chat_stream", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "chat_stream", type: "module" %>
+
   <%= javascript_importmap_tags %>
 </head>
 
 <body>
+<div id="chatMetadata" data-ai-name="<%= @ai_name %>" style="display: none;"></div>
 <main class="container mx-auto mt-28 px-5 flex flex-col items-center space-y-2">
   <%= yield %>
 
 
 </main>
 
+
+
 </body>
-<script>
-    function togglePasswordVisibility() {
-        const input = document.getElementById('password-field');
-        const icon = document.querySelector('.toggle-password');
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.textContent = '🙈';
-        } else {
-            input.type = 'password';
-            icon.textContent = '👁️';
-        }
-    }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form");
-        const checkbox = document.getElementById("terms-agree");
-
-        form.addEventListener("submit", function (e) {
-            if (!checkbox.checked) {
-                alert("You must agree to the Terms and Policies to sign up.");
-                e.preventDefault();
-            }
-        });
-    });
-</script>
 
 </html>

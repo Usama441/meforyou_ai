@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     sign_out: 'logout',
     sign_up: 'signup'
   }
-
+  if Rails.env.development?
+    get "/.well-known/*path", to: ->(env) { [204, {}, []] }
+  end
   post "/chat/summarize_memory", to: "chat#summarize_memory", as: :summarize_memory
 
   root to: 'chat#new'

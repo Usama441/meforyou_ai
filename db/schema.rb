@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_02_120157) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_02_200455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -39,11 +39,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_02_120157) do
 
   create_table "conversations", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "title"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "relationship"
     t.string "ai_name"
+    t.string "ai_status"
+    t.string "ai_gender"
+    t.integer "ai_age"
+    t.text "description"
     t.index ["user_id"], name: "index_conversations_on_user_id"
   end
 

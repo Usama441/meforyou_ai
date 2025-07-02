@@ -1,26 +1,13 @@
 module ChatHelper
-  def relationship_options
-    [
-      "Mother",
-      "Father",
-      "Brother",
-      "Sister",
-      "Friend",
-      "Male Friend",
-      "Female Friend",
-      "Partner",
-      "Ex-Partner",
-      "Cousin",
-      "Uncle",
-      "Aunt",
-      "Chachu",
-      "Teacher",
-      "Boss",
-      "Colleague",
-      "Child",
-      "Mentor",
-      "AI"
-    ]
-  end
-
+  RELATIONSHIP_OPTIONS = [
+    ['Friend', 'friend'],
+    ['Mother', 'mother'],
+    ['Father', 'father'],
+    ['Partner', 'partner'],
+    ['Sibling', 'sibling'],
+    ['Spouse', 'spouse'],
+    ['Child', 'child'],
+    ['Colleague', 'colleague'],
+    ['Custom', 'custom']
+  ]
 end
