@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_28_205410) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_01_210533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "chat_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "topic"
+    t.index ["user_id"], name: "index_chat_sessions_on_user_id"
+  end
 
   create_table "chats", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -21,6 +30,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_205410) do
     t.text "reply"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "chat_session_id"
+    t.index ["chat_session_id"], name: "index_chats_on_chat_session_id"
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
@@ -54,10 +65,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_28_205410) do
     t.string "relationship"
     t.string "name"
     t.string "ai_name"
+    t.string "person_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "chat_sessions", "users"
+  add_foreign_key "chats", "chat_sessions"
   add_foreign_key "chats", "users"
   add_foreign_key "conversations", "users"
   add_foreign_key "prompts", "users"
