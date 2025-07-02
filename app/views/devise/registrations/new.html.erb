@@ -1,45 +1,72 @@
 <main class="signup-container">
   <div class="signup-box">
-    <h1>👋 Create Your Me4You </h1>
-    <%= form_for(resource, as: :user, url: registration_path(:user)) do |form| %>
+    <h2>Create a new account</h2>
+    <p>It's quick and easy.</p>
+    <hr>
+
+    <%= form_for(resource, as: :user, url: registration_path(:user)) do |f| %>
       <%= render 'devise/shared/error_messages', resource: resource %>
 
-      <div class="form-group">
-        <%= form.label :name %>
-        <%= form.text_field :name, required: true, class: "form-input" %>
+
+      <label class="field-label">Full Name</label>
+      <div class="form-row double">
+        <div class="form-group">
+          <%= f.text_field :last_name, placeholder: "Last name", class: "form-input" %>
+        </div>
+        <div class="form-group">
+          <%= f.text_field :last_name, placeholder: "Last name", class: "form-input" %>
+        </div>
       </div>
 
-      <div class="form-group">
-        <%= form.label :ai_name, "Your AI's Name" %>
-        <%= form.text_field :ai_name, required: true, class: "form-input" %>
+
+
+      <label class="field-label">Date of Birth</label>
+      <%= f.date_select :dob, { start_year: 1950, end_year: Date.today.year - 5 },
+                        { class: "form-input", style: "width: 30%; margin-bottom: 1rem;" } %>
+
+      <label class="field-label">Gender</label>
+      <div class="form-row triple gender-options">
+        <label>
+          <%= f.radio_button :gender, "Female" %>
+          <span>Female</span>
+        </label>
+        <label>
+          <%= f.radio_button :gender, "Male" %>
+          <span>Male</span>
+        </label>
+        <label>
+          <%= f.radio_button :gender, "Custom" %>
+          <span>Custom</span>
+        </label>
       </div>
 
-      <div class="form-group">
-        <%= form.label :relationship, "Relationship with AI" %>
-        <%= form.select :relationship, ["friend", "mother", "partner", "mentor", "assistant"], prompt: "Select", class: "form-input" %>
+      <label class="field-label">Email or Phone</label>
+      <%= f.text_field :contact_input, id: "contact_input", placeholder: "Enter phone number", class: "form-input", autocomplete: "tel" %>
+
+      <label class="field-label">Password</label>
+      <div class="password-wrapper">
+        <%= f.password_field :password, id: "password-field", class: "form-input", placeholder: "New password" %>
+        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">👁️</button>
       </div>
 
-      <div class="form-group">
-        <%= form.label :email %>
-        <%= form.email_field :email, required: true, class: "form-input" %>
+      <label class="field-label">Confirm Password</label>
+      <%= f.password_field :password_confirmation, class: "form-input", placeholder: "Confirm password" %>
+
+      <div class="checkbox-group">
+        <label>
+          <input type="checkbox" id="terms-agree" required>
+          <span>I agree to the <a href="#">Terms</a>, <a href="#">Privacy Policy</a>, and <a href="#">Cookies Policy</a>.</span>
+        </label>
       </div>
 
-      <div class="form-group">
-        <%= form.label :password %>
-        <%= form.password_field :password, required: true, class: "form-input" %>
-      </div>
-
-      <div class="form-group">
-        <%= form.label :password_confirmation %>
-        <%= form.password_field :password_confirmation, required: true, class: "form-input" %>
-      </div>
-
-      <%= form.submit "🚀 Sign up", class: "submit-btn" %>
+      <%= f.submit "Sign Up", class: "submit-btn full-width" %>
     <% end %>
 
     <p class="form-footer">
       Already have an account?
-      <%= link_to "Log in", new_user_session_path, class: "login-link" %>
+      <%= link_to "Log in", new_user_session_path %>
     </p>
   </div>
 </main>
+
+
