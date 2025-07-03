@@ -1,5 +1,5 @@
 <!-- app/views/chat/_modal.html.erb -->
-<div id="newChatModal" class="modal" style="display: none;">
+<div id="newChatModal" class="modal">
   <div class="modal-content">
     <% if @conversation&.errors&.any? %>
       <div class="alert-danger">
@@ -45,8 +45,8 @@
       </div>
 
       <div class="form-group" style="text-align: center;">
-        <%= f.submit "Create", class: "chat-send" %>
-        <button type="button" class="chat-send" onclick="closeNewChatModal()">Cancel</button>
+        <button type="submit" class="chat-send">Create</button>
+        <button type="button" class="cancel-btn" onclick="closeNewChatModal()">Cancel</button>
       </div>
     <% end %>
   </div>
