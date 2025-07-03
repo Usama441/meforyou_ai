@@ -5,6 +5,8 @@ class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
   def new
+    @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
+
     @conversations = current_user.conversations.order(created_at: :desc)
     @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
     @chats = @conversation.persisted? ? @conversation.chats.order(:created_at) : []
@@ -146,7 +148,8 @@ class ChatController < ApplicationController
 
     if full_text.present?
       memory.add_message(role: "ai", content: full_text)
-
+      $redis.rpush("chatlog:#{conversation.id}", "User: #{params[:message]}")
+      $redis.rpush("chatlog:#{conversation.id}", "AI: #{full_text}")
       # ✅ Save USER message
       Chat.create!(
         user: current_user,
