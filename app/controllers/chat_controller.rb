@@ -5,16 +5,15 @@ class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
   def new
-    @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
-
     @conversations = current_user.conversations.order(created_at: :desc)
     @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
-    @chats = @conversation.persisted? ? @conversation.chats.order(:created_at) : []
+
+    @redis_log = @conversation&.persisted? ? $redis.lrange("chatlog:#{@conversation.id}", 0, -1) : []
+
+    @chats = @conversation.persisted? ? Chat.where(conversation_id: @conversation.id).order(:created_at) : []
     @messages = @conversation&.messages || []
-    @chats = Chat.where(conversation_id: @conversation.id).order(:created_at)
     @ai_name = @conversation.name.presence
 
-    # 👇 Add this condition
     if request.headers["Turbo-Frame"]
       render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
     else
