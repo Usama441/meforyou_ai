@@ -8,13 +8,14 @@ class ChatController < ApplicationController
     @conversations = current_user.conversations.order(created_at: :desc)
     @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
 
+    # ✅ Safely attempt to fetch from Redis
     begin
       if @conversation&.persisted?
         @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
       else
         @redis_log = []
       end
-    rescue Redis::BaseError => e
+    rescue => e
       Rails.logger.error("Redis error: #{e.message}")
       @redis_log = []
     end
