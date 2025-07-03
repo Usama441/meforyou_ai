@@ -19,7 +19,10 @@
   <link rel="icon" type="image/png" sizes="32x32" href="<%= asset_path('favicons/favicon-32x32.png') %>">
   <link rel="icon" type="image/png" sizes="16x16" href="<%= asset_path('favicons/favicon-16x16.png') %>">
   <link rel="manifest" href="<%= asset_path('favicons/site.webmanifest') %>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <meta name="theme-color" content="#ffffff">
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
 
   <!-- ✅ Rails Asset Pipeline -->
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>

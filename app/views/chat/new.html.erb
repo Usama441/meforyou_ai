@@ -1,7 +1,49 @@
 <div class="chat-container">
+
+  <!-- ✅ LEFT FEATURE SIDEBAR -->
+  <aside class="feature-sidebar">
+    <div class="feature-group">
+      <div class="tooltip-wrapper">
+        <button class="feature-btn" onclick="toggleTheme()">🌓</button>
+        <span class="tooltip">Toggle Light/Dark Mode</span>
+      </div>
+
+      <div class="tooltip-wrapper">
+        <button class="feature-btn" onclick="location.reload()">🔄</button>
+        <span class="tooltip">Refresh the Page</span>
+      </div>
+
+      <div class="tooltip-wrapper">
+        <button class="feature-btn" onclick="toggleFullscreen()">⛶</button>
+        <span class="tooltip">Toggle Fullscreen</span>
+      </div>
+
+      <div class="tooltip-wrapper">
+        <button class="feature-btn" onclick="downloadChat()">💾</button>
+        <span class="tooltip">Download Chat</span>
+      </div>
+
+      <div class="tooltip-wrapper">
+        <button class="feature-btn">ℹ️</button>
+        <span class="tooltip">App Information</span>
+      </div>
+    </div>
+
+    <!-- 🔧 Settings at bottom -->
+    <div class="tooltip-wrapper settings-btn">
+      <button class="feature-btn">⚙️</button>
+      <span class="tooltip">Settings</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn" title="Logout">
+      <i class="fas fa-right-from-bracket"></i>
+    </button>
+
+  </aside>
+
   <!-- ✅ LEFT SIDEBAR -->
   <aside class="sidebar">
     <h2>Conversations</h2>
+    <input type="text" id="conversationSearch" placeholder="Search conversations..." class="search-bar">
 
     <button type="button" class="chat-send" onclick="openNewChatModal()">Start New Chat</button>
 
@@ -13,7 +55,7 @@
   </aside>
 
   <!-- ✅ Hidden AI name for JS to use -->
-  <div id="chatMetadata" data-ai-name="<%= @ai_name %>" style="display: none;"></div>
+  <div  data-ai-name="<%= @ai_name %>" style="display: none;"></div>
 
   <!-- ✅ CHAT AREA -->
   <main class="chat-wrapper">
@@ -26,7 +68,91 @@
 <!-- ✅ Modal for new conversation (unchanged) -->
 <%= render partial: "chat/modal" %>
 
-<!-- ✅ Chat JavaScript -->
+<!-- ✅ Working JavaScript -->
 <script>
+    function openNewChatModal() {
+        const modal = document.getElementById('newChatModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+
+    function closeNewChatModal() {
+        const modal = document.getElementById('newChatModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("conversationSearch");
+        const items = document.querySelectorAll(".conversation-item");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? "block" : "none";
+            });
+        });
+    });
+
+    function toggleTheme() {
+        document.body.classList.toggle("light-theme");
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle("light-theme");
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    function downloadChat() {
+        const chatContent = document.querySelector('.chat-history')?.innerText || "No chat content available.";
+        const blob = new Blob([chatContent], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "chat-history.txt";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", () => {
+                const token = document.querySelector('meta[name="csrf-token"]').content;
+
+                fetch("/logout", {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-Token": token,
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                })
+                  .then(response => {
+                      if (response.ok) {
+                          window.location.href = "/login"; // ✅ Redirect after logout
+                      } else {
+                          alert("Logout failed.");
+                      }
+                  })
+                  .catch(error => {
+                      console.error("Logout error:", error);
+                      alert("Something went wrong.");
+                  });
+            });
+        }
+    });
 
 </script>

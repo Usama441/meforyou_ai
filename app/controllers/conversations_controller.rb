@@ -24,12 +24,9 @@ class ConversationsController < ApplicationController
     puts @conversation.inspect
 
     if @conversation.save
-      puts "✅ Conversation saved successfully! ID: #{@conversation.id}"
-      render json: { id: @conversation.id }
+      redirect_to chat_path(id: @conversation.id)
     else
-      puts "❌ Failed to save conversation"
-      puts @conversation.errors.full_messages
-      render json: { errors: @conversation.errors.full_messages }, status: :unprocessable_entity
+      render partial: "chat/modal", status: :unprocessable_entity
     end
   end
 
