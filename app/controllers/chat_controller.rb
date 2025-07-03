@@ -8,7 +8,16 @@ class ChatController < ApplicationController
     @conversations = current_user.conversations.order(created_at: :desc)
     @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
 
-    @redis_log = @conversation&.persisted? ? $redis.lrange("chatlog:#{@conversation.id}", 0, -1) : []
+    begin
+      if @conversation&.persisted?
+        @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
+      else
+        @redis_log = []
+      end
+    rescue Redis::BaseError => e
+      Rails.logger.error("Redis error: #{e.message}")
+      @redis_log = []
+    end
 
     @chats = @conversation.persisted? ? Chat.where(conversation_id: @conversation.id).order(:created_at) : []
     @messages = @conversation&.messages || []
