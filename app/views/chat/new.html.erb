@@ -64,6 +64,15 @@
     </turbo-frame>
   </main>
 </div>
+<!-- ✅ Append Redis chat history below the main chat -->
+<div class="chat-history">
+  <h3>🔁 Redis Chat Log</h3>
+  <% @redis_log.each do |line| %>
+    <div class="chat-bubble <%= line.starts_with?("User:") ? 'user' : 'ai' %>">
+      <%= line.sub(/^User: |^AI: /, "") %>
+    </div>
+  <% end %>
+</div>
 
 <!-- ✅ Modal for new conversation (unchanged) -->
 <%= render partial: "chat/modal" %>
