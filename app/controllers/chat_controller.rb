@@ -5,30 +5,23 @@ class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
   def new
-  @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
-  @conversations = current_user.conversations.order(created_at: :desc)
-  @chats = @conversation.present? ? Chat.where(conversation_id: @conversation.id).order(:created_at) : []
-  @messages = @conversation&.messages || []
-  @ai_name = @conversation.name.presence
+    @conversations = current_user.conversations.order(created_at: :desc)
+    @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
+    @chats = @conversation.persisted? ? @conversation.chats.order(:created_at) : []
+    @messages = @conversation&.messages || []
+    @chats = Chat.where(conversation_id: @conversation.id).order(:created_at)
+    @ai_name = @conversation.name.presence
 
-  # Redis log with rescue
-  begin
-    @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
-  rescue Redis::BaseConnectionError => e
-    Rails.logger.error "Redis connection failed: #{e.message}"
-    @redis_log = []
+    # 👇 Add this condition
+    if request.headers["Turbo-Frame"]
+      render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
+    else
+      render :new
+    end
   end
 
-  if request.headers["Turbo-Frame"]
-    render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
-  else
-    render :new
-  end
-end
 
-
-
-def create
+  def create
     conversation = current_user.conversations.find_by(id: params[:conversation_id]) ||
                    current_user.conversations.create(title: params[:ai_name], ai_name: params[:ai_name], relationship: params[:relationship])
 
@@ -153,8 +146,7 @@ def create
 
     if full_text.present?
       memory.add_message(role: "ai", content: full_text)
-      $redis.rpush("chatlog:#{conversation.id}", "User: #{params[:message]}")
-      $redis.rpush("chatlog:#{conversation.id}", "AI: #{full_text}")
+
       # ✅ Save USER message
       Chat.create!(
         user: current_user,
@@ -219,14 +211,5 @@ def create
     conversation_id = params[:conversation_id]
     RedisMemoryService.new(conversation_id).reset!
     redirect_to chat_path(id: conversation_id), notice: "Memory reset successfully."
-  end
-
-  def ping_test
-    begin
-      pong = $redis.ping
-      render plain: "Redis says: #{pong}"
-    rescue => e
-      render plain: "Redis error: #{e.class} - #{e.message}"
-    end
   end
 end
