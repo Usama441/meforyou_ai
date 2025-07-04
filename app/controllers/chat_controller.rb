@@ -5,34 +5,30 @@ class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
   def new
-    @conversations = current_user.conversations.order(created_at: :desc)
-    @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
+  @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
+  @conversations = current_user.conversations.order(created_at: :desc)
+  @chats = @conversation.present? ? Chat.where(conversation_id: @conversation.id).order(:created_at) : []
+  @messages = @conversation&.messages || []
+  @ai_name = @conversation.name.presence
 
-    # ✅ Safely attempt to fetch from Redis
-    begin
-      if @conversation&.persisted?
-        @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
-      else
-        @redis_log = []
-      end
-    rescue => e
-      Rails.logger.error("Redis error: #{e.message}")
-      @redis_log = []
-    end
-
-    @chats = @conversation.persisted? ? Chat.where(conversation_id: @conversation.id).order(:created_at) : []
-    @messages = @conversation&.messages || []
-    @ai_name = @conversation.name.presence
-
-    if request.headers["Turbo-Frame"]
-      render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
-    else
-      render :new
-    end
+  # Redis log with rescue
+  begin
+    @redis_log = $redis.lrange("chatlog:#{@conversation.id}", 0, -1)
+  rescue Redis::BaseConnectionError => e
+    Rails.logger.error "Redis connection failed: #{e.message}"
+    @redis_log = []
   end
 
+  if request.headers["Turbo-Frame"]
+    render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
+  else
+    render :new
+  end
+end
 
-  def create
+
+
+def create
     conversation = current_user.conversations.find_by(id: params[:conversation_id]) ||
                    current_user.conversations.create(title: params[:ai_name], ai_name: params[:ai_name], relationship: params[:relationship])
 
@@ -223,5 +219,14 @@ class ChatController < ApplicationController
     conversation_id = params[:conversation_id]
     RedisMemoryService.new(conversation_id).reset!
     redirect_to chat_path(id: conversation_id), notice: "Memory reset successfully."
+  end
+
+  def ping_test
+    begin
+      pong = $redis.ping
+      render plain: "Redis says: #{pong}"
+    rescue => e
+      render plain: "Redis error: #{e.class} - #{e.message}"
+    end
   end
 end
