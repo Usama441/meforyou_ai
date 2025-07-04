@@ -1,5 +1,6 @@
 source "https://rubygems.org"
-gem 'redis'
+gem 'redis', "~> 5.0"
+
 
 gem 'devise'
 gem 'openai'
