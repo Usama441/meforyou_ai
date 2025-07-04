@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   # Devise custom paths
   devise_for :users, path: '', path_names: {
@@ -19,6 +21,7 @@ Rails.application.routes.draw do
   if Rails.env.development?
     get "/.well-known/*path", to: ->(env) { [204, {}, []] }
   end
+  mount Sidekiq::Web => '/sidekiq' if Rails.env.development?
 
   # Chat routes
   get "chat", to: "chat#new"

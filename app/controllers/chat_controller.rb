@@ -4,6 +4,7 @@ require 'json'
 class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
+
   def new
     @conversations = current_user.conversations.order(created_at: :desc)
     @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
@@ -12,7 +13,6 @@ class ChatController < ApplicationController
     @chats = Chat.where(conversation_id: @conversation.id).order(:created_at)
     @ai_name = @conversation.name.presence
 
-    # 👇 Add this condition
     if request.headers["Turbo-Frame"]
       render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
     else
@@ -20,13 +20,12 @@ class ChatController < ApplicationController
     end
   end
 
-
   def create
     conversation = current_user.conversations.find_by(id: params[:conversation_id]) ||
                    current_user.conversations.create(title: params[:ai_name], ai_name: params[:ai_name], relationship: params[:relationship])
 
-    conversation.messages.create(content: params[:prompt], role: "user")
-    conversation.messages.create(content: "AI is replying to: #{params[:prompt]}", role: "bot")
+    conversation.messages.create(content: params[:message], role: "user")
+    conversation.messages.create(content: "AI is replying to: #{params[:message]}", role: "bot")
 
     session_id = current_user.chat_sessions.last&.id
     if TopicClassifier.new_topic?(current_user, params[:message])
@@ -52,7 +51,6 @@ class ChatController < ApplicationController
 
     memory.add_message(role: "ai", content: reply)
 
-    # ✅ Save USER message
     Chat.create!(
       user: current_user,
       chat_session_id: session_id,
@@ -60,15 +58,16 @@ class ChatController < ApplicationController
       role: "user",
       message: params[:message]
     )
+    store_in_redis(conversation.id, role: "user", content: params[:message])
 
-    # ✅ Save AI message with correct name
     Chat.create!(
       user: current_user,
       chat_session_id: session_id,
       conversation: conversation,
-      role: tone, # this can be "friend", "mother", etc.
+      role: tone,
       reply: reply
     )
+    store_in_redis(conversation.id, role: tone, content: reply)
 
     redirect_to chat_path(id: conversation.id), notice: "AI replied successfully."
   end
@@ -98,24 +97,17 @@ class ChatController < ApplicationController
     prompt = "#{persona}\n\nConversation:\n#{history}\n\nUser: #{params[:message]}\nAI:"
     Rails.logger.info "🔍 Streamed Prompt Sent:\n#{prompt}"
 
-    uri = URI("https://api.groq.com/openai/v1/chat/completions")
+    uri = URI("http://localhost:11434/api/generate")
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
+    http.use_ssl = false
 
     req = Net::HTTP::Post.new(uri.path, {
-      "Content-Type" => "application/json",
-      "Authorization" => "Bearer #{Rails.application.credentials[:groq_api_key]}"
+      "Content-Type" => "application/json"
     })
 
     req.body = {
-      model: "llama3-8b-8192",
-      messages: [
-        { role: "system", content: persona },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.7,
-      top_p: 0.9,
-      max_tokens: 150,
+      model: "mistral",
+      prompt: prompt,
       stream: true
     }.to_json
 
@@ -123,21 +115,15 @@ class ChatController < ApplicationController
 
     http.request(req) do |res|
       res.read_body do |chunk|
-        chunk.lines.each do |line|
-          next unless line.start_with?("data:")
-          json_str = line.sub("data:", "").strip
-          next if json_str == "[DONE]"
+        begin
+          data = JSON.parse(chunk) rescue nil
+          delta = data["response"]
+          next if delta.blank?
 
-          begin
-            data = JSON.parse(json_str)
-            delta = data.dig("choices", 0, "delta", "content")
-            next if delta.nil? || delta.strip.empty?
-
-            full_text += delta
-            response.stream.write("data: #{ { response: delta }.to_json }\n\n")
-          rescue => e
-            Rails.logger.error("Stream parse error: #{e.message} | Chunk: #{json_str}")
-          end
+          full_text += delta
+          response.stream.write("data: #{ { response: delta }.to_json }\n\n")
+        rescue => e
+          Rails.logger.error("Stream parse error: #{e.message} | Chunk: #{chunk}")
         end
       end
     end
@@ -147,7 +133,6 @@ class ChatController < ApplicationController
     if full_text.present?
       memory.add_message(role: "ai", content: full_text)
 
-      # ✅ Save USER message
       Chat.create!(
         user: current_user,
         chat_session_id: session_id,
@@ -155,15 +140,16 @@ class ChatController < ApplicationController
         role: "user",
         message: params[:message]
       )
+      store_in_redis(conversation.id, role: "user", content: params[:message])
 
-      # ✅ Save AI message
       Chat.create!(
         user: current_user,
         chat_session_id: session_id,
         conversation: conversation,
-        role: tone, # "mother", "AI", etc.
+        role: tone,
         reply: full_text
       )
+      store_in_redis(conversation.id, role: tone, content: full_text)
     end
 
   rescue => e
@@ -176,35 +162,40 @@ class ChatController < ApplicationController
   private
 
   def local_llama_response(prompt)
-    uri = URI("https://api.groq.com/openai/v1/chat/completions")
+    uri = URI("http://localhost:11434/api/generate")
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
+    http.use_ssl = false
 
     req = Net::HTTP::Post.new(uri.path, {
-      "Content-Type" => "application/json",
-      "Authorization" => "Bearer #{Rails.application.credentials[:groq_api_key]}"
+      "Content-Type" => "application/json"
     })
 
     req.body = {
-      model: "llama3-8b-8192",
-      messages: [
-        { role: "system", content: "You are a friendly assistant." },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.7,
-      top_p: 0.9,
-      max_tokens: 150,
+      model: "mistral",
+      prompt: prompt,
       stream: false
     }.to_json
 
     full_response = ""
     begin
-      http.request(req) { |response| response.read_body { |chunk| full_response += chunk } }
-      json = JSON.parse(full_response) rescue nil
-      json["choices"][0]["message"]["content"] || "Error: No content"
+      response = http.request(req)
+      json = JSON.parse(response.body) rescue nil
+      json["response"] || "Error: No content"
     rescue => e
       "Error: #{e.message}"
     end
+  end
+
+  def redis_chat_history(conversation_id)
+    json = $redis.get("chat:history:#{conversation_id}")
+    JSON.parse(json) rescue []
+  end
+
+  def store_in_redis(conversation_id, role:, content:)
+    key = "chat:history:#{conversation_id}"
+    history = ($redis.get(key).presence && JSON.parse($redis.get(key))) || []
+    history << { role: role, content: content, timestamp: Time.now.to_s }
+    $redis.set(key, history.to_json)
   end
 
   def summarize_memory
