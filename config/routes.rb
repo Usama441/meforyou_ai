@@ -25,10 +25,10 @@ Rails.application.routes.draw do
   post "chat", to: "chat#create"
   post "/chat/stream", to: "chat#stream"
   post "/chat/summarize_memory", to: "chat#summarize_memory", as: :summarize_memory
-
+  get "/ping_test", to: "chat#ping_test
   # Profile routes
-  get "profiles/edit", to: "profiles#edit", as: :profiles_edit
-  get "profiles/update", to: "profiles#update", as: :profiles_update
+  # get "profiles/edit", to: "profiles#edit", as: :profiles_edit
+  # get "profiles/update", to: "profiles#update", as: :profiles_update
 
   # Rails health check
   get "up", to: "rails/health#show", as: :rails_health_check
