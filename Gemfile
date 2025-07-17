@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-gem 'redis', "~> 5.0"
+gem 'redis', "~> 5.4"
 
 gem 'sidekiq'
 
