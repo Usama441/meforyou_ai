@@ -2,9 +2,11 @@ source "https://rubygems.org"
 gem 'redis', "~> 5.0"
 
 gem 'sidekiq'
+gem 'dotenv-rails'
 
 gem 'devise'
 gem 'openai'
+gem 'twilio-ruby', '~> 5.77', require: false
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.1"

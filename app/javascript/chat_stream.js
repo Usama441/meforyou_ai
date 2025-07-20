@@ -18,7 +18,6 @@ function attachChatListener() {
 
         const message = input.value.trim();
         if (!message) return;
-
         input.value = "";
 
         // Show user's message
@@ -32,11 +31,18 @@ function attachChatListener() {
         const aiBubble = document.createElement("div");
         aiBubble.classList.add("chat-bubble", "bot");
         const aiPara = document.createElement("p");
+        aiPara.innerHTML = `<strong>🤖 ${aiName}:</strong> <span class="ai-response"></span>`;
         aiBubble.appendChild(aiPara);
         chatHistory.appendChild(aiBubble);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
+        const responseSpan = aiPara.querySelector(".ai-response");
 
-        // Streaming fetch
+        // Stream from backend
+                    // Log what we're sending to help debug
+                    console.log("Sending chat request with:", {
+            conversation_id: conversationId,
+            message: message
+                    });
+
         fetch("/chat/stream", {
             method: "POST",
             headers: {
@@ -50,6 +56,8 @@ function attachChatListener() {
             })
         })
             .then(response => {
+                if (!response.ok) throw new Error("Response failed: " + response.status);
+
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder("utf-8");
                 let fullText = "";
@@ -59,30 +67,60 @@ function attachChatListener() {
                         if (done) return;
 
                         const chunk = decoder.decode(value, { stream: true });
-                        chunk.split("data: ").forEach(line => {
-                            if (line.trim()) {
-                                try {
-                                    const json = JSON.parse(line.trim());
-                                    if (json.response) {
-                                        fullText += json.response;
-                                        aiPara.textContent = `🤖 ${aiName}: ${fullText}`;
+                        const lines = chunk.split("\n").filter(line => line.startsWith("data: "));
+
+                        lines.forEach(line => {
+                            try {
+                                const jsonStr = line.replace("data: ", "").trim();
+                                if (jsonStr === "[DONE]") return;
+
+                                console.log("Received JSON string:", jsonStr);
+                                const json = JSON.parse(jsonStr);
+                                console.log("Parsed JSON:", json);
+
+                                // Check if this is an error response
+                                if (json.error) {
+                                    responseSpan.innerHTML = `<span style="color: #ff5555;">${json.response}</span>`;
+                                    console.error("Error from API:", json.response);
+                                    return;
+                                }
+
+                                const delta = json.response;
+                                const isError = json.error;
+
+                                if (delta) {
+                                    if (isError) {
+                                        // Handle error response
+                                        responseSpan.innerHTML = `<span class="error-message">${delta}</span>`;
+                                        console.error("API error:", delta);
+                                    } else {
+                                        // Handle normal response
+                                        fullText += delta;
+                                        responseSpan.textContent = fullText;
                                         chatHistory.scrollTop = chatHistory.scrollHeight;
                                     }
-                                } catch (err) {
-                                    console.error("Invalid JSON:", err);
                                 }
+                            } catch (err) {
+                                console.error("Invalid JSON:", err);
                             }
                         });
 
+                        // Continue reading stream
                         read();
                     });
                 }
 
                 read();
+            })
+            .catch(err => {
+                responseSpan.textContent = "❌ Error: " + err.message;
+                console.error("Fetch error:", err);
+                // Log detailed error information
+                console.log("Conversation ID:", conversationId);
+                console.log("Message sent:", message);
             });
     });
 }
 
-// Initial and turbo-frame load trigger
 document.addEventListener("DOMContentLoaded", attachChatListener);
 document.addEventListener("turbo:frame-load", attachChatListener);

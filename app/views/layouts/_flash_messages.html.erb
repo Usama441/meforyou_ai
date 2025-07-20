@@ -1,0 +1,73 @@
+<% if flash.any? %>
+  <div class="flash-messages">
+    <% flash.each do |type, message| %>
+      <div class="flash-message flash-<%= type %>">
+        <%= message %>
+        <button class="close-flash" onclick="this.parentElement.style.display='none'">&times;</button>
+      </div>
+    <% end %>
+  </div>
+
+  <style>
+    .flash-messages {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      max-width: 400px;
+    }
+
+    .flash-message {
+      padding: 12px 20px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .flash-notice {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .flash-alert,
+    .flash-error {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .flash-warning {
+      background-color: #ff9800;
+      color: white;
+    }
+
+    .close-flash {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+
+  <script>
+    // Auto-hide flash messages after 5 seconds
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.flash-message').forEach(el => {
+          el.style.animation = 'fadeOut 0.5s forwards';
+          setTimeout(() => { el.style.display = 'none'; }, 500);
+        });
+      }, 5000);
+    });
+  </script>
+<% end %>

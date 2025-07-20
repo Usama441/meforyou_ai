@@ -1,38 +1,20 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: 127.0.0.1       # ✅ Make sure it connects via TCP, not socket
-  port: 5432            # ✅ Default port
-  username: postgres    # ✅ Must match your Docker container env
-  password: postgres    # ✅ Must match your Docker container env
+  host: 127.0.0.1
+  port: 5432
+  username: postgres
+  password: postgres
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
   database: meforyou_ai_db
-  username: postgres
-  password: postgres
-  host: meforyou-postgres
 
 test:
   <<: *default
   database: meforyou_ai_db_test
 
 production:
-  primary: &primary_production
-    <<: *default
-    database: meforyou_ai_production
-    username: postgres
-    password: postgres
-  cache:
-    <<: *primary_production
-    database: meforyou_ai_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: meforyou_ai_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: meforyou_ai_production_cable
-    migrations_paths: db/cable_migrate
+  <<: *default
+  database: meforyou_ai_production

@@ -53,6 +53,11 @@ class RedisMemoryService
   end
 
   def redis
-    @redis ||= Redis.new
+    @redis ||= begin
+      Redis.new
+    rescue Redis::CannotConnectError => e
+      Rails.logger.error("Redis memory service connection error: #{e.message}")
+      nil
+    end
   end
 end

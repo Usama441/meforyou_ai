@@ -1,0 +1,223 @@
+<div class="verification-container">
+  <div class="verification-card">
+    <div class="card-header">
+      <h2>Verify Your Phone Number</h2>
+    </div>
+
+    <div class="card-body">
+      <% if flash[:notice] %>
+        <div class="alert alert-success"><%= flash[:notice] %></div>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <div class="alert alert-danger"><%= flash[:alert] %></div>
+      <% end %>
+
+      <p>We've sent a verification code to <strong><%= current_user.country_code %><%= current_user.phone_number %></strong>. Please enter the code below to verify your phone number.</p>
+
+      <%= form_with url: confirm_phone_path, method: :post, class: "verification-form" do |f| %>
+        <div class="form-group">
+          <label for="code">Verification Code</label>
+          <div class="code-input-wrapper">
+            <%= f.text_field :code, class: "form-control code-input", 
+                         placeholder: "Enter 6-digit code", 
+                         maxlength: 6, 
+                         required: true, 
+                         pattern: "\d{6}", 
+                         inputmode: "numeric" %>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit "Verify Phone Number", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+      <div class="resend-section">
+        <p>Didn't receive the code?</p>
+
+        <div class="resend-options">
+          <%= form_with url: resend_phone_verification_path, method: :post, class: "resend-form" do |f| %>
+            <input type="hidden" name="delivery_method" value="whatsapp">
+            <button type="submit" class="btn btn-outline-secondary">
+              <i class="fab fa-whatsapp"></i> Resend via WhatsApp
+            </button>
+          <% end %>
+
+          <%= form_with url: resend_phone_verification_path, method: :post, class: "resend-form" do |f| %>
+            <input type="hidden" name="delivery_method" value="voice">
+            <button type="submit" class="btn btn-outline-secondary">
+              <i class="fas fa-phone"></i> Call me instead
+            </button>
+          <% end %>
+
+          <%= form_with url: resend_phone_verification_path, method: :post, class: "resend-form" do |f| %>
+            <input type="hidden" name="delivery_method" value="sms">
+            <button type="submit" class="btn btn-outline-secondary">
+              <i class="fas fa-sms"></i> Send SMS instead
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .verification-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+  }
+
+  .verification-card {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--card-bg, #fff);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .card-header {
+    background-color: var(--primary-color, #3949ab);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .card-header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  .verification-form {
+    margin-top: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .code-input-wrapper {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .code-input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 24px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background-color: var(--input-bg, #fff);
+    color: var(--text-color, #333);
+    text-align: center;
+    letter-spacing: 10px;
+    transition: border-color 0.3s;
+  }
+
+  .code-input:focus {
+    border-color: var(--primary-color, #3949ab);
+    outline: none;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color, #3949ab);
+    color: white;
+    width: 100%;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-dark, #303f9f);
+  }
+
+  .btn-outline-secondary {
+    background-color: transparent;
+    color: var(--primary-color, #3949ab);
+    border: 1px solid var(--primary-color, #3949ab);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: rgba(57, 73, 171, 0.1);
+  }
+
+  .form-actions {
+    margin-top: 30px;
+  }
+
+  .resend-section {
+    margin-top: 30px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  .resend-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .alert {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  .alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+  }
+
+  .alert-danger {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+  }
+
+  .resend-form {
+    margin-bottom: 8px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const codeInput = document.querySelector('.code-input');
+    if (codeInput) {
+      codeInput.focus();
+    }
+  });
+</script>

@@ -1,5 +1,306 @@
 <h2>Customize Your Experience</h2>
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="card-header">
+      <h2>Your Profile</h2>
+    </div>
 
+    <div class="card-body">
+      <% if flash[:notice] %>
+        <div class="alert alert-success"><%= flash[:notice] %></div>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <div class="alert alert-danger"><%= flash[:alert] %></div>
+      <% end %>
+
+      <div class="profile-section">
+        <h3>Account Security</h3>
+
+        <div class="verification-status">
+          <div class="verification-item">
+            <div class="verification-icon <%= current_user.email_verified? ? 'verified' : 'unverified' %>">
+              <i class="fas <%= current_user.email_verified? ? 'fa-check-circle' : 'fa-exclamation-circle' %>"></i>
+            </div>
+            <div class="verification-details">
+              <h4>Email Verification</h4>
+              <p><%= current_user.email %></p>
+              <div class="verification-action">
+                <% if current_user.email_verified? %>
+                  <span class="status-badge verified">Verified</span>
+                <% else %>
+                  <span class="status-badge unverified">Unverified</span>
+                  <%= link_to "Verify Email", verification_path, class: "btn btn-sm btn-primary" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-item">
+            <div class="verification-icon <%= current_user.phone_verified? ? 'verified' : 'unverified' %>">
+              <i class="fas <%= current_user.phone_verified? ? 'fa-check-circle' : 'fa-exclamation-circle' %>"></i>
+            </div>
+            <div class="verification-details">
+              <h4>Phone Verification</h4>
+              <% if current_user.phone_number.present? %>
+                <p><%= current_user.country_code %><%= current_user.phone_number %></p>
+              <% else %>
+                <p>No phone number added</p>
+              <% end %>
+              <div class="verification-action">
+                <% if current_user.phone_verified? %>
+                  <span class="status-badge verified">Verified</span>
+                  <%= link_to "Change Number", new_phone_verification_path, class: "btn btn-sm btn-outline-secondary" %>
+                <% elsif current_user.phone_number.present? %>
+                  <span class="status-badge unverified">Unverified</span>
+                  <%= link_to "Verify Number", verify_phone_path, class: "btn btn-sm btn-primary" %>
+                <% else %>
+                  <%= link_to "Add Phone Number", new_phone_verification_path, class: "btn btn-sm btn-primary" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Account Information</h3>
+
+        <%= form_with model: current_user, url: user_registration_path, method: :put, class: "profile-form" do |f| %>
+          <%= f.hidden_field :email %>
+
+          <div class="form-group">
+            <label for="current_password">Current Password <small>(needed to confirm changes)</small></label>
+            <%= f.password_field :current_password, class: "form-control", autocomplete: "current-password" %>
+          </div>
+
+          <div class="form-group">
+            <label for="password">New Password <small>(leave blank if you don't want to change it)</small></label>
+            <%= f.password_field :password, class: "form-control", autocomplete: "new-password" %>
+          </div>
+
+          <div class="form-group">
+            <label for="password_confirmation">Confirm New Password</label>
+            <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password" %>
+          </div>
+
+          <div class="form-actions">
+            <%= f.submit "Update Profile", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .profile-card {
+    background-color: var(--card-bg, #fff);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .card-header {
+    background-color: var(--primary-color, #3949ab);
+    color: white;
+    padding: 20px 30px;
+  }
+
+  .card-header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  .profile-section {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .profile-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .profile-section h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: var(--heading-color, #333);
+  }
+
+  .verification-status {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .verification-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: var(--secondary-bg, #f5f5f5);
+    border-radius: 8px;
+  }
+
+  .verification-icon {
+    font-size: 24px;
+    margin-right: 15px;
+    padding-top: 5px;
+  }
+
+  .verification-icon.verified {
+    color: #4caf50;
+  }
+
+  .verification-icon.unverified {
+    color: #ff9800;
+  }
+
+  .verification-details {
+    flex: 1;
+  }
+
+  .verification-details h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 18px;
+  }
+
+  .verification-details p {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-muted, #666);
+  }
+
+  .verification-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .status-badge.verified {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+  }
+
+  .status-badge.unverified {
+    background-color: rgba(255, 152, 0, 0.2);
+    color: #ef6c00;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background-color: var(--input-bg, #fff);
+    color: var(--text-color, #333);
+    transition: border-color 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: var(--primary-color, #3949ab);
+    outline: none;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color, #3949ab);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-dark, #303f9f);
+  }
+
+  .btn-outline-secondary {
+    background-color: transparent;
+    color: var(--primary-color, #3949ab);
+    border: 1px solid var(--primary-color, #3949ab);
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: rgba(57, 73, 171, 0.1);
+  }
+
+  .alert {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  .alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+  }
+
+  .alert-danger {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+  }
+
+  @media (max-width: 768px) {
+    .verification-item {
+      flex-direction: column;
+    }
+
+    .verification-icon {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
+</style>
 <%= form_for current_user, url: profile_path, method: :patch do |f| %>
   <div>
     <%= f.label :name %>

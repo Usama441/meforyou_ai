@@ -1,4 +1,12 @@
-//= require chat_stream
+
+import "./chat_stream"; // if you have this file too
+import "./custom_select";
+import "./password_generation";
+import "./signup";
+import "./theme_toggle";
+import "./form_validation";
+import "./turbo_debug";
+
 
 const toggle = document.getElementById('darkModeToggle');
     const body = document.body;

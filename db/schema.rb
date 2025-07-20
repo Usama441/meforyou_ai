@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_02_200455) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_20_000005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -87,8 +87,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_02_200455) do
     t.date "dob"
     t.string "gender"
     t.string "phone"
+    t.boolean "email_verified", default: false
+    t.string "phone_number"
+    t.boolean "phone_verified", default: false
+    t.string "country_code"
+    t.string "contact_input"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["phone_number"], name: "index_users_on_phone_number"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "verification_codes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "code", null: false
+    t.datetime "expires_at", null: false
+    t.boolean "used", default: false
+    t.string "code_type", default: "email_verification"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "code_type"], name: "index_verification_codes_on_user_id_and_code_type"
+    t.index ["user_id"], name: "index_verification_codes_on_user_id"
   end
 
   add_foreign_key "chat_sessions", "users"
@@ -98,4 +116,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_02_200455) do
   add_foreign_key "conversations", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "prompts", "users"
+  add_foreign_key "verification_codes", "users"
 end

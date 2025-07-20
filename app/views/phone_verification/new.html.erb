@@ -1,0 +1,263 @@
+<div class="verification-container">
+  <div class="verification-card">
+    <div class="card-header">
+      <h2>Verify Your Phone Number</h2>
+    </div>
+
+    <div class="card-body">
+      <% if flash[:notice] %>
+        <div class="alert alert-success"><%= flash[:notice] %></div>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <div class="alert alert-danger"><%= flash[:alert] %></div>
+      <% end %>
+
+      <p>Please enter your phone number to receive a verification code.</p>
+
+      <%= form_with url: phone_verification_path, method: :post, class: "phone-verification-form" do |f| %>
+        <div class="form-group">
+          <label for="country_code">Country</label>
+          <select name="country_code" id="country_code" class="form-control" required>
+            <option value="">Select Country</option>
+            <% @countries.each do |country| %>
+              <option value="<%= country[:dial_code] %>" 
+                      <%= 'selected' if current_user.country_code == country[:dial_code] %>>
+                <%= country[:name] %> (<%= country[:dial_code] %>)
+              </option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="phone_number">Phone Number</label>
+          <div class="phone-input-container">
+            <div class="country-code" id="selected-country-code">+1</div>
+            <%= f.text_field :phone_number, class: "form-control phone-input", 
+                       placeholder: "Enter phone number", 
+                       required: true, 
+                       value: current_user.phone_number, 
+                       pattern: "[0-9\s\-\(\)]+", 
+                       inputmode: "tel" %>
+          </div>
+          <small class="form-text text-muted">Enter numbers only, without country code</small>
+        </div>
+
+        <div class="form-group">
+          <label>Verification Method</label>
+          <div class="delivery-methods">
+            <div class="delivery-method">
+              <input type="radio" name="delivery_method" id="delivery_whatsapp" value="whatsapp" checked>
+              <label for="delivery_whatsapp">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+              </label>
+            </div>
+
+            <div class="delivery-method">
+              <input type="radio" name="delivery_method" id="delivery_voice" value="voice">
+              <label for="delivery_voice">
+                <i class="fas fa-phone"></i> Voice Call
+              </label>
+            </div>
+
+            <div class="delivery-method">
+              <input type="radio" name="delivery_method" id="delivery_sms" value="sms">
+              <label for="delivery_sms">
+                <i class="fas fa-sms"></i> SMS
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit "Send Verification Code", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .verification-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+  }
+
+  .verification-card {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--card-bg, #fff);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .card-header {
+    background-color: var(--primary-color, #3949ab);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .card-header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .card-body {
+    padding: 30px;
+  }
+
+  .phone-verification-form {
+    margin-top: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background-color: var(--input-bg, #fff);
+    color: var(--text-color, #333);
+    transition: border-color 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: var(--primary-color, #3949ab);
+    outline: none;
+  }
+
+  .phone-input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .country-code {
+    padding: 12px 15px;
+    background-color: var(--secondary-bg, #f5f5f5);
+    border: 2px solid #ddd;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .phone-input {
+    border-radius: 0 6px 6px 0;
+  }
+
+  .delivery-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .delivery-method {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .delivery-method input[type="radio"] {
+    display: none;
+  }
+
+  .delivery-method label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background-color: var(--secondary-bg, #f5f5f5);
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+  }
+
+  .delivery-method label i {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .delivery-method input[type="radio"]:checked + label {
+    background-color: rgba(57, 73, 171, 0.1);
+    border-color: var(--primary-color, #3949ab);
+    color: var(--primary-color, #3949ab);
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color, #3949ab);
+    color: white;
+    width: 100%;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--primary-dark, #303f9f);
+  }
+
+  .form-actions {
+    margin-top: 30px;
+  }
+
+  .alert {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  .alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+  }
+
+  .alert-danger {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const countryCodeSelect = document.getElementById('country_code');
+    const selectedCountryCode = document.getElementById('selected-country-code');
+
+    // Update displayed country code when selection changes
+    countryCodeSelect.addEventListener('change', function() {
+      selectedCountryCode.textContent = this.value || '+1';
+    });
+
+    // Set initial country code
+    selectedCountryCode.textContent = countryCodeSelect.value || '+1';
+  });
+</script>

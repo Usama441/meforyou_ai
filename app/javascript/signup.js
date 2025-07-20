@@ -22,4 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
             options.style.display = 'none';
         }
     });
+
 });
+

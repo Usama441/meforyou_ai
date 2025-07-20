@@ -33,8 +33,13 @@ class ChatController < ApplicationController
       session_id = new_session.id
     end
 
-    memory = RedisMemoryService.new(conversation.id)
-    memory.add_message(role: "user", content: params[:message])
+    begin
+      memory = RedisMemoryService.new(conversation.id)
+      memory.add_message(role: "user", content: params[:message])
+    rescue => e
+      Rails.logger.error("Memory service error: #{e.message}")
+      # Continue without memory service
+    end
 
     tone = conversation.try(:relationship).presence || current_user.try(:relationship).presence || "neutral"
     ai_name = conversation.try(:ai_name).presence || current_user.try(:ai_name).presence || "AI"
@@ -44,7 +49,13 @@ class ChatController < ApplicationController
     PersonaManager.new(current_user).set("ai_name", ai_name)
 
     persona = PersonaManager.new(current_user).all.map { |k, v| "#{k}: #{v}" }.join("\n")
-    history = memory.get_prompt_context
+    history = []
+    begin
+      history = memory.get_prompt_context if memory.respond_to?(:get_prompt_context)
+    rescue => e
+      Rails.logger.error("Memory history error: #{e.message}")
+      # Continue with empty history
+    end
 
     prompt = "#{persona}\n\nConversation:\n#{history}\n\nUser: #{params[:message]}\nAI:"
     reply = local_llama_response(prompt)
@@ -78,11 +89,26 @@ class ChatController < ApplicationController
     response.headers['X-Accel-Buffering'] = 'no'
 
     start_time = Time.now
-    conversation = current_user.conversations.find_by(id: params[:conversation_id]) || current_user.conversations.last
+
+    # Extract message from different possible parameter formats
+    user_message = params[:message] || params.dig(:chat, :message)
+    conversation_id = params[:conversation_id] || params.dig(:chat, :conversation_id)
+
+    conversation = current_user.conversations.find_by(id: conversation_id) || current_user.conversations.last
     session_id = current_user.chat_sessions.last&.id
 
-    memory = RedisMemoryService.new(conversation.id)
-    memory.add_message(role: "user", content: params[:message])
+    puts "📩 Processing message: #{user_message.inspect}"
+    puts "🆔 For conversation: #{conversation.id}"
+
+    user_message = params[:message] || params.dig(:chat, :message)
+
+    begin
+      memory = RedisMemoryService.new(conversation.id)
+      memory.add_message(role: "user", content: user_message) if memory.respond_to?(:add_message)
+    rescue => e
+      Rails.logger.error("Memory service error: #{e.message}")
+      # Continue without memory service
+    end
 
     tone = conversation.try(:relationship).presence || current_user.try(:relationship).presence || "neutral"
     ai_name = conversation.try(:ai_name).presence || current_user.try(:ai_name).presence || "AI"
@@ -94,36 +120,79 @@ class ChatController < ApplicationController
     persona = PersonaManager.new(current_user).all.map { |k, v| "#{k}: #{v}" }.join("\n")
     history = memory.get_prompt_context
 
-    prompt = "#{persona}\n\nConversation:\n#{history}\n\nUser: #{params[:message]}\nAI:"
-    Rails.logger.info "🔍 Streamed Prompt Sent:\n#{prompt}"
+    # Build chat messages
+    messages = []
 
-    uri = URI("http://localhost:11434/api/generate")
+    # Add system message if persona is not blank
+    messages << { role: "system", content: persona } unless persona.blank?
+
+    # Add history messages if available
+    messages += history if history.is_a?(Array) && history.any?
+
+    # Always add the user message
+    messages << { role: "user", content: user_message }
+
+    uri = URI("https://api.groq.com/openai/v1/chat/completions")
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = false
+    http.use_ssl = true
 
     req = Net::HTTP::Post.new(uri.path, {
-      "Content-Type" => "application/json"
+      "Content-Type" => "application/json",
+      "Authorization" => "Bearer REMOVED_KEYs5qgkbtisTw65QwrGjOKWGdyb3FYl79K1NiSsALhWmtQArVMg6Wg"
     })
 
     req.body = {
-      model: "mistral",
-      prompt: prompt,
+      model: "gemma2-9b-it", # Use a more reliable model
+      messages: messages,
       stream: true
     }.to_json
 
+    puts "📤 Request payload: #{req.body}"
+
     full_text = ""
 
-    http.request(req) do |res|
+          puts "🌐 Making request to Groq API"
+          http.request(req) do |res|
+      puts "📥 Response status: #{res.code} #{res.message}"
+
+      if res.code.to_i >= 400
+        error_message = "Groq API error: #{res.code} #{res.message}"
+        error_body = JSON.parse(res.body) rescue { "error" => "Unknown error" }
+        detailed_error = "#{error_message} - #{error_body['error']['message']}" rescue error_message
+
+        Rails.logger.error("API Error: #{detailed_error}")
+        puts "🔥 Groq API Error: #{detailed_error}"
+        puts "🔍 Request body: #{req.body}"
+
+        response.stream.write("data: #{{ response: detailed_error, error: true }.to_json}\n\n")
+        response.stream.flush
+        return
+      end
+
       res.read_body do |chunk|
         begin
-          data = JSON.parse(chunk) rescue nil
-          delta = data["response"]
-          next if delta.blank?
+          # Clean prefix like "data: ..."
+          chunk.strip.split("\n").each do |line|
+            next unless line.start_with?("data: ")
+            begin
+              json_data = JSON.parse(line.sub("data: ", ""))
+              delta = json_data.dig("choices", 0, "delta", "content")
+              puts "🔍 Groq Delta: #{delta.inspect}"
+              next if delta.nil? || delta.empty?
+            rescue => e
+              puts "❌ Error parsing Groq chunk: #{e.message} | Line: #{line.inspect}"
+              next
+            end
 
-          full_text += delta
-          response.stream.write("data: #{ { response: delta }.to_json }\n\n")
+            full_text += delta
+            response_data = { response: delta }.to_json
+            puts "📤 Sending stream data: #{response_data}"
+            # Ensure proper format for EventSource parsing
+            response.stream.write("data: #{response_data}\n\n")
+            response.stream.flush
+          end
         rescue => e
-          Rails.logger.error("Stream parse error: #{e.message} | Chunk: #{chunk}")
+          Rails.logger.error("Groq stream parse error: #{e.message} | Chunk: #{chunk}")
         end
       end
     end
@@ -131,7 +200,12 @@ class ChatController < ApplicationController
     Rails.logger.info "⏱ Streamed Response time: #{Time.now - start_time}s"
 
     if full_text.present?
-      memory.add_message(role: "ai", content: full_text)
+      begin
+        memory.add_message(role: "ai", content: full_text) if memory.respond_to?(:add_message)
+      rescue => e
+        Rails.logger.error("Memory add message error: #{e.message}")
+        # Continue without memory service
+      end
 
       Chat.create!(
         user: current_user,
@@ -153,49 +227,69 @@ class ChatController < ApplicationController
     end
 
   rescue => e
-    Rails.logger.error("Stream error: #{e.message}")
-    response.stream.write("data: #{ { response: "[Error: #{e.message}]" }.to_json }\n\n")
+    error_message = "Groq Stream error: #{e.message} | #{e.backtrace.first(3).join(', ')}"
+    Rails.logger.error(error_message)
+    response_data = { response: "[Error: #{e.message}]", error: true }.to_json
+    puts "📤 Sending error: #{response_data}"
+    response.stream.write("data: #{response_data}\n\n")
+    response.stream.flush
   ensure
     response.stream.close
   end
 
+
   private
 
   def local_llama_response(prompt)
-    uri = URI("http://localhost:11434/api/generate")
+    uri = URI("https://api.groq.com/openai/v1/chat/completions")
     http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = false
+    http.use_ssl = true
 
     req = Net::HTTP::Post.new(uri.path, {
-      "Content-Type" => "application/json"
+      "Content-Type" => "application/json",
+      "Authorization" => "Bearer REMOVED_KEYs5qgkbtisTw65QwrGjOKWGdyb3FYl79K1NiSsALhWmtQArVMg6Wg"
     })
 
     req.body = {
-      model: "mistral",
-      prompt: prompt,
+      model: "gemma2-9b-it", # Use a more reliable model
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: prompt }
+      ],
       stream: false
     }.to_json
 
-    full_response = ""
-    begin
-      response = http.request(req)
-      json = JSON.parse(response.body) rescue nil
-      json["response"] || "Error: No content"
-    rescue => e
-      "Error: #{e.message}"
-    end
+    response = http.request(req)
+    json = JSON.parse(response.body) rescue nil
+    json["choices"][0]["message"]["content"] rescue "Error: No content"
+  rescue => e
+    "Error: #{e.message}"
   end
 
   def redis_chat_history(conversation_id)
-    json = $redis.get("chat:history:#{conversation_id}")
-    JSON.parse(json) rescue []
+    begin
+      return [] unless $redis&.connected?
+      json = $redis.get("chat:history:#{conversation_id}")
+      JSON.parse(json) rescue []
+    rescue => e
+      Rails.logger.error("Redis chat history error: #{e.message}")
+      return []
+    end
   end
 
   def store_in_redis(conversation_id, role:, content:)
-    key = "chat:history:#{conversation_id}"
-    history = ($redis.get(key).presence && JSON.parse($redis.get(key))) || []
-    history << { role: role, content: content, timestamp: Time.now.to_s }
-    $redis.set(key, history.to_json)
+    begin
+      key = "chat:history:#{conversation_id}"
+      history = ($redis.get(key).presence && JSON.parse($redis.get(key))) || []
+      history << { role: role, content: content, timestamp: Time.now.to_s }
+      $redis.set(key, history.to_json)
+    rescue Redis::CannotConnectError => e
+      Rails.logger.error("Redis connection error: #{e.message}")
+      # Continue without Redis to allow chat functionality to work
+    rescue => e
+      Rails.logger.error("Redis error: #{e.message}")
+      # Continue without Redis to allow chat functionality to work
+    end
   end
 
   def summarize_memory

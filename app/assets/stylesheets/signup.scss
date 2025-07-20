@@ -221,3 +221,144 @@
     font-size: 1rem;
   }
 }
+// Password Modal Styling
+#passwordModal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); // Dim background
+  backdrop-filter: blur(2px);
+  justify-content: center;
+  align-items: center; // Center vertically and horizontally
+  flex-direction: column;
+
+  &.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background-color: #ffffff;
+    color: #333;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+
+    h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    input#suggestedPassword {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #f2f2f2;
+      color: #333;
+      text-align: center;
+    }
+
+    .modal-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+
+      button {
+        flex: 1 1 30%;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+
+        &:nth-child(1) {
+          background-color: #007bff;
+          color: white;
+
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+
+        &:nth-child(2) {
+          background-color: #28a745;
+          color: white;
+
+          &:hover {
+            background-color: #1e7e34;
+          }
+        }
+
+        &:nth-child(3) {
+          background-color: #ffc107;
+          color: black;
+
+          &:hover {
+            background-color: #e0a800;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark Mode Support
+body.dark-mode {
+  #passwordModal .modal-content {
+    background-color: #1e1e1e;
+    color: #eee;
+
+    input#suggestedPassword {
+      background-color: #2a2a2a;
+      color: #eee;
+      border: 1px solid #444;
+    }
+
+    button {
+      color: #fff;
+    }
+  }
+}
+
+// Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Mobile First Tweaks
+@media (max-width: 480px) {
+  #passwordModal .modal-content {
+    padding: 1rem;
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    input#suggestedPassword {
+      font-size: 0.9rem;
+    }
+
+    .modal-buttons button {
+      font-size: 0.9rem;
+      flex: 1 1 100%; // Stack buttons on small screens
+    }
+  }
+}
