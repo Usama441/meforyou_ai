@@ -1,7 +1,8 @@
 
 import "./chat_stream"; // if you have this file too
 import "./custom_select";
-import "./signup";
+import "./password_modal";
+
 import "./theme_toggle";
 import "./form_validation";
 import "./turbo_debug";

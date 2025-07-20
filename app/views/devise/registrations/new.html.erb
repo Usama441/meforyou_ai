@@ -8,7 +8,7 @@
       <%= render 'devise/shared/error_messages', resource: resource %>
 
       <!-- Full Name -->
-      <label class="field-label">Full Name</label>
+      <label class="field-label">Full Name:</label>
       <div class="form-row double">
         <div class="form-group">
           <%= f.text_field :first_name, placeholder: "First name", class: "form-input", autocomplete: "off" %>
@@ -19,11 +19,11 @@
       </div>
 
       <!-- DOB -->
-      <label class="field-label">Date of Birth</label>
+      <label class="field-label">Date of Birth:</label>
       <%= f.date_select :dob, { start_year: 1950, end_year: Date.today.year - 5 }, { class: "form-input", style: "width: 30%; margin-bottom: 1rem;" } %>
 
       <!-- Gender -->
-      <label class="field-label">Gender</label>
+      <label class="field-label">Gender:</label>
       <div class="form-row triple gender-options">
         <label><%= f.radio_button :gender, "Female" %><span>Female</span></label>
         <label><%= f.radio_button :gender, "Male" %><span>Male</span></label>
@@ -36,31 +36,45 @@
 
       <!-- Email Field -->
       <div id="email_field">
+        <label class="field-label">Enter you Email:</label>
         <%= f.email_field :email, placeholder: "Enter email", class: "form-input", autocomplete: "off" %>
       </div>
 
       <!-- Phone Field -->
       <div id="phone_field" style="display: none;">
+        <label class="field-label">Select your Country:</label>
         <div class="form-row double">
           <select id="country_code" name="country_code" class="form-input"></select>
+          <label class="field-label">Enter phone Number:</label>
           <%= f.text_field :phone, placeholder: "Phone number", class: "form-input" %>
         </div>
       </div>
 
 
-      <!-- Password Fields -->
-      <div class="form-row">
-        <%= f.password_field :password, placeholder: "Password", class: "form-input", id: "user_password", autocomplete: "new-password" %>
-        <span class="toggle-eye" onclick="togglePassword('user_password')">👁️</span>
-      </div>
-      <div id="password-strength"></div>
 
-      <div class="form-row">
-        <%= f.password_field :password_confirmation, placeholder: "Confirm Password", class: "form-input", id: "user_password_confirmation", autocomplete: "new-password" %>
-        <span class="toggle-eye" onclick="togglePassword('password_confirmation', this)">👁️</span>
+      <!-- Password Fields -->
+      <div class="password-wrapper">
+        <label class="field-label">Select your password:</label>
+        <!-- Password Field with Eye Icon Inside -->
+        <div class="form-row" style="position: relative;">
+          <%= f.password_field :password, placeholder: "Password", class: "form-input", id: "user_password", autocomplete: "new-password" %>
+          <%= f.password_field :password_confirmation, placeholder: "Confirm Password", class: "form-input", id: "user_password_confirmation", autocomplete: "new-password" %>
+
+          <!-- Single Eye Icon Positioned Inside First Field -->
+          <span
+              class="toggle-eye"
+              onclick="togglePassword()"
+              style="position: absolute; right: 12px; top: 25%; transform: translateY(-50%); cursor: pointer; font-size: 18px;">
+      👁️
+    </span>
+        </div>
+
+        <!-- Password Strength Display -->
+        <div id="password-strength" style="margin-top: 5px;"></div>
+
+        <!-- Password Generator Button -->
+        <button type="button" class="generate-btn" onclick="openPasswordModal()">Generate Secure Password</button>
       </div>
-      <!-- Password Generator Button -->
-      <button type="button" class="generate-btn" onclick="openPasswordModal()">Generate Secure Password</button>
 
       <!-- Modal -->
       <div id="passwordModal" class="modal" onclick="clickOutsideModal(event)">
@@ -91,7 +105,6 @@
     </p>
   </div>
 </main>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.20/libphonenumber-js.min.js"></script>
 <script>
@@ -353,9 +366,13 @@
         document.getElementById("passwordModal").style.display = "none";
     }
 
-    function togglePassword(id) {
-        const field = document.getElementById(id);
-        field.type = field.type === "password" ? "text" : "password";
+    function togglePassword() {
+        const pw1 = document.getElementById("user_password");
+        const pw2 = document.getElementById("user_password_confirmation");
+
+        const isPassword = pw1.type === "password";
+        pw1.type = isPassword ? "text" : "password";
+        pw2.type = isPassword ? "text" : "password";
     }
 
     function updateStrength(password) {

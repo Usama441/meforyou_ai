@@ -5,7 +5,6 @@
   padding: 2rem;
   background: #f0f2f5;
   min-height: 100vh;
-
 }
 
 .signup-box {
@@ -17,24 +16,25 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 
+  h2, p, hr {
+    text-align: center;
+  }
+
   h2 {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.2rem;
     color: black;
-    text-align: center;
   }
 
   p {
     margin-bottom: 1rem;
     font-size: 0.9rem;
     color: #606770;
-    text-align: center;
   }
 
   hr {
     margin: 1rem 0;
-    border: none;
     border-top: 1px solid #ddd;
   }
 
@@ -48,9 +48,9 @@
 
   .form-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    flex-wrap: wrap;
 
     &.double {
       flex-direction: row;
@@ -63,7 +63,6 @@
 
     &.triple.gender-options {
       justify-content: space-between;
-      gap: 0.5rem;
 
       label {
         flex: 1;
@@ -74,10 +73,10 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 0.9rem;
-        cursor: pointer;
         background: #f5f6f7;
         color: #1c1e21;
-        transition: all 0.2s ease;
+        cursor: pointer;
+        transition: 0.2s;
 
         span {
           margin-left: 0.4rem;
@@ -91,11 +90,10 @@
       input[type="radio"]:checked + span {
         font-weight: bold;
         color: #42b72a;
-      }
 
-      input[type="radio"]:checked + span::before {
-        content: "✔ ";
-        color: #42b72a;
+        &::before {
+          content: "✔ ";
+        }
       }
     }
   }
@@ -109,12 +107,18 @@
     box-sizing: border-box;
   }
 
-  .password-wrapper {
+  .password-field-wrapper {
     position: relative;
     margin-bottom: 1rem;
 
-    .form-input {
-      padding-right: 2.5rem;
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.6rem 2.5rem 0.6rem 0.6rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
 
     .toggle-password {
@@ -122,12 +126,16 @@
       top: 50%;
       right: 0.75rem;
       transform: translateY(-50%);
-      background: transparent;
-      border: none;
       cursor: pointer;
       font-size: 1.2rem;
       color: #888;
+      background: transparent;
+      border: none;
       padding: 0;
+
+      &:hover {
+        color: #333;
+      }
     }
   }
 
@@ -176,17 +184,6 @@
     }
   }
 
-  .policy-text {
-    font-size: 0.75rem;
-    color: #606770;
-    margin-top: 0.75rem;
-
-    a {
-      color: #385898;
-      text-decoration: none;
-    }
-  }
-
   .form-footer {
     margin-top: 1rem;
     text-align: center;
@@ -198,52 +195,37 @@
   }
 }
 
-// ❌ Invalid phone field styling
+// Eye Icon - Responsive
+@media (max-width: 480px) {
+  .password-field-wrapper .toggle-password {
+    font-size: 1rem;
+    right: 0.6rem;
+  }
+}
+
+// Invalid phone field
 .invalid-phone {
   border: 1px solid red !important;
 }
 
-/* ✅ Media Queries for small screens */
-@media (max-width: 480px) {
-  .signup-box {
-    padding: 1.2rem;
-  }
-
-  .form-row.double {
-    flex-direction: column;
-
-    .form-group {
-      min-width: 100%;
-    }
-  }
-
-  .submit-btn {
-    font-size: 1rem;
-  }
-}
-
-
-// Password Modal Styling
+// Modal styling (unchanged from before)
 #passwordModal {
   display: none;
   position: fixed;
   z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); // Dim background
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
+  display: flex;
   justify-content: center;
-  align-items: center; // Center vertically and horizontally
-  flex-direction: column;
+  align-items: center;
 
   &.show {
     display: flex;
   }
 
   .modal-content {
-    background-color: #ffffff;
+    background-color: #fff;
     color: #333;
     padding: 2rem;
     border-radius: 16px;
@@ -266,7 +248,6 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       background-color: #f2f2f2;
-      color: #333;
       text-align: center;
     }
 
@@ -283,7 +264,7 @@
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
+        transition: background-color 0.2s;
 
         &:nth-child(1) {
           background-color: #007bff;
@@ -316,7 +297,7 @@
   }
 }
 
-// Dark Mode Support
+// Dark Mode
 body.dark-mode {
   #passwordModal .modal-content {
     background-color: #1e1e1e;
@@ -334,7 +315,7 @@ body.dark-mode {
   }
 }
 
-// Animation
+// Animations
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -343,24 +324,5 @@ body.dark-mode {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-// Mobile First Tweaks
-@media (max-width: 480px) {
-  #passwordModal .modal-content {
-    padding: 1rem;
-    h3 {
-      font-size: 1.2rem;
-    }
-
-    input#suggestedPassword {
-      font-size: 0.9rem;
-    }
-
-    .modal-buttons button {
-      font-size: 0.9rem;
-      flex: 1 1 100%; // Stack buttons on small screens
-    }
   }
 }

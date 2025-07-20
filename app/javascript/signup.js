@@ -1,6 +1,3 @@
-
-import "./password_modal";
-
 document.addEventListener('DOMContentLoaded', function () {
     const dropdown = document.getElementById('customDropdown');
     const selected = dropdown.querySelector('.selected');
