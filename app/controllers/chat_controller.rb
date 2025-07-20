@@ -138,7 +138,7 @@ class ChatController < ApplicationController
 
     req = Net::HTTP::Post.new(uri.path, {
       "Content-Type" => "application/json",
-      "Authorization" => "Bearer REMOVED_KEYs5qgkbtisTw65QwrGjOKWGdyb3FYl79K1NiSsALhWmtQArVMg6Wg"
+      "Authorization" => "Bearer #{ENV['GROQ_API_KEY']}"
     })
 
     req.body = {
@@ -247,7 +247,7 @@ class ChatController < ApplicationController
 
     req = Net::HTTP::Post.new(uri.path, {
       "Content-Type" => "application/json",
-      "Authorization" => "Bearer REMOVED_KEYs5qgkbtisTw65QwrGjOKWGdyb3FYl79K1NiSsALhWmtQArVMg6Wg"
+      "Authorization" => "Bearer #{ENV['GROQ_API_KEY']}"
     })
 
     req.body = {
