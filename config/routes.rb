@@ -31,25 +31,32 @@ Rails.application.routes.draw do
   post "/chat/stream", to: "chat#stream"
   post "/chat/summarize_memory", to: "chat#summarize_memory", as: :summarize_memory
   get "/ping_test", to: "chat#ping_test"
+
   # Profile routes
-   get "profiles/edit", to: "profiles#edit", as: :profiles_edit
-   get "profiles/update", to: "profiles#update", as: :profiles_update
+  get "profiles/edit", to: "profiles#edit", as: :profiles_edit
+  get "profiles/update", to: "profiles#update", as: :profiles_update
 
   # Rails health check
   get "up", to: "rails/health#show", as: :rails_health_check
 
   # Email verification routes
-  get "verification", to: "verification#index"
-  post "verification/send", to: "verification#send_code", as: :send_verification_code
-  post "verification/verify", to: "verification#verify", as: :verify
-  post "verification/resend", to: "verification#resend_code", as: :resend_verification_code
+  get  "verification",        to: "verification#index"
+  post "verification/send",   to: "verification#send_code",     as: :send_verification_code
+  post "verification/verify", to: "verification#verify",        as: :verify_email_code
+  post "verification/resend", to: "verification#resend_code",   as: :resend_verification_code
+
+
+  get '/auth/:provider/callback', to: 'sessions#create'
+  get '/auth/failure', to: redirect('/')
+  get '/signout', to: 'sessions#destroy', as: 'signout'
+  delete '/logout', to: 'sessions#destroy'
 
   # Phone verification routes
-  get "phone_verification", to: "phone_verification#new", as: :new_phone_verification
-  post "phone_verification", to: "phone_verification#create"
-  get "phone_verification/verify", to: "phone_verification#verify", as: :verify_phone
-  post "phone_verification/confirm", to: "phone_verification#confirm", as: :confirm_phone
-  post "phone_verification/resend", to: "phone_verification#resend", as: :resend_phone_verification
+  get  "phone_verification",        to: "phone_verification#new",     as: :new_phone_verification
+  post "phone_verification",        to: "phone_verification#create"
+  get  "phone_verification/verify", to: "phone_verification#verify",  as: :verify_phone
+  post "phone_verification/confirm",to: "phone_verification#confirm", as: :confirm_phone
+  post "phone_verification/resend", to: "phone_verification#resend",  as: :resend_phone_verification
 
   # Twilio TwiML for voice verification
   post "twilio/twiml", to: "twilio#twiml", as: :twilio_twiml

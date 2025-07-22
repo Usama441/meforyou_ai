@@ -4,6 +4,7 @@ require 'json'
 class ChatController < ApplicationController
   include ActionController::Live
   before_action :authenticate_user!
+  before_action :ensure_verified_user!
 
   def new
     @conversations = current_user.conversations.order(created_at: :desc)

@@ -20,4 +20,9 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
+  def ensure_verified_user!
+    return if current_user&.verified?
+
+    redirect_to verification_path, alert: "Please verify your email before continuing."
+  end
 end

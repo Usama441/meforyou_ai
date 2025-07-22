@@ -7,6 +7,7 @@ gem 'dotenv-rails'
 gem 'devise'
 gem 'openai'
 gem 'twilio-ruby', '~> 5.77', require: false
+gem 'mailersend-ruby'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.1"

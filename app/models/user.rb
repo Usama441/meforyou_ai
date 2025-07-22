@@ -42,6 +42,8 @@ class User < ApplicationRecord
     end
   end
 
+  # app/models/user.rb
+
   def assign_contact_input
     return if contact_input.blank?
 
