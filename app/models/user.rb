@@ -14,6 +14,8 @@ class User < ApplicationRecord
   before_validation :assign_contact_input
   validate :email_or_phone_present
   validate :validate_contact_input
+  validates :name, :dob, :gender, presence: true  # ✅ Add this line
+  validates :accept_terms, acceptance: { accept: true, message: "must be accepted" }
 
   # Conditional email/phone validations
   validates :email, uniqueness: true, allow_blank: true

@@ -99,22 +99,30 @@
     </p>
   </div>
 </main>
-
 <!-- Include external JS libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.20/libphonenumber-js.min.js"></script>
+
+<!-- reCAPTCHA script with explicit render to ensure it's visible -->
 <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
-
 <script>
-    function onRecaptchaLoad() {
-        grecaptcha.render('g-recaptcha-container', {
-            'sitekey': '<%= Rails.application.credentials.dig(:recaptcha, :site_key) || ENV["RECAPTCHA_SITE_KEY"] %>',
-            'callback': onRecaptchaVerified
-        });
-    }
+  function onRecaptchaLoad() {
+    // Explicitly render the reCAPTCHA widget
+    grecaptcha.render('g-recaptcha-container', {
+      'sitekey': '<%= Rails.application.credentials.dig(:recaptcha, :site_key) || ENV["RECAPTCHA_SITE_KEY"] %>',
+      'callback': onRecaptchaVerified,
+      'expired-callback': onRecaptchaExpired
+    });
+  }
 
-    function onRecaptchaVerified(token) {
-        // Store the token in a hidden input if needed
-        console.log("Verified:", token);
-    }
+  function onRecaptchaVerified(token) {
+    console.log('reCAPTCHA verified');
+    // You can add additional logic here if needed
+  }
+
+  function onRecaptchaExpired() {
+    console.log('reCAPTCHA expired');
+    // You can add additional logic here if needed
+  }
 </script>
 
 <!-- Include JavaScript files -->
