@@ -8,6 +8,7 @@ gem 'devise'
 gem 'openai'
 gem 'twilio-ruby', '~> 5.77', require: false
 gem 'mailersend-ruby'
+gem 'recaptcha', require: 'recaptcha/rails'
 
 group :development do
   gem 'bundler-audit', require: false

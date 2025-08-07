@@ -1,20 +1,48 @@
 class RegistrationsController < Devise::RegistrationsController
+  require 'net/http'
+  require 'uri'
+  require 'json'
+
   def create
+    # Make sure we properly extract the reCAPTCHA response
+    recaptcha_response = params["g-recaptcha-response"]
+
+    unless verify_recaptcha_v2(recaptcha_response)
+      build_resource(sign_up_params)
+      resource.validate
+      flash.now[:recaptcha_error] = "Please complete the reCAPTCHA verification."
+      flash.now[:alert] = "reCAPTCHA verification failed. Please try again."
+      respond_with_navigational(resource) { render :new }
+      return
+    end
+
     super do |resource|
       if resource.persisted?
         begin
-          # Create verification code and send email
           verification_code = resource.create_verification_code
           VerificationMailer.verification_email(resource, verification_code).deliver_later
         rescue => e
           Rails.logger.error("Failed to create verification code: #{e.message}")
-          # Continue with registration even if verification fails
-          # We'll handle this in the verification flow
         end
       end
     end
-    Rails.logger.debug "USER PARAMS: #{params[:user].inspect}"
-    Rails.logger.debug "RESOURCE ERRORS: #{resource.errors.full_messages}"
+  end
+
+  private
+
+  def verify_recaptcha_v2(response_token)
+    secret_key = Rails.application.credentials.dig(:recaptcha, :secret_key) || ENV['RECAPTCHA_SECRET_KEY']
+    return false unless response_token.present? && secret_key.present?
+
+    uri = URI("https://www.google.com/recaptcha/api/siteverify")
+    res = Net::HTTP.post_form(uri, {
+      "secret" => secret_key,
+      "response" => response_token
+    })
+
+    result = JSON.parse(res.body)
+    Rails.logger.debug "RECAPTCHA V2 RESPONSE: #{result.inspect}"
+    result["success"] == true
   end
 
   def sign_up_params
@@ -24,7 +52,7 @@ class RegistrationsController < Devise::RegistrationsController
       :dob,
       :gender,
       :email,
-      :phone, # ✅ Add this
+      :phone,
       :password,
       :password_confirmation
     )

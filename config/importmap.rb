@@ -2,6 +2,7 @@
 
 pin "application", to: "application.js" # keep only once
 pin "signup", to: "signup.js"
+pin "registration", to: "registration.js"
 
 pin "chat_stream", to: "chat_stream.js"
 pin "custom_select", to: "custom_select.js"
