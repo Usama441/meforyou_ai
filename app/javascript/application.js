@@ -1,12 +1,12 @@
 
 import "./chat_stream"; // if you have this file too
 import "./custom_select";
-import "./password_modal";
 
-import "./theme_toggle";
 import "./form_validation";
 import "./turbo_debug";
 
+
+console.log("📦 JS Loaded Successfully!");
 
 const toggle = document.getElementById('darkModeToggle');
     const body = document.body;

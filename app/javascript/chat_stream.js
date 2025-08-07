@@ -1,9 +1,16 @@
+//console.log("✅ chat_stream.js loaded!");
+
 function getCSRFToken() {
     const meta = document.querySelector("meta[name='csrf-token']");
     return meta && meta.getAttribute("content");
 }
 
+let chatListenerAttached = false;
 function attachChatListener() {
+
+    if (chatListenerAttached) return;
+    chatListenerAttached = true;
+
     const form = document.getElementById("chat-form");
     const input = document.getElementById("chat-input");
     const chatHistory = document.getElementById("chatHistory");

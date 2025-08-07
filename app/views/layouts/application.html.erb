@@ -26,14 +26,11 @@
 
   <!-- ✅ Rails Asset Pipeline -->
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-  <%= javascript_include_tag "application", type: "module" %>
-
-
-
   <%= javascript_importmap_tags %>
+
       <!-- Font Awesome for icons -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <%= javascript_importmap_tags %>
 </head>
 
 <body>

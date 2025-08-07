@@ -1,7 +1,10 @@
 {
   "name": "app",
   "private": "true",
-  "dependencies": {
+  "scripts": {
+    "test": "--passWithNoTests"
   },
-  "scripts": {}
+  "devDependencies": {
+    "jest": "^30.0.5"
+  }
 }

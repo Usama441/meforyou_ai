@@ -2,12 +2,3 @@
 
 require_relative "../config/application"
 require "importmap/commands"
-
-pin "signup", to: "signup.js"
-
-pin "application"
-pin "chat_stream"
-pin "custom_select"
-pin "theme_toggle"
-pin "form_validation"
-pin "turbo_debug"

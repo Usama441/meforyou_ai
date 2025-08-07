@@ -9,6 +9,11 @@ gem 'openai'
 gem 'twilio-ruby', '~> 5.77', require: false
 gem 'mailersend-ruby'
 
+group :development do
+  gem 'bundler-audit', require: false
+end
+
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
