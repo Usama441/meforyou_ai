@@ -75,14 +75,6 @@
         </div>
       </div>
 
-      <!-- Terms -->
-      <div class="checkbox-group">
-        <label>
-          <input type="checkbox" id="terms-agree" required>
-          <span>I agree to the <a href="#">Terms</a>, <a href="#">Privacy Policy</a>, and <a href="#">Cookies Policy</a>.</span>
-        </label>
-      </div>
-
       <!-- reCAPTCHA v2 -->
       <div class="recaptcha-container" style="margin-top: 1rem;">
         <div id="g-recaptcha-container"></div>
@@ -90,7 +82,13 @@
           <div class="error-message"><%= flash[:recaptcha_error] %></div>
         <% end %>
       </div>
-
+      <!-- Terms -->
+      <div class="checkbox-group">
+        <label>
+          <input type="checkbox" id="terms-agree" required>
+          <span>I agree to the <a href="#">Terms</a>, <a href="#">Privacy Policy</a>, and <a href="#">Cookies Policy</a>.</span>
+        </label>
+      </div>
       <%= f.submit "Sign Up" %>
     <% end %>
 

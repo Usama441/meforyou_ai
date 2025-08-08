@@ -1,3 +1,4 @@
+// === Base Container ===
 .signup-container {
   display: flex;
   justify-content: center;
@@ -7,35 +8,35 @@
   min-height: 100vh;
 }
 
+// === Signup Box ===
 .signup-box {
   background: white;
   border-radius: 8px;
   padding: 2rem;
-  max-width: 420px;
+  max-width: 500px;
   width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-
-  h2, p, hr {
-    text-align: center;
-  }
 
   h2 {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.2rem;
-    color: black;
+    color: #1877f2;
+    text-align: center;
   }
 
   p {
     margin-bottom: 1rem;
     font-size: 0.9rem;
     color: #606770;
+    text-align: center;
   }
 
   hr {
     margin: 1rem 0;
     border-top: 1px solid #ddd;
+    text-align: center;
   }
 
   .field-label {
@@ -46,41 +47,58 @@
     color: #1c1e21;
   }
 
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  .form-footer {
+    margin-top: 1rem;
+    text-align: center;
 
-    &.double {
-      flex-direction: row;
+    a {
+      color: #1877f2;
+      font-size: 0.9rem;
+      text-decoration: none;
+      font-weight: 500;
 
-      .form-group {
-        flex: 1;
-        min-width: 48%;
+      &:hover {
+        text-decoration: underline;
       }
     }
+  }
+}
 
-    &.triple.gender-options {
-      justify-content: space-between;
+// === Form Rows ===
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 
-      label {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        background: #f5f6f7;
-        color: #1c1e21;
-        cursor: pointer;
-        transition: 0.2s;
+  &.double {
+    flex-direction: row;
 
-        span {
-          margin-left: 0.4rem;
-        }
+    .form-group {
+      flex: 1;
+      min-width: 48%;
+    }
+  }
+
+  &.triple.gender-options {
+    justify-content: space-between;
+
+    label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      background: #f5f6f7;
+      color: #1c1e21;
+      cursor: pointer;
+      transition: 0.2s;
+
+      span {
+        margin-left: 0.4rem;
       }
 
       input[type="radio"] {
@@ -97,126 +115,138 @@
       }
     }
   }
+}
 
-  .form-input {
-    padding: 0.6rem;
+// === Inputs ===
+.form-input {
+  padding: 0.6rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+  }
+}
+
+// === Password Field (with Eye Icon) ===
+.password-field-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+
+  input[type="password"],
+  input[type="text"] {
+    width: 100%;
+    padding: 0.6rem 2.5rem 0.6rem 0.6rem;
     font-size: 0.95rem;
     border-radius: 6px;
     border: 1px solid #ccc;
-    width: 100%;
     box-sizing: border-box;
   }
 
-  .password-field-wrapper {
-    position: relative;
-    margin-bottom: 1rem;
-
-    input[type="password"],
-    input[type="text"] {
-      width: 100%;
-      padding: 0.6rem 2.5rem 0.6rem 0.6rem;
-      font-size: 0.95rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 0.75rem;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #888;
-      background: transparent;
-      border: none;
-      padding: 0;
-
-      &:hover {
-        color: #333;
-      }
-    }
-  }
-
-  .checkbox-group {
-    margin-top: 0.75rem;
-    font-size: 0.8rem;
-
-    label {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      line-height: 1.4;
-    }
-
-    input[type="checkbox"] {
-      margin-top: 0.1rem;
-    }
-
-    span {
-      color: #1c1e21;
-    }
-
-    a {
-      color: #385898;
-      text-decoration: underline;
-    }
-  }
-
-  .submit-btn {
-    background: #3b82f6;
-    color: white;
-    padding: 0.75rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    margin-top: 1rem;
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
     cursor: pointer;
-    transition: background 0.2s ease;
-
-    &.full-width {
-      width: 100%;
-    }
+    font-size: 1.2rem;
+    color: #888;
+    background: transparent;
+    border: none;
+    padding: 0;
 
     &:hover {
-      background: #2563eb;
-    }
-  }
-
-  .form-footer {
-    margin-top: 1rem;
-    text-align: center;
-
-    a {
-      color: #1877f2;
-      font-size: 0.9rem;
+      color: #333;
     }
   }
 }
 
-// Eye Icon - Responsive
-@media (max-width: 480px) {
-  .password-field-wrapper .toggle-password {
-    font-size: 1rem;
-    right: 0.6rem;
+// === Checkbox Terms Section ===
+.checkbox-group {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+
+  label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    line-height: 1.4;
+  }
+
+  input[type="checkbox"] {
+    margin-top: 0.1rem;
+  }
+
+  span {
+    color: #1c1e21;
+  }
+
+  a {
+    color: #385898;
+    text-decoration: underline;
   }
 }
 
-// Invalid phone field
-.invalid-phone {
-  border: 1px solid red !important;
+// === Submit Button ===
+.submit-btn,
+input[type="submit"] {
+  background: #3b82f6;
+  color: white;
+  padding: 0.75rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  margin-top: 0.1rem;
+  cursor: pointer;
+  width: 100%;
+
+  transition: background 0.2s ease;
+
+  &.full-width {
+    width: 100%;
+  }
+
+  &:hover {
+    background: #2563eb;
+  }
 }
 
-// Modal styling (unchanged from before)
-#passwordModal {
+// === reCAPTCHA ===
+.recaptcha-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .error-message {
+    color: #e41e3f;
+    font-size: 13px;
+    margin-top: 5px;
+  }
+}
+
+#g-recaptcha-container {
+  min-height: 78px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+// === Modal ===
+#passwordModal,
+.modal {
   display: none;
   position: fixed;
   z-index: 1000;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
-  display: flex;
   justify-content: center;
   align-items: center;
 
@@ -238,6 +268,7 @@
     h3 {
       font-size: 1.4rem;
       margin-bottom: 1rem;
+      color: #1877f2;
     }
 
     input#suggestedPassword {
@@ -297,7 +328,7 @@
   }
 }
 
-// Dark Mode
+// === Dark Mode ===
 body.dark-mode {
   #passwordModal .modal-content {
     background-color: #1e1e1e;
@@ -315,7 +346,7 @@ body.dark-mode {
   }
 }
 
-// Animations
+// === Animations ===
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -324,5 +355,51 @@ body.dark-mode {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+// === Invalid Field ===
+.invalid-phone {
+  border: 1px solid red !important;
+}
+
+// === Responsive ===
+@media (max-width: 576px) {
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+
+    &.double > *,
+    &.triple > * {
+      width: 100%;
+    }
+  }
+
+  .gender-options label {
+    margin-right: 0;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .password-field-wrapper .toggle-password {
+    font-size: 1rem;
+    right: 0.6rem;
+  }
+}
+.generate-btn {
+  background-color: #42b72a;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #36a420;
   }
 }

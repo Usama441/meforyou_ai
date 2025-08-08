@@ -1,19 +1,20 @@
-FROM ruby:3.2.2
+FROM ruby:3.3
 
-# Set working directory
+# NodeJS & Yarn for Rails assets
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get update -qq && \
+    apt-get install -y nodejs postgresql-client && \
+    npm install -g yarn
+
+# App directory
 WORKDIR /app
 
-# Install dependencies
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn
-
-# Copy Gemfile and install gems
+# Install gems
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler && bundle install
+RUN bundle install
 
-# Copy app
+# Copy project files
 COPY . .
 
-# Precompile assets in production
-# RUN RAILS_ENV=production bundle exec rake assets:precompile
-
-EXPOSE 3000
+# Default command
+CMD ["bash", "-c", "bundle exec rails db:migrate && bundle exec puma -C config/puma.rb"]
