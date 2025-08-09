@@ -36,7 +36,17 @@
 
       <div class="form-group">
         <%= f.label :ai_age, "AI Age" %>
-        <%= f.number_field :ai_age, class: "form-control", min: 1 %>
+        <div class="number-input">
+          <%= f.number_field :ai_age, class: "form-control", min: 1 %>
+          <div class="number-controls">
+            <button type="button" class="num-btn up" onclick="this.parentNode.previousElementSibling.stepUp()">
+              +
+            </button>
+            <button type="button" class="num-btn down" onclick="this.parentNode.previousElementSibling.stepDown()">
+              -
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">

@@ -1,14 +1,14 @@
 /* === app/assets/stylesheets/components/_chat_modal.scss === */
 
 .modal {
-  display: none; /* Hidden by default */
+  display: none;
   position: fixed;
   z-index: 1000;
   left: 0;
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+  background-color: rgba(0, 0, 0, 0.6);
   justify-content: center;
   align-items: center;
 
@@ -18,15 +18,38 @@
   }
 
   .modal-content {
-    background-color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
     padding: 2rem;
     border-radius: 1rem;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
     animation: scaleIn 0.3s ease-in-out;
     overflow-y: auto;
     max-height: 90vh;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
   }
 
   .form-group {
@@ -36,42 +59,96 @@
       display: block;
       font-weight: bold;
       margin-bottom: 0.4rem;
+      color: #fff;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
+      display: block;
       width: 100%;
       padding: 0.7rem;
-      border: 1px solid #ccc;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 0.5rem;
       font-size: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      box-sizing: border-box;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    select option {
+      background: rgba(30, 30, 30, 0.95);
+      color: #fff;
+    }
+    select option:hover,
+    select option:focus {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
     }
   }
 
-  .chat-send {
-    background-color: #1e90ff;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #0c7cd5;
-    }
-
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
   }
 }
 
+/* === Buttons (Create/Cancel) === */
+.chat-send {
+  background: linear-gradient(135deg, #00a884, #25d366);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 168, 132, 0.3);
+  min-width: 120px;
+}
+.chat-send:hover {
+  background: linear-gradient(135deg, #019176, #1daa52);
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+  min-width: 120px;
+}
+.cancel-btn:hover {
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
+  transform: translateY(-2px);
+}
+
+/* === Animations === */
 @keyframes fadeIn {
-  from { opacity: 0 }
-  to { opacity: 1 }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
 @keyframes scaleIn {
-  from { transform: scale(0.9); opacity: 0 }
-  to { transform: scale(1); opacity: 1 }
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
