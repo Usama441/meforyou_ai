@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   # Virtual validations
   before_validation :assign_contact_input
+  before_validation :set_full_name
+
   validate :email_or_phone_present
   validate :validate_contact_input
   validates :name, :dob, :gender, presence: true  # ✅ Add this line
@@ -110,5 +112,12 @@ class User < ApplicationRecord
   def format_phone_number
     return if phone_number.blank?
     self.phone_number = phone_number.gsub(/[\s\-\(\)]/, '').gsub(/^\+/, '')
+  end
+end
+
+def set_full_name
+  # Agar name column hai to usme first_name + last_name save karo
+  if self.has_attribute?(:name)
+    self.name = [first_name, last_name].compact.join(' ').strip
   end
 end
