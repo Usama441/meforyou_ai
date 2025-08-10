@@ -2,79 +2,145 @@
 
   <!-- ✅ LEFT FEATURE SIDEBAR -->
   <aside class="feature-sidebar">
+    <!-- Top group -->
     <div class="feature-group">
-      <div class="tooltip-wrapper">
-        <button class="feature-btn" onclick="toggleTheme()">🌓</button>
-        <span class="tooltip">Toggle Light/Dark Mode</span>
-      </div>
+      <!-- Theme Toggle -->
+      <button class="feature-btn" onclick="toggleTheme()" title="Toggle Theme">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+        </svg>
+      </button>
 
-      <div class="tooltip-wrapper">
-        <button class="feature-btn" onclick="location.reload()">🔄</button>
-        <span class="tooltip">Refresh the Page</span>
-      </div>
+      <!-- Reload -->
+      <button class="feature-btn" onclick="location.reload()" title="Reload">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10M1 14l5.36 5.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+      </button>
 
-      <div class="tooltip-wrapper">
-        <button class="feature-btn" onclick="toggleFullscreen()">⛶</button>
-        <span class="tooltip">Toggle Fullscreen</span>
-      </div>
+      <!-- Fullscreen -->
+      <button class="feature-btn" onclick="toggleFullscreen()" title="Fullscreen">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+          <path d="M16 3h3a2 2 0 0 1 2 2v3"></path>
+          <path d="M8 21H5a2 2 0 0 1-2-2v-3"></path>
+          <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+        </svg>
+      </button>
 
-      <div class="tooltip-wrapper">
-        <button class="feature-btn" onclick="downloadChat()">💾</button>
-        <span class="tooltip">Download Chat</span>
-      </div>
+      <!-- Download -->
+      <button class="feature-btn" onclick="downloadChat()" title="Download Chat">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </button>
 
-      <div class="tooltip-wrapper">
-        <button class="feature-btn">ℹ️</button>
-        <span class="tooltip">App Information</span>
-      </div>
+      <!-- Info -->
+      <button class="feature-btn" title="Info">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </button>
     </div>
 
-    <!-- 🔧 Settings at bottom -->
-    <div class="tooltip-wrapper settings-btn">
-      <button class="feature-btn">⚙️</button>
-      <span class="tooltip">Settings</span>
-    </div>
-    <button class="logout-btn" id="logoutBtn" title="Logout">
-      <i class="fas fa-right-from-bracket"></i>
-    </button>
+    <!-- Bottom group -->
+    <div class="bottom-group">
+      <!-- Logout -->
+      <button class="feature-btn logout-btn" id="logoutBtn" title="Logout">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M16 13v-2H7V8l-5 4 5 4v-3h9z"/>
+          <path d="M20 3h-8v2h8v14h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </button>
 
+      <!-- Settings -->
+      <button class="feature-btn settings-btn" title="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M19.14,12.94a7.19,7.19,0,0,0,.05-.94,7.19,7.19,0,0,0-.05-.94l2.11-1.65a.5.5,0,0,0,.12-.64l-2-3.46a.5.5,0,0,0-.6-.22l-2.49,1a6.89,6.89,0,0,0-1.63-.94l-.38-2.65A.5.5,0,0,0,13.8,2H10.2a.5.5,0,0,0-.49.42L9.33,5.07a6.89,6.89,0,0,0-1.63.94l-2.49-1a.5.5,0,0,0-.6.22l-2,3.46a.5.5,0,0,0,.12.64L4.94,11.06a7.19,7.19,0,0,0-.05.94,7.19,7.19,0,0,0,.05.94l-2.11,1.65a.5.5,0,0,0-.12.64l2,3.46a.5.5,0,0,0,.6.22l2.49-1a6.89,6.89,0,0,0,1.63.94l.38,2.65a.5.5,0,0,0,.49.42h3.6a.5.5,0,0,0,.49-.42l.38-2.65a6.89,6.89,0,0,0,1.63-.94l2.49,1a.5.5,0,0,0,.6-.22l2-3.46a.5.5,0,0,0-.12-.64ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/>
+        </svg>
+      </button>
+    </div>
   </aside>
 
   <!-- ✅ LEFT SIDEBAR -->
   <aside class="sidebar">
-    <h2>Conversations</h2>
+    <!-- WhatsApp-style top bar -->
+    <div class="sidebar-header">
+      <div class="profile-pic"></div>
+      <div class="name-container">
+        <div class="app-name">
+          <h2>Me For You</h2>
+        </div>
+        <div class="user-name">
+          <h4>Usama Arshad</h4>
+        </div>
+      </div>
+
+      <div class="sidebar-actions">
+        <i class="fas fa-ellipsis-v"></i>
+      </div>
+    </div>
+
+    <!-- Search -->
     <input type="text" id="conversationSearch" placeholder="Search conversations..." class="search-bar">
 
+    <!-- ✅ Start New Chat button (restored) -->
     <button type="button" class="chat-send" onclick="openNewChatModal()">Start New Chat</button>
 
+    <!-- Conversation List -->
     <div class="conversation-list">
       <% @conversations.each do |convo| %>
-        <%= link_to convo.name, chat_path(id: convo.id), data: { turbo_frame: "chat_frame" }, class: "conversation-item #{'active' if @conversation&.id == convo.id}" %>
+        <%= link_to chat_path(id: convo.id), data: { turbo_frame: "chat_frame" }, class: "conversation-item #{'active' if @conversation&.id == convo.id}" do %>
+          <div class="avatar"></div>
+          <div class="conversation-info">
+            <div class="conversation-title">
+              <span class="name"><%= convo.name %></span>
+              <span class="time">10:45</span>
+            </div>
+            <div class="last-message"><%= convo.name %>:<%= convo.last_message&.truncate(30) || "No messages yet" %>
+            </div>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </aside>
 
-  <!-- ✅ Hidden AI name for JS to use -->
-  <div  data-ai-name="<%= @ai_name %>" style="display: none;"></div>
-
   <!-- ✅ CHAT AREA -->
   <main class="chat-wrapper">
+    <!-- Top Chat Header -->
+    <div class="chat-header-bar">
+      <div class="avatar"></div>
+      <div class="chat-contact-info">
+        <span class="chat-name"><%= @conversation&.name || "Select a conversation" %></span>
+        <span class="chat-status">online</span>
+      </div>
+      <div class="chat-actions">
+        <i class="fas fa-search"></i>
+        <i class="fas fa-paperclip"></i>
+        <i class="fas fa-ellipsis-v"></i>
+      </div>
+    </div>
+
+    <!-- Chat Messages -->
     <turbo-frame id="chat_frame">
       <%= render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation } %>
     </turbo-frame>
   </main>
 </div>
-<!-- ✅ Append Redis chat history below the main chat -->
-<!--<div class="chat-history">
-  <h3>🔁 Redis Chat Log</h3>
 
-</div> -->
-
-<!-- ✅ Modal for new conversation (unchanged) -->
+<!-- ✅ Modal -->
 <%= render partial: "chat/modal" %>
 
 <!-- ✅ Working JavaScript -->
 <script>
+
+
     function openNewChatModal() {
         const modal = document.getElementById('newChatModal');
         if (modal) {
@@ -159,5 +225,6 @@
             });
         }
     });
+
 
 </script>

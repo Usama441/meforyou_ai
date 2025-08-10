@@ -28,13 +28,38 @@
       <% end %>
     <% end %>
 
+
+
   </div>
 
   <!-- ✅ Only one form (no duplicate) -->
   <div class="chat-options">
     <form id="chat-form" data-conversation-id="<%= @conversation.id %>">
       <input type="text" id="chat-input" name="message" placeholder="Type your message..." />
-      <button type="submit">Send</button>
+      <button type="submit">></button>
     </form>
   </div>
+
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chatInput = document.getElementById("chat-input");
+        const sendButton = document.querySelector("#chat-form button");
+
+        function toggleButton() {
+            if (chatInput.value.trim() === "") {
+                sendButton.style.display = "none";
+            } else {
+                sendButton.style.display = "block";
+            }
+        }
+
+        // ✅ Initial check when page loads
+        toggleButton();
+
+        // ✅ On typing
+        chatInput.addEventListener("input", toggleButton);
+    });
+
+</script>

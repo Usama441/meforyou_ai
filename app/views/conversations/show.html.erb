@@ -9,7 +9,7 @@
 
     <% @conversations.each do |convo| %>
       <div>
-        <%= link_to convo.title, conversation_path(convo) %>
+        <%= link_to convo.name, conversation_path(convo) %>
       </div>
     <% end %>
   </aside>
@@ -17,10 +17,11 @@
   <main class="chat-main">
     <div class="messages">
       <% @conversation.messages.each do |msg| %>
-        <div class="message <%= msg.role %>">
-          <%= msg.role.capitalize %>: <%= msg.content %>
+        <div class="message <%= msg.role.to_s %>">
+          <%= msg.role.to_s.capitalize %>: <%= msg.content %>
         </div>
-      <% end %>
+
+    <% end %>
     </div>
 
     <%= form_with model: [@conversation, @message], local: true do |f| %>

@@ -24,12 +24,15 @@ body {
 // Chat box styles
 .chat-box {
   background-color: white;
-  border-radius: 1rem;
+  border-radius: 0rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: $transition;
   padding: 2rem;
   margin: auto;
-  max-width: 700px;
+  max-width: 1500px;       // max width ko limit kar dia
+  max-height: 746px;      // height fix kar dia (aap apni zarurat ke mutabiq adjust kar sakte hain)
+  overflow-y: auto;       // vertical scroll agar content zyada hua
+  overflow-x: hidden;
 
   .message {
     margin-bottom: 1.5rem;

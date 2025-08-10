@@ -8,4 +8,8 @@ class Conversation < ApplicationRecord
   def conversation_params
     params.require(:conversation).permit(:name, :relationship, :ai_status, :ai_gender, :ai_age, :description)
   end
+
+  def last_message
+    messages.order(created_at: :desc).first&.content
+  end
 end

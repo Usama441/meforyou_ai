@@ -45,7 +45,6 @@ Rails.application.routes.draw do
   post "verification/verify", to: "verification#verify",        as: :verify_email_code
   post "verification/resend", to: "verification#resend_code",   as: :resend_verification_code
 
-
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: redirect('/')
   get '/signout', to: 'sessions#destroy', as: 'signout'
@@ -61,8 +60,15 @@ Rails.application.routes.draw do
   # Twilio TwiML for voice verification
   post "twilio/twiml", to: "twilio#twiml", as: :twilio_twiml
 
-  # Conversations & messages
+  # Conversations & messages (web)
   resources :conversations, only: [:index, :show, :create] do
     resources :messages, only: [:create]
+  end
+
+  # Add API namespace for JSON endpoints
+  namespace :api, defaults: { format: :json } do
+    resources :conversations, only: [:index, :show, :create] do
+      resources :messages, only: [:index, :create]
+    end
   end
 end
