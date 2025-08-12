@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const dropdown = document.getElementById('customDropdown');
+    if (!dropdown) return;  // Exit if no dropdown on page
+
     const selected = dropdown.querySelector('.selected');
     const options = dropdown.querySelector('.options');
     const input = document.getElementById('relationshipInput');

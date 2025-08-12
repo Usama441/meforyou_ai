@@ -29,9 +29,9 @@ body {
   transition: $transition;
   padding: 2rem;
   margin: auto;
-  max-width: 1500px;       // max width ko limit kar dia
-  max-height: 746px;      // height fix kar dia (aap apni zarurat ke mutabiq adjust kar sakte hain)
-  overflow-y: auto;       // vertical scroll agar content zyada hua
+  max-width: 1500px;
+  max-height: 746px;
+  overflow-y: auto;
   overflow-x: hidden;
 
   .message {
@@ -45,6 +45,7 @@ body {
     border: 1px solid #ddd;
     width: 100%;
     margin-bottom: 1rem;
+    font-size: 1rem;
   }
 
   button {
@@ -71,5 +72,61 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Medium-large screens */
+@media (max-width: 1200px) {
+  .chat-box {
+    max-width: 900px;
+    padding: 1.5rem;
+
+    input[type="text"] {
+      font-size: 0.95rem;
+      padding: 0.65rem 1.25rem;
+    }
+
+    button {
+      padding: 0.65rem 1.25rem;
+    }
+  }
+}
+
+/* Tablets and small laptops */
+@media (max-width: 768px) {
+  .chat-box {
+    max-width: 600px;
+    max-height: 600px;
+    padding: 1.25rem;
+
+    input[type="text"] {
+      font-size: 0.9rem;
+      padding: 0.6rem 1rem;
+    }
+
+    button {
+      padding: 0.6rem 1rem;
+    }
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .chat-box {
+    max-width: 100%;
+    max-height: 100vh;
+    padding: 1rem;
+    margin: 0 0.5rem;
+
+    input[type="text"] {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.75rem;
+    }
+
+    button {
+      padding: 0.5rem 0.75rem;
+    }
   }
 }

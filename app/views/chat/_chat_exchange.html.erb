@@ -46,6 +46,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const chatInput = document.getElementById("chat-input");
         const sendButton = document.querySelector("#chat-form button");
+        const chatForm = document.getElementById("chat-form");
 
         function toggleButton() {
             if (chatInput.value.trim() === "") {
@@ -55,11 +56,31 @@
             }
         }
 
-        // ✅ Initial check when page loads
-        toggleButton();
+        function scrollToBottom() {
+            const chatHistory = document.getElementById("chatHistory");
+            if (chatHistory) {
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+        }
 
-        // ✅ On typing
+        // Initial toggle and scroll on load
+        toggleButton();
+        scrollToBottom();
+
         chatInput.addEventListener("input", toggleButton);
+
+        chatForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            // Your AJAX or form submit logic here to send message
+
+            // After message added (simulate with timeout if async)
+            setTimeout(() => {
+                scrollToBottom();
+                chatInput.value = "";
+                toggleButton();
+                chatInput.focus();
+            }, 100);
+        });
     });
 
 </script>

@@ -1,5 +1,3 @@
-/* === app/assets/stylesheets/components/_chat_modal.scss === */
-
 .modal {
   display: none;
   position: fixed;
@@ -103,13 +101,13 @@
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap; /* Responsive wrap */
   }
 }
 
 /* === Buttons (Create/Cancel) === */
-.chat-send {
-  background: linear-gradient(135deg, #00a884, #25d366);
-  color: #fff;
+.chat-send,
+.cancel-btn {
   padding: 0.6rem 1rem;
   border: none;
   border-radius: 50px;
@@ -117,8 +115,14 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 1.2rem;
-  box-shadow: 0 4px 10px rgba(0, 168, 132, 0.3);
   min-width: 120px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.chat-send {
+  background: linear-gradient(135deg, #00a884, #25d366);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 168, 132, 0.3);
 }
 .chat-send:hover {
   background: linear-gradient(135deg, #019176, #1daa52);
@@ -128,15 +132,7 @@
 .cancel-btn {
   background: linear-gradient(135deg, #f44336, #d32f2f);
   color: #fff;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 50px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 1.2rem;
   box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
-  min-width: 120px;
 }
 .cancel-btn:hover {
   background: linear-gradient(135deg, #d32f2f, #b71c1c);
@@ -151,4 +147,74 @@
 @keyframes scaleIn {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+/* ===== RESPONSIVE MEDIA QUERIES ===== */
+
+/* Medium devices */
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90%;
+    padding: 1.5rem;
+    max-height: 80vh;
+  }
+
+  .form-group {
+    input,
+    select,
+    textarea {
+      font-size: 0.9rem;
+      padding: 0.6rem;
+    }
+
+    textarea {
+      min-height: 100px;
+    }
+  }
+
+  .button-group {
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .chat-send,
+  .cancel-btn {
+    min-width: 100px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small devices */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    padding: 1rem;
+    max-height: 75vh;
+  }
+
+  .form-group {
+    input,
+    select,
+    textarea {
+      font-size: 0.85rem;
+      padding: 0.5rem;
+    }
+
+    textarea {
+      min-height: 80px;
+    }
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .chat-send,
+  .cancel-btn {
+    min-width: 100%;
+    padding: 0.6rem 0;
+    font-size: 1rem;
+  }
 }
