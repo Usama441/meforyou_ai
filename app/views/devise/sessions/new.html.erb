@@ -1,341 +1,235 @@
-<!-- Navigation Header -->
-<header class="nav-header">
-  <nav class="nav-container" role="navigation" aria-label="Main Navigation">
-    <!-- App Name as SVG -->
-    <div class="nav-brand" aria-hidden="false">
-      <!-- Inline SVG for RENATA (scalable, themeable) -->
-      <svg class="app-name-svg" viewBox="0 0 400 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="renataTitle renataDesc">
-        <title id="renataTitle">RENATA</title>
-        <desc id="renataDesc">Application name RENATA styled logo</desc>
-        <defs>
-          <linearGradient id="renataGradient" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#00d4ff"/>
-            <stop offset="100%" stop-color="#0077ff"/>
-          </linearGradient>
-          <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        <!-- Text uses system font stack; will render crisp. If you prefer an outline/path logo, we can convert later. -->
-        <text x="0" y="34" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial" font-weight="700" font-size="32" fill="url(#renataGradient)" filter="url(#softGlow)" letter-spacing="2">
-          RENATA
-        </text>
-      </svg>
-    </div>
-
-    <!-- Menu Links -->
-    <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Features</a></li>
-      <li><a href="#">Pricing</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-
-    <!-- Buttons -->
-    <div class="nav-actions">
-      <%= link_to "Login", new_user_session_path, class: "nav-btn nav-login" %>
-      <%= link_to "Sign Up", new_user_registration_path, class: "nav-btn nav-signup" %>
-    </div>
-  </nav>
-</header>
-
-
-<!-- Background Video -->
-<div class="video-background">
-  <video autoplay muted loop playsinline>
-    <source src="/videos/bg.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
 
 <!-- Login Section -->
-<div class="login-container">
+<!-- Header Section - Redesigned with Rails helpers -->
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <div class="logo-icon">R</div>
+      <div class="logo-text">RENATA</div>
+    </div>
 
+    <nav>
+      <ul class="nav-menu">
+        <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "About", "#" %></li>
+        <li><%= link_to "Services", "#" %></li>
+        <li><%= link_to "Resources", "#" %></li>
+        <li><%= link_to "Contact", "#" %></li>
+      </ul>
+    </nav>
 
-
-  <div class="login-box">
-    <div class="hover-glow"></div>
-
-    <div class="auth-card">
-      <h2 class="login-title">Welcome Back</h2>
-
-      <!-- Social Buttons -->
-      <div class="social-container">
-        <!-- Instagram -->
-        <a href="#" class="circle" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.88a1.13 1.13 0 11-2.25 0 1.13 1.13 0 012.25 0z"></path>
-          </svg>
-        </a>
-
-        <!-- LinkedIn -->
-        <a href="#" class="circle" aria-label="LinkedIn">
-          <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1a53.79 53.79 0 1 1 53.79-53.8 53.79 53.79 0 0 1-53.79 53.8zM447.9 448h-92.4V304.1c0-34.3-12.3-57.7-43.1-57.7-23.5 0-37.6 15.8-43.8 31.1-2.3 5.4-2.9 12.9-2.9 20.4V448h-92.4s1.2-270.5 0-298.9h92.4v42.3c12.3-19 34.3-46 83.6-46 61 0 106.8 39.8 106.8 125.4V448z"/>
-          </svg>
-        </a>
-
-        <!-- Facebook -->
-        <a href="#" class="circle" aria-label="Facebook">
-          <svg viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg">
-            <path d="M279.14 288l14.22-92.66H196.6V129.77c0-25.35 12.42-50.06 52.24-50.06H293V6.26S269.91 0 247.13 0c-73.41 0-121.1 44.38-121.1 124.72V195.3H86.41V288h39.62v224h92.16V288z"/>
-          </svg>
-        </a>
-      </div>
-
-
-
-      <span class="login-subtext">or use your account</span>
-
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "login-form" }) do |form| %>
-        <div class="form-group input-wrapper">
-          <%= form.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-input #{'input-error' if resource.errors[:email].present?}" %>
-        </div>
-
-        <div class="form-group input-wrapper password-wrapper">
-          <%= form.password_field :password, autocomplete: "current-password", placeholder: "Password", class: "form-input #{'input-error' if resource.errors[:password].present?}" %>
-          <span class="toggle-password">&#128065;</span>
-        </div>
-
-        <% if devise_mapping.recoverable? %>
-          <div class="form-group forgot-password">
-            <%= link_to "Forgot your password?", new_password_path(resource_name) %>
-          </div>
-        <% end %>
-
-        <div class="form-group">
-          <%= form.submit "Sign In", class: "login-button" %>
-        </div>
-      <% end %>
-
+    <div class="header-actions">
+      <%= link_to "Log In", new_user_session_path, class: "btn-header btn-login" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "btn-header btn-signup" %>
     </div>
   </div>
-</div>
+</header>
 
+<!-- Main Content -->
+<main class="main-content">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="auth-card" id="authCard">
+        <div class="hover-glow" id="hoverGlow"></div>
+        <h2 class="login-title">Sign in</h2>
 
-<!-- Footer -->
+        <!-- Social Buttons -->
+        <div class="social-container">
+          <!-- Instagram -->
+          <a href="#" class="circle" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.88a1.13 1.13 0 11-2.25 0 1.13 1.13 0 012.25 0z"></path>
+            </svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="circle" aria-label="LinkedIn">
+            <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+              <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1a53.79 53.79 0 1 1 53.79-53.8 53.79 53.79 0 0 1-53.79 53.8zM447.9 448h-92.4V304.1c0-34.3-12.3-57.7-43.1-57.7-23.5 0-37.6 15.8-43.8 31.1-2.3 5.4-2.9 12.9-2.9 20.4V448h-92.4s1.2-270.5 0-298.9h92.4v42.3c12.3-19 34.3-46 83.6-46 61 0 106.8 39.8 106.8 125.4V448z"/>
+            </svg>
+          </a>
+          <!-- Facebook -->
+          <a href="#" class="circle" aria-label="Facebook">
+            <svg viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg">
+              <path d="M279.14 288l14.22-92.66H196.6V129.77c0-25.35 12.42-50.06 52.24-50.06H293V6.26S269.91 0 247.13 0c-73.41 0-121.1 44.38-121.1 124.72V195.3H86.41V288h39.62v224h92.16V288z"/>
+            </svg>
+          </a>
+        </div>
+
+        <span class="login-subtext">or use your account</span>
+
+        <!-- Rails Form -->
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "login-form" }) do |form| %>
+          <div class="form-group input-wrapper">
+            <%= form.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-input #{'input-error' if resource.errors[:email].present?}" %>
+          </div>
+          <div class="form-group input-wrapper password-wrapper">
+            <%= form.password_field :password, autocomplete: "current-password", placeholder: "Password", class: "form-input #{'input-error' if resource.errors[:password].present?}" %>
+            <span class="toggle-password">&#128065;</span>
+          </div>
+          <% if devise_mapping.recoverable? %>
+            <div class="form-group forgot-password">
+              <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <%= form.submit "Sign In", class: "login-button" %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Animated Text Section -->
+      <div class="animated-text-section">
+        <h3 class="animated-text-title">Welcome to RENATA</h3>
+        <div class="animated-text-container">
+          <div class="animated-text" id="animatedText"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer Section -->
 <footer class="app-footer">
   <div class="footer-container">
-    <!-- Column 1: Brand -->
     <div class="footer-column footer-brand">
-      <!-- RENATA wordmark (SVG word text with gradient) -->
-      <svg class="footer-name-svg" viewBox="0 0 420 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="footerRenataTitle">
-        <title id="footerRenataTitle">RENATA</title>
-        <defs>
-          <linearGradient id="renataGradientFooter" x1="0" x2="1">
-            <stop offset="0%" stop-color="#7af3ff"/>
-            <stop offset="60%" stop-color="#00bfff"/>
-            <stop offset="100%" stop-color="#6b6bff"/>
-          </linearGradient>
-          <filter id="glowFooter" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3.2" result="b"/>
-            <feMerge>
-              <feMergeNode in="b"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
+      <svg class="footer-name-svg" viewBox="0 0 420 48" xmlns="http://www.w3.org/2000/svg">
         <text x="0" y="34" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
-              font-weight="800" font-size="32" fill="url(#renataGradientFooter)" filter="url(#glowFooter)" letter-spacing="2">
+              font-weight="800" font-size="32" fill="#7af3ff" letter-spacing="2">
           RENATA
         </text>
       </svg>
-
       <p class="footer-tagline">Your futuristic AI companion — built for real emotions, real responses, and the real you.</p>
     </div>
-
-    <!-- Column 2: Explore (with updated modern icons) -->
     <div class="footer-column">
       <h4>Explore</h4>
       <ul class="footer-links">
-        <li>
-          <a href="#">
-            <!-- Icon: feature / spark (futuristic) -->
-            <svg class="icon icon-spark" viewBox="0 0 24 24" role="img" aria-hidden="true">
-              <defs>
-                <linearGradient id="g-spark" x1="0" x2="1">
-                  <stop offset="0%" stop-color="#fff7a9"/><!-- warm core -->
-                  <stop offset="50%" stop-color="#ffd36b"/>
-                  <stop offset="100%" stop-color="#00d4ff"/>
-                </linearGradient>
-                <filter id="g-spark-glow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="2.2" result="b"/>
-                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <g fill="none" stroke="url(#g-spark)" stroke-width="1.6" filter="url(#g-spark-glow)" stroke-linecap="round" stroke-linejoin="round" transform="translate(0.5,0.5)">
-                <path d="M12 2 L13.6 8 L20 9.5 L14.5 13.4 L15.8 20 L12 16.8 L8.2 20 L9.5 13.4 L4 9.5 L10.4 8 Z" fill="url(#g-spark)"/>
-              </g>
-            </svg>
-            Features
-          </a>
-        </li>
-
-        <li>
-          <%= link_to new_user_session_path do %>
-            <!-- Icon: login (futuristic door/arrow) -->
-            <svg class="icon icon-login" viewBox="0 0 24 24" role="img" aria-hidden="true">
-              <defs>
-                <linearGradient id="g-login" x1="0" x2="1">
-                  <stop offset="0%" stop-color="#8be9ff"/>
-                  <stop offset="100%" stop-color="#6b6bff"/>
-                </linearGradient>
-                <filter id="g-login-glow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="1.6" result="b"/>
-                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <g fill="none" stroke="url(#g-login)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#g-login-glow)">
-                <path d="M10 17l5-5-5-5" />
-                <path d="M5 17v-10h7" />
-              </g>
-            </svg>
-            Login
-          <% end %>
-        </li>
-
-        <li>
-          <%= link_to new_user_registration_path do %>
-            <!-- Icon: signup (user + futuristic) -->
-            <svg class="icon icon-signup" viewBox="0 0 24 24" role="img" aria-hidden="true">
-              <defs>
-                <linearGradient id="g-signup" x1="0" x2="1">
-                  <stop offset="0%" stop-color="#9effff"/>
-                  <stop offset="100%" stop-color="#7a7aff"/>
-                </linearGradient>
-                <filter id="g-signup-glow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="1.8" result="b"/>
-                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <g fill="none" stroke="url(#g-signup)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" filter="url(#g-signup-glow)">
-                <path d="M12 12a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"/>
-                <path d="M4 20a8 8 0 0 1 16 0" />
-                <path d="M20 8v4" />
-                <path d="M22 10h-4" />
-              </g>
-            </svg>
-            Signup
-          <% end %>
-        </li>
-
-        <li>
-          <a href="#">
-            <!-- Icon: privacy (shield with digital cut) -->
-            <svg class="icon icon-privacy" viewBox="0 0 24 24" role="img" aria-hidden="true">
-              <defs>
-                <linearGradient id="g-privacy" x1="0" x2="1">
-                  <stop offset="0%" stop-color="#a8f0ff"/>
-                  <stop offset="100%" stop-color="#7a7aff"/>
-                </linearGradient>
-                <filter id="g-privacy-glow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="1.8" result="b"/>
-                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <g fill="url(#g-privacy)" filter="url(#g-privacy-glow)">
-                <path d="M12 2C7.6 4 5 6 5 9v4c0 5 4 9 7 9s7-4 7-9V9c0-3-2.6-5-7-7z" opacity="0.98"/>
-                <path d="M10.5 11.5l1.5 2 3-4" fill="none" stroke="#031827" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
-              </g>
-            </svg>
-            Privacy Policy
-          </a>
-        </li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Signup</a></li>
+        <li><a href="#">Privacy Policy</a></li>
       </ul>
     </div>
-
-    <!-- Column 3: Contact -->
     <div class="footer-column">
       <h4>Contact</h4>
       <ul class="footer-contact">
-        <li>
-          <!-- mail icon -->
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-mail" x1="0" x2="1">
-                <stop offset="0%" stop-color="#bfefff"/>
-                <stop offset="100%" stop-color="#7a7aff"/>
-              </linearGradient>
-            </defs>
-            <path fill="url(#g-mail)" d="M20 4H4c-1.1 0-2 .9-2 2v10a2 2 0 002 2h16a2 2 0 002-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
-          </svg>
-          hello@renata.ai
-        </li>
-        <li>
-          <!-- phone icon -->
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-phone" x1="0" x2="1">
-                <stop offset="0%" stop-color="#bfefff"/>
-                <stop offset="100%" stop-color="#7a7aff"/>
-              </linearGradient>
-            </defs>
-            <path fill="url(#g-phone)" d="M6.6 10.8a15 15 0 006.6 6.6l2.3-2.3a1 1 0 011.1-.2c1.2.5 2.4.8 3.6.8a1 1 0 011 1v3.2a1 1 0 01-1 1C10.7 21 3 13.3 3 3.9A1 1 0 014 3h3.2a1 1 0 011 1c0 1.2.3 2.4.8 3.6.2.3 0 .7-.2 1l-2.2 2.3z"/>
-          </svg>
-          +1-234-567-8910
-        </li>
-        <li>
-          <!-- location icon -->
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-loc" x1="0" x2="1">
-                <stop offset="0%" stop-color="#bfefff"/>
-                <stop offset="100%" stop-color="#7a7aff"/>
-              </linearGradient>
-            </defs>
-            <path fill="url(#g-loc)" d="M12 2C8.1 2 5 5.1 5 9c0 7 7 13 7 13s7-6 7-13c0-3.9-3.1-7-7-7zM12 11.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/>
-          </svg>
-          Future City, AIverse
-        </li>
+        <li>hello@renata.ai</li>
+        <li>+1-234-567-8910</li>
+        <li>Future City, AIverse</li>
       </ul>
     </div>
   </div>
-
   <div class="footer-bottom">
     &copy; 2025 RENATA — Built with ❤️ & intelligence.
   </div>
 </footer>
+
+
+<div class="notification" id="notification"></div>
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const loginBox = document.querySelector(".login-box");
-        const glow = document.querySelector(".hover-glow");
-        const togglePassword = document.querySelector(".toggle-password");
-        const passwordField = document.querySelector(".password-wrapper input");
+    document.addEventListener('DOMContentLoaded', function() {
+        // Dynamic hover effect that follows mouse - only for login container
+        const authCard = document.getElementById('authCard');
+        const hoverGlow = document.getElementById('hoverGlow');
 
-        // Hover glow effect only inside login-box
-        if (loginBox && glow) {
-            loginBox.addEventListener("mousemove", (e) => {
-                const rect = loginBox.getBoundingClientRect();
-                const glowWidth = glow.offsetWidth;
-                const glowHeight = glow.offsetHeight;
+        authCard.addEventListener('mousemove', function(e) {
+            // Get the position of the auth card
+            const rect = authCard.getBoundingClientRect();
 
-                // Center glow on cursor
-                const x = e.clientX - rect.left - glowWidth / 2;
-                const y = e.clientY - rect.top - glowHeight / 2;
-                glow.style.transform = `translate(${x}px, ${y}px)`;
-            });
+            // Calculate the mouse position relative to the auth card
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-            loginBox.addEventListener("mouseenter", () => {
-                glow.style.opacity = "1";
-            });
+            // Position the glow at the mouse position
+            hoverGlow.style.left = x + 'px';
+            hoverGlow.style.top = y + 'px';
+        });
 
-            loginBox.addEventListener("mouseleave", () => {
-                glow.style.opacity = "0";
+        // Toggle password visibility
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.querySelector('.password-wrapper input');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+        });
+
+        // Form submission
+        const loginForm = document.querySelector('.login-form');
+        const notification = document.getElementById('notification');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const email = document.querySelector('input[type="email"]').value;
+            const password = document.querySelector('input[type="password"]').value;
+
+            // Simple validation
+            if (!email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+
+            // In a real application, you would send the login request to your server here
+            // For demo purposes, we'll just show a success message
+            showNotification('Login successful! Redirecting...', 'success');
+
+            // Simulate redirect after successful login
+            setTimeout(() => {
+                // window.location.href = '/dashboard';
+                console.log('Redirecting to dashboard...');
+            }, 2000);
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Animated text - character by character
+        const animatedTextElement = document.getElementById('animatedText');
+        const text = "Your journey to emotional wellbeing starts here";
+        const characters = text.split('');
+
+        // Function to animate text
+        function animateText() {
+            // Clear the animated text element
+            animatedTextElement.innerHTML = '';
+
+            // Create span elements for each character
+            characters.forEach((char, index) => {
+                const charSpan = document.createElement('span');
+                charSpan.textContent = char;
+                charSpan.classList.add('animated-char');
+                charSpan.style.animationDelay = `${index * 0.1}s`; // Faster animation for characters
+                animatedTextElement.appendChild(charSpan);
             });
         }
 
-        // Password show/hide toggle
-        if (togglePassword && passwordField) {
-            togglePassword.addEventListener("click", () => {
-                passwordField.type = passwordField.type === "password" ? "text" : "password";
-            });
-        }
+        // Initial animation
+        animateText();
+
+        // After the animation completes, restart it
+        const totalAnimationTime = characters.length * 0.1 + 1; // Add 1 second for the last character to fully animate
+        setInterval(() => {
+            animateText();
+        }, totalAnimationTime * 1000 + 2000); // Add 2 seconds before restarting
     });
 </script>
+
 
 

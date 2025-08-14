@@ -1,419 +1,545 @@
-<main class="signup-container">
-  <div class="signup-box">
-    <h2>Create a new account</h2>
-    <p>It's quick and easy.</p>
-    <hr>
-
-    <!-- Step Indicators -->
-    <div class="step-indicators">
-      <div class="step-indicator active" data-step="1">1</div>
-      <div class="step-indicator" data-step="2">2</div>
-      <div class="step-indicator" data-step="3">3</div>
-      <div class="step-indicator" data-step="4">4</div>
-      <div class="step-indicator" data-step="5">5</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RENATA - Emotional Support Platform</title>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <div class="logo-icon">R</div>
+      <div class="logo-text">RENATA</div>
     </div>
 
-    <%= form_for(resource, as: :user, url: registration_path(:user), html: { autocomplete: "off", class: "step-form" }) do |f| %>
-      <%= render 'devise/shared/error_messages', resource: resource %>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
 
+    <div class="header-actions">
+      <%= link_to "Login", new_user_session_path, class: "btn-header btn-login" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "btn-header btn-signup" %>
+    </div>
+  </div>
+
+</header>
+
+<div class="main-content">
+
+<div class="signup-container">
+  <div class="ai-badge">RENATA</div>
+  <div class="signup-header">
+    <h2>Emotional Support Account</h2>
+    <p>Your journey to emotional wellbeing starts here</p>
+  </div>
+
+  <div class="emotional-support-tagline">
+    Creating a safe space for your emotional growth
+  </div>
+
+  <div class="step-indicators">
+    <div class="step-indicator active" data-step="1">
+      <div class="step-node">1</div>
+      <div class="step-name">Personal Info</div>
+    </div>
+    <div class="step-indicator" data-step="2">
+      <div class="step-node">2</div>
+      <div class="step-name">Profile</div>
+    </div>
+    <div class="step-indicator" data-step="3">
+      <div class="step-node">3</div>
+      <div class="step-name">Contact</div>
+    </div>
+    <div class="step-indicator" data-step="4">
+      <div class="step-node">4</div>
+      <div class="step-name">Security</div>
+    </div>
+    <div class="step-indicator" data-step="5">
+      <div class="step-node">5</div>
+      <div class="step-name">Complete</div>
+    </div>
+  </div>
+
+  <div class="form-content">
+    <%= form_with model: @user, url: user_registration_path, id: "signupForm", data: { turbo: false } do |f| %>
       <!-- STEP 1: Name -->
       <div class="step step-1 active">
-        <label class="field-label">Full Name:</label>
-        <div class="form-row double">
-          <%= f.text_field :first_name, placeholder: "First name", class: "form-input", autocomplete: "off" %>
-          <%= f.text_field :last_name, placeholder: "Last name", class: "form-input", autocomplete: "off" %>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="form-row double">
+            <%= f.text_field :first_name, class: "form-input", placeholder: "First name", required: true, id: "firstName" %>
+            <%= f.text_field :last_name,  class: "form-input", placeholder: "Last name",  required: true, id: "lastName" %>
+          </div>
+          <% if @user.errors[:first_name].present? || @user.errors[:last_name].present? %>
+            <div class="error-message">Please enter your full name</div>
+          <% end %>
         </div>
       </div>
 
       <!-- STEP 2: Age & Gender -->
       <div class="step step-2">
-        <label class="field-label">Date of Birth:</label>
-        <%= f.date_select :dob, { start_year: 1950, end_year: Date.today.year - 5 }, { class: "form-input dob-select" } %>
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
 
-        <label class="field-label">Gender:</label>
-        <div class="form-row triple gender-options">
-          <label><%= f.radio_button :gender, "Female" %><span>Female</span></label>
-          <label><%= f.radio_button :gender, "Male" %><span>Male</span></label>
-          <label><%= f.radio_button :gender, "Custom" %><span>Other</span></label>
-        </div>
-      </div>
+          <!-- Visible input with your custom calendar -->
+          <div class="date-input-container">
+            <input type="text" class="form-input" id="dob_display" placeholder="Select your birth date" readonly required>
+            <span class="calendar-icon">📅</span>
 
-      <!-- STEP 3: Contact Info -->
-      <div class="step step-3">
-        <label><input type="radio" name="registration_method" value="email" checked onchange="toggleRegistrationMethod()"> Email</label>
-        <label><input type="radio" name="registration_method" value="phone" onchange="toggleRegistrationMethod()"> Phone</label>
+            <div class="calendar-container" id="calendarContainer">
+              <div class="calendar-header">
+                <button class="nav-button" id="prevButton" type="button">❮</button>
+                <div class="month-year" id="monthYear"></div>
+                <button class="nav-button" id="nextButton" type="button">❯</button>
+              </div>
 
-        <div id="email_field">
-          <label class="field-label">Enter your Email:</label>
-          <%= f.email_field :email, placeholder: "Enter email", class: "form-input", autocomplete: "off" %>
-        </div>
-
-        <div id="phone_field" style="display: none;">
-          <label class="field-label">Select your Country:</label>
-          <div class="form-row double">
-            <select id="country_code" name="country_code" class="form-input"></select>
-            <%= f.text_field :phone, placeholder: "Phone number", class: "form-input" %>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 4: Password Setup -->
-      <div class="step step-4">
-        <label class="field-label">Select your password:</label>
-        <%= f.password_field :password, placeholder: "Password", class: "form-input", id: "user_password", autocomplete: "new-password" %>
-        <%= f.password_field :password_confirmation, placeholder: "Confirm Password", class: "form-input", id: "user_password_confirmation", autocomplete: "new-password" %>
-
-        <div id="password-strength" style="margin-top: 5px;"></div>
-        <button type="button" class="generate-btn" onclick="openPasswordModal()">Generate Secure Password</button>
-
-        <!-- Password Modal -->
-        <div id="passwordModal" class="modal" onclick="clickOutsideModal(event)">
-          <div class="modal-content">
-            <h3>Suggested Password</h3>
-            <input type="text" id="suggestedPassword" readonly />
-            <div class="modal-buttons">
-              <button type="button" onclick="copyPassword()">📋 Copy</button>
-              <button type="button" onclick="useSuggestedPassword()">✅ Use</button>
-              <button type="button" onclick="generatePassword()">🔁</button>
+              <div class="breadcrumb" id="breadcrumb"></div>
+              <div id="calendarView"></div>
+              <div class="view-indicator" id="viewIndicator">Click on month/year to change view</div>
             </div>
           </div>
+
+          <!-- Hidden Rails field actually submitted -->
+          <%= f.hidden_field :date_of_birth, id: "dob_hidden" %>
+
+          <% if @user.errors[:date_of_birth].present? %>
+            <div class="error-message">Please select your date of birth</div>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <div class="form-row triple">
+            <label>
+              <%= f.radio_button :gender, "female", required: true %>
+              <span>Female</span>
+            </label>
+            <label>
+              <%= f.radio_button :gender, "male", required: true %>
+              <span>Male</span>
+            </label>
+            <label>
+              <%= f.radio_button :gender, "other", required: true %>
+              <span>Other</span>
+            </label>
+          </div>
+          <% if @user.errors[:gender].present? %>
+            <div class="error-message">Please select your gender</div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- STEP 3: Verification Method -->
+      <div class="step step-3">
+        <div class="form-group">
+          <label class="form-label">Verification Method</label>
+          <div class="verification-method">
+            <%= f.radio_button :verification_method, "email", checked: true, id: "emailMethod" %>
+            <label for="emailMethod">Email</label>
+
+            <%= f.radio_button :verification_method, "phone", id: "phoneMethod" %>
+            <label for="phoneMethod">Phone</label>
+          </div>
+        </div>
+
+        <div class="form-group" id="emailField">
+          <label class="form-label">Email Address</label>
+          <%= f.email_field :email, class: "form-input", placeholder: "Enter your email", id: "email" %>
+          <% if @user.errors[:email].present? %>
+            <div class="error-message">Please enter a valid email address</div>
+          <% end %>
+        </div>
+
+        <div class="form-group" id="phoneField" style="display: none;">
+          <label class="form-label">Phone Number</label>
+          <div class="form-row double">
+            <%= f.select :country_code,
+                         options_for_select([["+1 US","+1"],["+44 UK","+44"],["+91 IN","+91"],["+61 AU","+61"],["+81 JP","+81"]], @user.country_code),
+                         {}, class: "form-input", id: "countryCode" %>
+            <%= f.telephone_field :phone, class: "form-input", placeholder: "Phone number", id: "phone" %>
+          </div>
+          <% if @user.errors[:phone].present? %>
+            <div class="error-message">Please enter a valid phone number</div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- STEP 4: Password -->
+      <div class="step step-4">
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <%= f.password_field :password, class: "form-input", placeholder: "Create a password", id: "password", required: true, minlength: 8 %>
+          <div class="password-strength">
+            <div class="password-strength-meter" id="strengthMeter"></div>
+          </div>
+          <% if @user.errors[:password].present? %>
+            <div class="error-message">Password must be at least 8 characters</div>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <%= f.password_field :password_confirmation, class: "form-input", placeholder: "Confirm your password", id: "confirmPassword", required: true %>
+          <% if @user.errors[:password_confirmation].present? %>
+            <div class="error-message">Passwords do not match</div>
+          <% end %>
         </div>
       </div>
 
       <!-- STEP 5: Security & Terms -->
       <div class="step step-5">
-        <div class="recaptcha-container">
-          <div id="g-recaptcha-container"></div>
-          <% if flash[:recaptcha_error] %>
-            <div class="error-message"><%= flash[:recaptcha_error] %></div>
+        <div class="form-group">
+          <label class="form-label">Human Verification</label>
+          <div class="captcha-container">
+            <div class="captcha-question" id="captchaQuestion">
+              <%# simple math captcha generated in controller %>
+              <% q_a = session[:captcha_a]; q_b = session[:captcha_b] %>
+              What is <%= q_a %> + <%= q_b %>?
+            </div>
+            <input type="text" class="captcha-input" name="captcha_answer" id="captchaInput" placeholder="Answer" required>
+          </div>
+          <% if flash.now[:captcha_error] %>
+            <div class="error-message"><%= flash.now[:captcha_error] %></div>
           <% end %>
         </div>
 
         <div class="checkbox-group">
           <label>
-            <input type="checkbox" id="terms-agree" required>
-            <span>I agree to the <a href="#">Terms</a>, <a href="#">Privacy Policy</a>, and <a href="#">Cookies Policy</a>.</span>
+            <%= f.check_box :terms_agree, id: "termsAgree", required: true %>
+            <span>I agree to the <%= link_to "Terms of Service", "#" %>, <%= link_to "Privacy Policy", "#" %>, and <%= link_to "Cookie Policy", "#" %></span>
           </label>
+          <% if @user.errors[:terms_agree].present? %>
+            <div class="error-message">You must agree to the terms</div>
+          <% end %>
         </div>
       </div>
 
-      <!-- Step Navigation -->
       <div class="step-buttons">
-        <button type="button" id="prevBtn" disabled>Previous</button>
-        <button type="button" id="nextBtn">Next</button>
+        <button type="button" class="btn btn-secondary" id="prevBtn" disabled>Previous</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+        <!-- Final actual submit (hidden, click it programmatically on final step) -->
+        <%= f.submit "Create Account", class: "btn btn-primary", id: "submitBtn", style: "display:none" %>
       </div>
     <% end %>
-
-    <p class="form-footer">
-      Already have an account? <%= link_to "Log in", new_user_session_path %>
-    </p>
   </div>
-</main>
 
+  <div class="form-footer">
+    Already have an account?<%= link_to "Log in", new_user_session_path %>
+  </div>
+  </div>
+</div>
 
-<!-- reCAPTCHA script -->
-<script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
-
+<div class="notification" id="notification"><%= notice || alert %></div>
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // ===== Multi-Step Stepper =====
-        const steps = document.querySelectorAll(".step");
-        const indicators = document.querySelectorAll(".step-indicator");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        let currentStep = 0;
-        let recaptchaRendered = false;
+    /* ------------ Calendar Code ------------- */
+    const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-        function showStep(index) {
-            steps.forEach((step, i) => {
-                step.classList.toggle("active", i === index);
-                indicators[i].classList.toggle("active", i === index);
-                indicators[i].classList.toggle("completed", i < index);
-            });
+    let currentDate = new Date();
+    let selectedDate = null;
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+    let currentView = 'day';
+    let yearRangeStart = currentYear - 10;
 
-            prevBtn.disabled = index === 0;
-            nextBtn.textContent = index === steps.length - 1 ? "Complete" : "Next";
+    const dateInputDisplay = document.getElementById('dob_display');
+    const calendarContainer = document.getElementById('calendarContainer');
+    const monthYearElement = document.getElementById('monthYear');
+    const calendarView = document.getElementById('calendarView');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const viewIndicator = document.getElementById('viewIndicator');
+    const breadcrumb = document.getElementById('breadcrumb');
+    const dobHidden = document.getElementById('dob_hidden');
 
-            // Render reCAPTCHA only when its step becomes active
-            if (!recaptchaRendered) {
-                const recaptchaStep = document.getElementById("g-recaptcha-container");
-                if (recaptchaStep && steps[index].contains(recaptchaStep)) {
-                    renderRecaptcha();
-                    recaptchaRendered = true;
+    renderCalendar();
+
+    dateInputDisplay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        calendarContainer.classList.toggle('active');
+    });
+    calendarContainer.addEventListener('click', function(e) { e.stopPropagation(); });
+    document.addEventListener('click', function() { calendarContainer.classList.remove('active'); });
+
+    function renderCalendar() {
+        calendarView.innerHTML = '';
+        switch(currentView) {
+            case 'day': renderDayView(); break;
+            case 'month': renderMonthView(); break;
+            case 'year': renderYearView(); break;
+        }
+        updateHeader();
+        updateBreadcrumb();
+    }
+
+    function updateHeader() {
+        if (currentView === 'day') { monthYearElement.textContent = `${monthNames[currentMonth]} ${currentYear}`; viewIndicator.textContent = "Click on month/year to change view"; }
+        if (currentView === 'month') { monthYearElement.textContent = `${currentYear}`; viewIndicator.textContent = "Click on year to change view, click on month to select"; }
+        if (currentView === 'year') { monthYearElement.textContent = `${yearRangeStart} - ${yearRangeStart + 19}`; viewIndicator.textContent = "Click on year to select"; }
+    }
+
+    function updateBreadcrumb() {
+        breadcrumb.innerHTML = '';
+        if (currentView === 'year') return;
+
+        const yearItem = document.createElement('div');
+        yearItem.className = 'breadcrumb-item';
+        yearItem.textContent = currentYear;
+        yearItem.addEventListener('click', function() { currentView = 'year'; renderCalendar(); });
+        breadcrumb.appendChild(yearItem);
+
+        if (currentView === 'day') {
+            const separator = document.createElement('div');
+            separator.className = 'breadcrumb-separator';
+            separator.textContent = '>';
+            breadcrumb.appendChild(separator);
+
+            const monthItem = document.createElement('div');
+            monthItem.className = 'breadcrumb-item';
+            monthItem.textContent = monthNames[currentMonth];
+            monthItem.addEventListener('click', function() { currentView = 'month'; renderCalendar(); });
+            breadcrumb.appendChild(monthItem);
+        }
+    }
+
+    function renderDayView() {
+        const dayHeaders = document.createElement('div');
+        dayHeaders.className = 'calendar-grid';
+        dayNames.forEach(function(day) {
+            const dayHeader = document.createElement('div'); dayHeader.className = 'day-header'; dayHeader.textContent = day;
+            dayHeaders.appendChild(dayHeader);
+        });
+        calendarView.appendChild(dayHeaders);
+
+        const dayGrid = document.createElement('div'); dayGrid.className = 'calendar-grid';
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) dayGrid.appendChild(document.createElement('div'));
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.className = 'day-cell';
+            dayCell.textContent = day;
+
+            const today = new Date();
+            if (currentYear === today.getFullYear() && currentMonth === today.getMonth() && day === today.getDate()) {
+                dayCell.classList.add('today');
+            }
+            if (selectedDate &&
+              currentYear === selectedDate.getFullYear() &&
+              currentMonth === selectedDate.getMonth() &&
+              day === selectedDate.getDate()) {
+                dayCell.classList.add('selected');
+            }
+
+            dayCell.addEventListener('click', function() { selectDate(day); });
+            dayGrid.appendChild(dayCell);
+        }
+        calendarView.appendChild(dayGrid);
+    }
+
+    function renderMonthView() {
+        const monthGrid = document.createElement('div'); monthGrid.className = 'month-grid';
+        monthNames.forEach(function(month, index) {
+            const monthCell = document.createElement('div');
+            monthCell.className = 'month-cell';
+            monthCell.textContent = month.substring(0, 3);
+
+            if (currentYear === (new Date()).getFullYear() && index === (new Date()).getMonth()) {
+                monthCell.style.fontWeight = 'bold';
+            }
+            if (selectedDate && currentYear === selectedDate.getFullYear() && index === selectedDate.getMonth()) {
+                monthCell.classList.add('selected');
+            }
+            monthCell.addEventListener('click', function() { currentMonth = index; currentView = 'day'; renderCalendar(); });
+            monthGrid.appendChild(monthCell);
+        });
+        calendarView.appendChild(monthGrid);
+    }
+
+    function renderYearView() {
+        const yearGrid = document.createElement('div'); yearGrid.className = 'year-grid';
+        for (let i = 0; i < 20; i++) {
+            const year = yearRangeStart + i;
+            const yearCell = document.createElement('div'); yearCell.className = 'year-cell'; yearCell.textContent = year;
+            if (year === (new Date()).getFullYear()) yearCell.style.fontWeight = 'bold';
+            if (selectedDate && year === selectedDate.getFullYear()) yearCell.classList.add('selected');
+            yearCell.addEventListener('click', function() { currentYear = year; currentView = 'month'; renderCalendar(); });
+            yearGrid.appendChild(yearCell);
+        }
+        calendarView.appendChild(yearGrid);
+    }
+
+    function selectDate(day) {
+        selectedDate = new Date(currentYear, currentMonth, day);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        dateInputDisplay.value = selectedDate.toLocaleDateString('en-US', options);
+        const iso = selectedDate.toISOString().slice(0,10);
+        dobHidden.value = iso;
+        calendarContainer.classList.remove('active');
+    }
+
+    monthYearElement.addEventListener('click', function() {
+        if (currentView === 'day') currentView = 'month';
+        else if (currentView === 'month') currentView = 'year';
+        renderCalendar();
+    });
+
+    prevButton.addEventListener('click', function() {
+        switch(currentView) {
+            case 'day':
+                currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } break;
+            case 'month':
+                currentYear--; break;
+            case 'year':
+                yearRangeStart -= 20; break;
+        }
+        renderCalendar();
+    });
+
+    nextButton.addEventListener('click', function() {
+        switch(currentView) {
+            case 'day':
+                currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } break;
+            case 'month':
+                currentYear++; break;
+            case 'year':
+                yearRangeStart += 20; break;
+        }
+        renderCalendar();
+    });
+
+    /* ---- Email/Phone toggle ---- */
+    const emailMethod = document.getElementById('emailMethod');
+    const phoneMethod = document.getElementById('phoneMethod');
+    const emailField = document.getElementById('emailField');
+    const phoneField = document.getElementById('phoneField');
+    function toggleContact() {
+        if (phoneMethod.checked) { phoneField.style.display = ''; emailField.style.display = 'none'; }
+        else { emailField.style.display = ''; phoneField.style.display = 'none'; }
+    }
+    [emailMethod, phoneMethod].forEach(el => el.addEventListener('change', toggleContact));
+    toggleContact();
+
+    /* ---- Stepper ---- */
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const steps = Array.from(document.querySelectorAll('.step'));
+    let stepIndex = steps.findIndex(s => s.classList.contains('active'));
+
+    function showStep(i){
+        steps.forEach(s => s.classList.remove('active'));
+        steps[i].classList.add('active');
+        document.querySelectorAll('.step-indicator').forEach((si,idx)=>{
+            si.classList.toggle('active', idx===i);
+        });
+        prevBtn.disabled = i===0;
+        nextBtn.style.display = i===steps.length-1 ? 'none' : '';
+        submitBtn.style.display = i===steps.length-1 ? '' : 'none';
+    }
+
+    function validateStep(i) {
+        let valid = true;
+        const currentStep = steps[i];
+        const inputs = currentStep.querySelectorAll("input, select, textarea");
+        inputs.forEach(input => input.classList.remove("input-error"));
+
+        inputs.forEach(input => {
+            if (input.hasAttribute("required") && !input.value.trim()) {
+                input.classList.add("input-error");
+                valid = false;
+            }
+            if (input.type === "radio" && input.hasAttribute("required")) {
+                const group = currentStep.querySelectorAll(`input[name='${input.name}']`);
+                if (![...group].some(r => r.checked)) {
+                    valid = false;
                 }
             }
-        }
-
-        nextBtn?.addEventListener("click", () => {
-            if (currentStep < steps.length - 1) {
-                currentStep++;
-                showStep(currentStep);
-            } else {
-                document.querySelector(".step-form")?.submit();
-            }
         });
 
-        prevBtn?.addEventListener("click", () => {
-            if (currentStep > 0) {
-                currentStep--;
-                showStep(currentStep);
+        if (i === 3) {
+            const pass = document.getElementById("password").value.trim();
+            const confirmPass = document.getElementById("confirmPassword").value.trim();
+            if (pass !== confirmPass || pass.length < 8) {
+                alert("Passwords must match and be at least 8 characters long.");
+                valid = false;
+            }
+        }
+
+        if (i === 4) {
+            const captcha = document.getElementById("captchaInput").value.trim();
+            if (!captcha) {
+                alert("Please solve the captcha.");
+                valid = false;
+            }
+            const terms = document.getElementById("termsAgree");
+            if (!terms.checked) {
+                alert("You must agree to the terms.");
+                valid = false;
+            }
+        }
+
+        if (!valid) {
+            alert("Please fill all required fields before proceeding.");
+        }
+
+        return valid;
+    }
+
+    prevBtn.addEventListener('click', ()=>{
+        stepIndex=Math.max(0, stepIndex-1);
+        showStep(stepIndex);
+    });
+
+    nextBtn.addEventListener('click', ()=>{
+        if (!validateStep(stepIndex)) return;
+        stepIndex=Math.min(steps.length-1, stepIndex+1);
+        showStep(stepIndex);
+    });
+
+    const style = document.createElement("style");
+    style.innerHTML = `.input-error { border: 2px solid red !important; }`;
+    document.head.appendChild(style);
+
+    showStep(stepIndex);
+
+    /* ---- ✅ Password Strength Meter ---- */
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.querySelector('.password-strength-meter');
+
+    if (passwordInput && strengthBar) {
+        passwordInput.addEventListener('input', () => {
+            const value = passwordInput.value;
+            let strength = 0;
+
+            if (value.length >= 6) strength++;
+            if (/[A-Z]/.test(value)) strength++;
+            if (/[0-9]/.test(value)) strength++;
+            if (/[^A-Za-z0-9]/.test(value)) strength++;
+
+            strengthBar.className = 'password-strength-meter';
+
+            if (strength <= 1) {
+                strengthBar.classList.add('weak');
+            } else if (strength === 2 || strength === 3) {
+                strengthBar.classList.add('medium');
+            } else if (strength >= 4) {
+                strengthBar.classList.add('strong');
             }
         });
-
-        showStep(currentStep);
-
-        // ===== Email / Phone Toggle =====
-        window.toggleRegistrationMethod = function () {
-            const method = document.querySelector('input[name="registration_method"]:checked')?.value;
-            document.getElementById("email_field").style.display = method === "email" ? "block" : "none";
-            document.getElementById("phone_field").style.display = method === "phone" ? "block" : "none";
-        };
-        toggleRegistrationMethod();
-
-        // ===== reCAPTCHA Explicit Render =====
-        function renderRecaptcha() {
-            const container = document.getElementById("g-recaptcha-container");
-            if (container && typeof grecaptcha !== "undefined") {
-                grecaptcha.render(container, {
-                    sitekey: "<%= Rails.application.credentials.dig(:recaptcha, :site_key) || ENV['RECAPTCHA_SITE_KEY'] %>",
-                    callback: onRecaptchaVerified,
-                    "expired-callback": onRecaptchaExpired,
-                    theme: "light"
-                });
-                console.log("reCAPTCHA rendered successfully");
-            } else {
-                console.error("reCAPTCHA container not found or grecaptcha not loaded yet!");
-            }
-        }
-
-        window.onRecaptchaVerified = function (token) {
-            console.log("reCAPTCHA verified:", token);
-        };
-
-        window.onRecaptchaExpired = function () {
-            console.warn("reCAPTCHA expired");
-        };
-
-        // Onload hook from Google script
-        window.onRecaptchaLoad = function () {
-            console.log("Google reCAPTCHA API loaded");
-            // If first step already contains reCAPTCHA, render immediately
-            if (steps[currentStep].contains(document.getElementById("g-recaptcha-container"))) {
-                renderRecaptcha();
-                recaptchaRendered = true;
-            }
-        };
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const countries = [ { name: "Afghanistan", dial: "+93", flag: "🇦🇫" },
-            { name: "Albania", dial: "+355", flag: "🇦🇱" },
-            { name: "Algeria", dial: "+213", flag: "🇩🇿" },
-            { name: "Andorra", dial: "+376", flag: "🇦🇩" },
-            { name: "Angola", dial: "+244", flag: "🇦🇴" },
-            { name: "Antigua and Barbuda", dial: "+1‑268", flag: "🇦🇬" },
-            { name: "Argentina", dial: "+54", flag: "🇦🇷" },
-            { name: "Armenia", dial: "+374", flag: "🇦🇲" },
-            { name: "Australia", dial: "+61", flag: "🇦🇺" },
-            { name: "Austria", dial: "+43", flag: "🇦🇹" },
-            { name: "Azerbaijan", dial: "+994", flag: "🇦🇿" },
-            { name: "Bahamas", dial: "+1‑242", flag: "🇧🇸" },
-            { name: "Bahrain", dial: "+973", flag: "🇧🇭" },
-            { name: "Bangladesh", dial: "+880", flag: "🇧🇩" },
-            { name: "Barbados", dial: "+1‑246", flag: "🇧🇧" },
-            { name: "Belarus", dial: "+375", flag: "🇧🇾" },
-            { name: "Belgium", dial: "+32", flag: "🇧🇪" },
-            { name: "Belize", dial: "+501", flag: "🇧🇿" },
-            { name: "Benin", dial: "+229", flag: "🇧🇯" },
-            { name: "Bhutan", dial: "+975", flag: "🇧🇹" },
-            { name: "Bolivia", dial: "+591", flag: "🇧🇴" },
-            { name: "Bosnia and Herzegovina", dial: "+387", flag: "🇧🇦" },
-            { name: "Botswana", dial: "+267", flag: "🇧🇼" },
-            { name: "Brazil", dial: "+55", flag: "🇧🇷" },
-            { name: "Brunei", dial: "+673", flag: "🇧🇳" },
-            { name: "Bulgaria", dial: "+359", flag: "🇧🇬" },
-            { name: "Burkina Faso", dial: "+226", flag: "🇧🇫" },
-            { name: "Burundi", dial: "+257", flag: "🇧🇮" },
-            { name: "Cambodia", dial: "+855", flag: "🇰🇭" },
-            { name: "Cameroon", dial: "+237", flag: "🇨🇲" },
-            { name: "Canada", dial: "+1", flag: "🇨🇦" },
-            { name: "Cape Verde", dial: "+238", flag: "🇨🇻" },
-            { name: "Central African Republic", dial: "+236", flag: "🇨🇫" },
-            { name: "Chad", dial: "+235", flag: "🇹🇩" },
-            { name: "Chile", dial: "+56", flag: "🇨🇱" },
-            { name: "China", dial: "+86", flag: "🇨🇳" },
-            { name: "Colombia", dial: "+57", flag: "🇨🇴" },
-            { name: "Comoros", dial: "+269", flag: "🇰🇲" },
-            { name: "Congo (Brazzaville)", dial: "+242", flag: "🇨🇬" },
-            { name: "Congo (Kinshasa)", dial: "+243", flag: "🇨🇩" },
-            { name: "Costa Rica", dial: "+506", flag: "🇨🇷" },
-            { name: "Croatia", dial: "+385", flag: "🇭🇷" },
-            { name: "Cuba", dial: "+53", flag: "🇨🇺" },
-            { name: "Cyprus", dial: "+357", flag: "🇨🇾" },
-            { name: "Czech Republic", dial: "+420", flag: "🇨🇿" },
-            { name: "Denmark", dial: "+45", flag: "🇩🇰" },
-            { name: "Djibouti", dial: "+253", flag: "🇩🇯" },
-            { name: "Dominica", dial: "+1‑767", flag: "🇩🇲" },
-            { name: "Dominican Republic", dial: "+1‑809", flag: "🇩🇴" },
-            { name: "Ecuador", dial: "+593", flag: "🇪🇨" },
-            { name: "Egypt", dial: "+20", flag: "🇪🇬" },
-            { name: "El Salvador", dial: "+503", flag: "🇸🇻" },
-            { name: "Equatorial Guinea", dial: "+240", flag: "🇬🇶" },
-            { name: "Eritrea", dial: "+291", flag: "🇪🇷" },
-            { name: "Estonia", dial: "+372", flag: "🇪🇪" },
-            { name: "Eswatini", dial: "+268", flag: "🇸🇿" },
-            { name: "Ethiopia", dial: "+251", flag: "🇪🇹" },
-            { name: "Fiji", dial: "+679", flag: "🇫🇯" },
-            { name: "Finland", dial: "+358", flag: "🇫🇮" },
-            { name: "France", dial: "+33", flag: "🇫🇷" },
-            { name: "Gabon", dial: "+241", flag: "🇬🇦" },
-            { name: "Gambia", dial: "+220", flag: "🇬🇲" },
-            { name: "Georgia", dial: "+995", flag: "🇬🇪" },
-            { name: "Germany", dial: "+49", flag: "🇩🇪" },
-            { name: "Ghana", dial: "+233", flag: "🇬🇭" },
-            { name: "Greece", dial: "+30", flag: "🇬🇷" },
-            { name: "Grenada", dial: "+1‑473", flag: "🇬🇩" },
-            { name: "Guatemala", dial: "+502", flag: "🇬🇹" },
-            { name: "Guinea", dial: "+224", flag: "🇬🇳" },
-            { name: "Guinea‑Bissau", dial: "+245", flag: "🇬🇼" },
-            { name: "Guyana", dial: "+592", flag: "🇬🇾" },
-            { name: "Haiti", dial: "+509", flag: "🇭🇹" },
-            { name: "Honduras", dial: "+504", flag: "🇭🇳" },
-            { name: "Hungary", dial: "+36", flag: "🇭🇺" },
-            { name: "Iceland", dial: "+354", flag: "🇮🇸" },
-            { name: "India", dial: "+91", flag: "🇮🇳" },
-            { name: "Indonesia", dial: "+62", flag: "🇮🇩" },
-            { name: "Iran", dial: "+98", flag: "🇮🇷" },
-            { name: "Iraq", dial: "+964", flag: "🇮🇶" },
-            { name: "Ireland", dial: "+353", flag: "🇮🇪" },
-            { name: "Israel", dial: "+972", flag: "🇮🇱" },
-            { name: "Italy", dial: "+39", flag: "🇮🇹" },
-            { name: "Ivory Coast", dial: "+225", flag: "🇨🇮" },
-            { name: "Jamaica", dial: "+1‑876", flag: "🇯🇲" },
-            { name: "Japan", dial: "+81", flag: "🇯🇵" },
-            { name: "Jordan", dial: "+962", flag: "🇯🇴" },
-            { name: "Kazakhstan", dial: "+7", flag: "🇰🇿" },
-            { name: "Kenya", dial: "+254", flag: "🇰🇪" },
-            { name: "Kiribati", dial: "+686", flag: "🇰🇮" },
-            { name: "Kuwait", dial: "+965", flag: "🇰🇼" },
-            { name: "Kyrgyzstan", dial: "+996", flag: "🇰🇬" },
-            { name: "Laos", dial: "+856", flag: "🇱🇦" },
-            { name: "Latvia", dial: "+371", flag: "🇱🇻" },
-            { name: "Lebanon", dial: "+961", flag: "🇱🇧" },
-            { name: "Lesotho", dial: "+266", flag: "🇱🇸" },
-            { name: "Liberia", dial: "+231", flag: "🇱🇷" },
-            { name: "Libya", dial: "+218", flag: "🇱🇾" },
-            { name: "Liechtenstein", dial: "+423", flag: "🇱🇮" },
-            { name: "Lithuania", dial: "+370", flag: "🇱🇹" },
-            { name: "Luxembourg", dial: "+352", flag: "🇱🇺" },
-            { name: "Madagascar", dial: "+261", flag: "🇲🇬" },
-            { name: "Malawi", dial: "+265", flag: "🇲🇼" },
-            { name: "Malaysia", dial: "+60", flag: "🇲🇾" },
-            { name: "Maldives", dial: "+960", flag: "🇲🇻" },
-            {name: "Mali", dial: "+223", flag: "🇲🇱 "},
-            {name: "Malta", dial: "+356", flag: "🇲🇹"},
-            {name: "Marshall Islands", dial: "+692", flag: "🇲🇭"},
-            {name: "Mauritania", dial: "+222", flag: "🇲🇷"},
-            {name: "Mauritius", dial: "+230", flag: "🇲🇺"},
-            {name: "Mexico", dial: "+52", flag: "🇲🇽"},
-            {name: "Micronesia", dial: "+691", flag: "🇫🇲"},
-            {name: "Moldova", dial: "+373", flag: "🇲🇩"},
-            {name: "Monaco", dial: "+377", flag: "🇲🇨"},
-            {name: "Mongolia", dial: "+976", flag: "🇲🇳"},
-            {name: "Montenegro", dial: "+382", flag: "🇲🇪"},
-            {name: "Morocco", dial: "+212", flag: "🇲🇦"},
-            {name: "Mozambique", dial: "+258", flag: "🇲🇿"},
-            {name: "Myanmar", dial: "+95", flag: "🇲🇲"},
-            {name: "Namibia", dial: "+264", flag: "🇳🇦"},
-            {name: "Nauru", dial: "+674", flag: "🇳🇷"},
-            {name: "Nepal", dial: "+977", flag: "🇳🇵"},
-            {name: "Netherlands", dial: "+31", flag: "🇳🇱"},
-            {name: "New Zealand", dial: "+64", flag: "🇳🇿"},
-            {name: "Nicaragua", dial: "+505", flag: "🇳🇮"},
-            {name: "Niger", dial: "+227", flag: "🇳🇪"},
-            {name: "Nigeria", dial: "+234", flag: "🇳🇬"},
-            {name: "North Korea", dial: "+850", flag: "🇰🇵"},
-            {name: "North Macedonia", dial: "+389", flag: "🇲🇰"},
-            {name: "Norway", dial: "+47", flag: "🇳🇴"},
-            {name: "Oman", dial: "+968", flag: "🇴🇲"},
-            {name: "Pakistan", dial: "+92", flag: "🇵🇰"},
-            {name: "Palau", dial: "+680", flag: "🇵🇼"},
-            {name: "Palestine", dial: "+970", flag: "🇵🇸"},
-            {name: "Panama", dial: "+507", flag: "🇵🇦"},
-            {name: "Papua New Guinea ", dial: "+675", flag: "🇵🇬"},
-            {name: "Paraguay", dial: "+595", flag: "🇵🇾"},
-            {name: "Peru", dial: "+51", flag: "🇵🇪"},
-            {name: "Philippines", dial: "+63", flag: "🇵🇭"},
-            {name: "Poland", dial: "+48", flag: "🇵🇱"},
-            {name: "Portugal", dial: "+351", flag: "🇵🇹"},
-            {name: "Qatar", dial: "+974", flag: "🇶🇦"},
-            {name: "Romania", dial: "+40", flag: "🇷🇴"},
-            {name: "Russia", dial: "+7", flag: "🇷🇺"},
-            {name: "Rwanda", dial: "+250", flag: "🇷🇼"},
-            {name: "Saint Kitts and Nevis", dial: "+1-869", flag: "🇰🇳"},
-            {name: "Saint Lucia", dial: "+1-758", flag: "🇱🇨"},
-            {name: "Saint Vincent and the Grenadines", dial: "+1-784", flag: "🇻🇨"},
-            {name: "Samoa", dial: "+685", flag: "🇼🇸"},
-            {name: "San Marino", dial: "+378", flag: "🇸🇲"},
-            {name: "Sao Tome and Principe", dial: "+239", flag: "🇸🇹"},
-            {name: "Saudi Arabia", dial: "+966", flag: "🇸🇦"},
-            {name: "Senegal", dial: "+221", flag: "🇸🇳"},
-            {name: "Serbia", dial: "+381", flag: "🇷🇸"},
-            {name: "Seychelles", dial: "+248", flag: "🇸🇨"},
-            {name: "Sierra Leone", dial: "+232", flag: "🇸🇱"},
-            {name: "Singapore", dial: "+65", flag: "🇸🇬"},
-            {name: "Slovakia", dial: "+421", flag: "🇸🇰"},
-            {name: "Slovenia", dial: "+386", flag: "🇸🇮"},
-            {name: "Solomon Islands", dial: "+677", flag: "🇸🇧"},
-            {name: "Somalia", dial: "+252", flag: "🇸🇴"},
-            {name: "South Africa", dial: "+27", flag: "🇿🇦"},
-            {name: "South Korea", dial: "+82", flag: "🇰🇷"},
-            {name: "South Sudan", dial: "+211", flag: "🇸🇸"},
-            {name: "Spain", dial: "+34", flag: "🇪🇸"},
-            {name: "Sri Lanka", dial: "+94", flag: "🇱🇰"},
-            {name: "Sudan", dial: "+249", flag: "🇸🇩"},
-            {name: "Suriname", dial: "+597", flag: "🇸🇷"},
-            {name: "Sweden", dial: "+46", flag: "🇸🇪"},
-            {name: "Switzerland", dial: "+41", flag: "🇨🇭"},
-            {name: "Syria", dial: "+963", flag: "🇸🇾"},
-            {name: "Taiwan", dial: "+886", flag: "🇹🇼"},
-            {name: "Tajikistan", dial: "+992", flag: "🇹🇯"},
-            {name: "Tanzania", dial: "+255", flag: "🇹🇿"},
-            {name: "Thailand", dial: "+66", flag: "🇹🇭"},
-            {name: "Timor-Leste", dial: "+670", flag: "🇹🇱"},
-            {name: "Togo", dial: "+228", flag: "🇹🇬"},
-            {name: "Tonga", dial: "+676", flag: "🇹🇴"},
-            {name: "Trinidad and Tobago", dial: "+1-868", flag: "🇹🇹"},
-            {name: "Tunisia", dial: "+216", flag: "🇹🇳"},
-            {name: "Turkey", dial: "+90", flag: "🇹🇷"},
-            {name: "Turkmenistan", dial: "+993", flag: "🇹🇲"},
-            {name: "Tuvalu", dial: "+688", flag: "🇹🇻"},
-            {name: "Uganda", dial: "+256", flag: "🇺🇬"},
-            {name: "Ukraine", dial: "+380", flag: "🇺🇦"},
-            {name: "United Arab Emirates", dial: "+971", flag: "🇦🇪"},
-            {name: "United Kingdom", dial: "+44", flag: "🇬🇧"},
-            {name: "United States", dial: "+1", flag: "🇺🇸"},
-            {name: "Uruguay", dial: "+598", flag: "🇺🇾"},
-            {name: "Uzbekistan", dial: "+998", flag: "🇺🇿"},
-            {name: "Vanuatu", dial: "+678", flag: "🇻🇺"},
-            {name: "Vatican City", dial: "+379", flag: "🇻🇦"},
-            {name: "Venezuela", dial: "+58", flag: "🇻🇪"},
-            {name: "Vietnam", dial: "+84", flag: "🇻🇳"},
-            {name: "Yemen", dial: "+967", flag: "🇾🇪"},
-            {name: "Zambia", dial: "+260", flag: "🇿🇲"},
-            {name: "Zimbabwe", dial: "+263", flag: "🇿🇼"}
-        ];
-        countries.sort((a, b) => a.name.localeCompare(b.name));
-        const select = document.getElementById("country_code");
-        if (select) {
-            countries.forEach(c => {
-                const option = document.createElement("option");
-                option.value = c.dial;
-                option.textContent = `${c.flag} ${c.dial} (${c.name})`;
-                if (c.name === "Pakistan") option.selected = true;
-                select.appendChild(option);
-            });
-        }
-    });
-
+    }
 </script>
+
+
+</body>
+</html>
