@@ -410,12 +410,19 @@ body {
   text-align: center;
   margin-bottom: 20px;
   border: 1px solid $color-border;
+  min-height: auto; // remove fixed height if scaling
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: visible; // important for dropdown
 
-  .captcha-question {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 15px;
-    color: $color-text-primary;
+  .g-recaptcha {
+    z-index: 9999 !important;
+    position: relative;
+    display: inline-block;
+    transform: none; // remove scaling
+    transform-origin: top center;
   }
 
   .captcha-input {

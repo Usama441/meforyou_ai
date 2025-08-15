@@ -1,22 +1,157 @@
-<div class="forgot-password-container">
-  <div class="forgot-password-box">
-    <h2>Forgot your password?</h2>
 
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+<body>
+<!-- Header Section -->
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <div class="logo-icon">R</div>
+      <div class="logo-text">RENATA</div>
+    </div>
 
-      <div class="form-group">
-        <%= f.label :email %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input" %>
-      </div>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
 
-      <%= f.submit "Send reset instructions", class: "submit-btn" %>
-    <% end %>
-
-    <div class="separator-line">OR</div>
-
-    <div class="form-group back-login-wrapper">
-      <%= link_to "← Back to Login", new_session_path(resource_name), class: "back-login-btn" %>
+    <div class="header-actions">
+      <%= link_to "Login", new_user_session_path, class: "btn-header btn-login" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "btn-header btn-signup" %>
     </div>
   </div>
-</div>
+</header>
+
+<!-- Main Content -->
+<main class="main-content">
+  <div class="forgot-password-container">
+    <div class="forgot-password-box">
+      <h2>Forgot your password?</h2>
+
+      <!-- Form with error messages -->
+      <form id="forgotPasswordForm">
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+        <!-- Error messages container -->
+        <div class="error-messages" id="errorMessages" style="display: none;">
+          <ul>
+            <li id="errorMessage">Error message will appear here</li>
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :email %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-input" %>
+        </div>
+        <%= f.submit "Send reset instructions", class: "submit-btn" %>
+        <% end %>
+      </form>
+
+      <div class="separator-line">OR</div>
+
+      <div class="form-group back-login-wrapper">
+        <%= link_to "← Back to Login", new_session_path(resource_name), class: "back-login-btn" %>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="app-footer">
+  <div class="footer-container">
+    <div class="footer-column footer-brand">
+      <svg class="footer-name-svg" viewBox="0 0 420 48" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="34" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+              font-weight="800" font-size="32" fill="#7af3ff" letter-spacing="2">
+          RENATA
+        </text>
+      </svg>
+      <p class="footer-tagline">Your futuristic AI companion — built for real emotions, real responses, and the real you.</p>
+    </div>
+    <div class="footer-column">
+      <h4>Explore</h4>
+      <ul class="footer-links">
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Signup</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h4>Contact</h4>
+      <ul class="footer-contact">
+        <li>hello@renata.ai</li>
+        <li>+1-234-567-8910</li>
+        <li>Future City, AIverse</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 RENATA — Built with ❤️ & intelligence.
+  </div>
+</footer>
+
+<div class="notification" id="notification"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form submission
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const notification = document.getElementById('notification');
+        const errorMessages = document.getElementById('errorMessages');
+        const errorMessage = document.getElementById('errorMessage');
+
+        forgotPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const email = document.getElementById('email').value;
+
+            // Hide any previous error messages
+            errorMessages.style.display = 'none';
+
+            // Simple validation
+            if (!email) {
+                showError('Please enter your email address');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            // In a real application, you would send the forgot password request to your server here
+            // For demo purposes, we'll just show a success message
+            showNotification('Password reset instructions have been sent to your email', 'success');
+
+            // Simulate form submission
+            setTimeout(() => {
+                // In a real app, this would redirect or show a confirmation
+                console.log('Password reset request submitted for:', email);
+            }, 1000);
+        });
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessages.style.display = 'block';
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+    });
+</script>
+</body>

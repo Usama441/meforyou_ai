@@ -198,13 +198,10 @@
       <div class="step step-5">
         <div class="form-group">
           <label class="form-label">Human Verification</label>
-          <div class="captcha-container">
-            <div class="captcha-question" id="captchaQuestion">
-              <%# simple math captcha generated in controller %>
-              <% q_a = session[:captcha_a]; q_b = session[:captcha_b] %>
-              What is <%= q_a %> + <%= q_b %>?
+          <div class="form-group">
+            <div class="captcha-container">
+              <%= recaptcha_tags %>
             </div>
-            <input type="text" class="captcha-input" name="captcha_answer" id="captchaInput" placeholder="Answer" required>
           </div>
           <% if flash.now[:captcha_error] %>
             <div class="error-message"><%= flash.now[:captcha_error] %></div>
@@ -538,6 +535,7 @@
             }
         });
     }
+
 </script>
 
 

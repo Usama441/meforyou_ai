@@ -202,26 +202,42 @@
 
         // Animated text - character by character
         const animatedTextElement = document.getElementById('animatedText');
-        const text = "Your journey to emotional wellbeing starts here";
-        const characters = text.split('');
+        const text = `💖 Your emotional health is our priority.
+🌱 Experience personalized guidance, gentle support,
+🛠️ and practical strategies to navigate life’s ups and downs.
+✨ Begin your journey toward clarity, calm, and confidence.`;
 
-        // Function to animate text
+// Split text by spaces but keep emojis intact
+        const words = text.split(/(\s+)/); // split including spaces
+
         function animateText() {
-            // Clear the animated text element
             animatedTextElement.innerHTML = '';
 
-            // Create span elements for each character
-            characters.forEach((char, index) => {
-                const charSpan = document.createElement('span');
-                charSpan.textContent = char;
-                charSpan.classList.add('animated-char');
-                charSpan.style.animationDelay = `${index * 0.1}s`; // Faster animation for characters
-                animatedTextElement.appendChild(charSpan);
+            let delay = 0;
+
+            words.forEach(word => {
+                const wordSpan = document.createElement('span');
+
+                if (word === '\n') {
+                    wordSpan.innerHTML = '<br>';
+                } else {
+                    wordSpan.textContent = word;
+                }
+
+                wordSpan.classList.add('animated-char');
+                wordSpan.style.animationDelay = `${delay}s`;
+                animatedTextElement.appendChild(wordSpan);
+
+                // Increase delay per word (adjust speed here)
+                delay += 0.3;
             });
         }
 
-        // Initial animation
+// Start animation
         animateText();
+
+        // Initial animation
+
 
         // After the animation completes, restart it
         const totalAnimationTime = characters.length * 0.1 + 1; // Add 1 second for the last character to fully animate
