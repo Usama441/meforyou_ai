@@ -177,6 +177,7 @@
         <div class="form-group">
           <label class="form-label">Password</label>
           <%= f.password_field :password, class: "form-input", placeholder: "Create a password", id: "password", required: true, minlength: 8 %>
+          <span class="toggle-password-signup">&#128065;</span>
           <div class="password-strength">
             <div class="password-strength-meter" id="strengthMeter"></div>
           </div>
@@ -188,7 +189,9 @@
         <div class="form-group">
           <label class="form-label">Confirm Password</label>
           <%= f.password_field :password_confirmation, class: "form-input", placeholder: "Confirm your password", id: "confirmPassword", required: true %>
+          <span class="toggle-password-signup-con">&#128065;</span>
           <% if @user.errors[:password_confirmation].present? %>
+
             <div class="error-message">Passwords do not match</div>
           <% end %>
         </div>
@@ -535,6 +538,7 @@
             }
         });
     }
+
 
 </script>
 

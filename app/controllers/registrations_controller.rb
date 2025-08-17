@@ -7,14 +7,14 @@ class RegistrationsController < Devise::RegistrationsController
     # Make sure we properly extract the reCAPTCHA response
     # recaptcha_response = params["g-recaptcha-response"]
 
-    #unless verify_recaptcha_v2(recaptcha_response)
-    #  build_resource(sign_up_params)
-    #  resource.validate
-    #  flash.now[:recaptcha_error] = "Please complete the reCAPTCHA verification."
-    #  flash.now[:alert] = "reCAPTCHA verification failed. Please try again."
-    #  respond_with_navigational(resource) { render :new }
-    #  return
-    #end
+    unless verify_recaptcha_v2(recaptcha_response)
+      build_resource(sign_up_params)
+      resource.validate
+      flash.now[:recaptcha_error] = "Please complete the reCAPTCHA verification."
+      flash.now[:alert] = "reCAPTCHA verification failed. Please try again."
+      respond_with_navigational(resource) { render :new }
+      return
+    end
 
     super do |resource|
       if resource.persisted?

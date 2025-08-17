@@ -25,138 +25,11 @@ $color-error: #ef4444;
 body {
   background: $color-bg;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   color: $color-text-primary;
   overflow-x: hidden;
   position: relative;
 }
 
-// Header
-.header {
-  width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: linear-gradient(135deg, rgba(13,13,13,0.95), rgba(26,26,26,0.95));
-  backdrop-filter: blur(15px);
-  border-bottom: 1px solid rgba(38,38,38,0.8);
-  padding: 10px 0;
-
-  .header-container {
-    max-width: 1200px; // content width
-    margin: 0 auto;     // center the container
-    display: flex;
-    justify-content: space-between; // left/right alignment
-    align-items: center;
-    padding: 0 20px;
-    width: 100%;
-
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      .logo-icon {
-        width: 32px;
-        height: 32px;
-        background: linear-gradient(135deg, $color-accent, $color-accent-secondary);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-        color: $color-bg;
-        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.5);
-      }
-
-      .logo-text {
-        font-size: 20px;
-        font-weight: 700;
-        color: $color-heading;
-        letter-spacing: 1px;
-      }
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 25px;
-
-      a {
-        text-decoration: none;
-        color: $color-text-secondary;
-        font-weight: 500;
-        font-size: 14px;
-        transition: all 0.3s ease;
-        position: relative;
-        padding: 3px 0;
-
-        &:hover {
-          color: $color-accent;
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background: $color-accent;
-          transition: width 0.3s ease;
-        }
-
-        &:hover::after {
-          width: 100%;
-        }
-      }
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-
-      .btn-header {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 8px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-
-        &.btn-login {
-          background: transparent;
-          color: $color-text-primary;
-          border: 1px solid $color-border;
-
-          &:hover {
-            background: rgba(79, 70, 229, 0.1);
-            border-color: $color-accent;
-            color: $color-accent;
-          }
-        }
-
-        &.btn-signup {
-          background: linear-gradient(135deg, $color-accent, $color-accent-secondary);
-          color: $color-bg;
-          box-shadow: 0 4px 10px rgba(79, 70, 229, 0.5);
-
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.6);
-          }
-        }
-      }
-    }
-  }
-}
 
 // Main content
 .main-content {
@@ -334,20 +207,7 @@ body {
               }
             }
 
-            .toggle-password {
-              position: absolute;
-              right: 15px;
-              top: 50%;
-              transform: translateY(-50%);
-              cursor: pointer;
-              color: $color-text-secondary;
-              font-size: 18px;
-              transition: color 0.3s ease;
 
-              &:hover {
-                color: $color-accent;
-              }
-            }
           }
         }
 
@@ -471,140 +331,6 @@ body {
       }
     }
 
-
-    // Footer
-    .app-footer {
-      background: linear-gradient(135deg, rgba(13, 13, 13, 0.95), rgba(26, 26, 26, 0.95));
-      backdrop-filter: blur(15px);
-      border-top: 1px solid rgba(38, 38, 38, 0.8);
-      padding: 25px 0 15px;
-      margin-top: auto;
-      position: relative;
-      overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, $color-accent, $color-accent-secondary);
-        animation: pulse 4s ease-in-out infinite;
-      }
-
-      .footer-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 20px;
-
-        .footer-column {
-          flex: 1;
-          min-width: 200px;
-
-          h4 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: $color-heading;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            display: inline-block;
-
-            &::after {
-              content: '';
-              position: absolute;
-              bottom: -5px;
-              left: 0;
-              width: 30px;
-              height: 2px;
-              background: $color-accent;
-            }
-          }
-
-          ul.footer-links,
-          ul.footer-contact {
-            list-style: none;
-
-            li {
-              margin-bottom: 8px;
-              position: relative;
-              padding-left: 15px;
-
-              &::before {
-                content: '▸';
-                position: absolute;
-                left: 0;
-                color: $color-accent;
-              }
-            }
-
-            a {
-              color: $color-text-secondary;
-              text-decoration: none;
-              font-size: 14px;
-              transition: all 0.3s ease;
-
-              &:hover {
-                color: $color-accent;
-                text-decoration: underline;
-                padding-left: 5px;
-              }
-            }
-          }
-
-          ul.footer-contact li {
-            color: $color-text-secondary;
-            font-size: 14px;
-          }
-        }
-
-        .footer-brand {
-          flex: 2;
-          min-width: 300px;
-
-          .footer-name-svg {
-            height: 40px;
-            margin-bottom: 10px;
-          }
-
-          .footer-tagline {
-            color: $color-text-secondary;
-            font-size: 14px;
-            line-height: 1.5;
-            max-width: 350px;
-          }
-        }
-      }
-
-      .footer-bottom {
-        max-width: 1200px;
-        margin: 20px auto 0;
-        padding: 15px;
-        text-align: center;
-        color: $color-text-secondary;
-        font-size: 14px;
-        border-top: 1px solid rgba(38, 38, 38, 0.5);
-        position: relative;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 50px;
-          height: 2px;
-          background: $color-accent;
-        }
-      }
-    }
-
     // Notifications / Alerts
     .notification {
       padding: 15px 20px;
@@ -703,3 +429,17 @@ body {
   }
 }
 
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: $color-text-secondary;
+  font-size: 18px;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $color-accent;
+  }
+}

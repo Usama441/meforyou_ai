@@ -1,38 +1,126 @@
-<div class="verification-container">
-  <div class="verification-card">
-    <div class="card-header">
-      <h2>Verify Your Email</h2>
-    </div>
+<main class="main-content">
+  <div class="verification-container">
+    <div class="verification-card">
+      <div class="card-header">
+        <h2>Verify Your Email</h2>
+      </div>
 
-    <div class="card-body">
-      <% if flash[:notice] %>
-        <div class="alert alert-success"><%= flash[:notice] %></div>
-      <% end %>
+      <div class="card-body">
+        <% if flash[:notice] %>
+          <div class="alert alert-success"><%= flash[:notice] %></div>
+        <% end %>
 
-      <% if flash[:alert] %>
-        <div class="alert alert-danger"><%= flash[:alert] %></div>
-      <% end %>
+        <% if flash[:alert] %>
+          <div class="alert alert-danger"><%= flash[:alert] %></div>
+        <% end %>
 
-      <p class="message">We've sent a verification code to <strong><%= current_user.email %></strong>. Please check your email and enter the code below to verify your account.</p>
+        <p class="message">
+          We've sent a verification code to
+          <strong><%= current_user.email %></strong>.
+          Please check your email and enter the code below to verify your account.
+        </p>
 
-      <%= form_with url: verify_email_code_path, method: :post, class: "verification-form" do |f| %>
-        <%= f.hidden_field :user_id, value: current_user.id %>
+        <!-- Verify form -->
+        <%= form_with url: verify_email_code_path, method: :post, class: "verification-form", id: "verificationForm" do |f| %>
+          <%= f.hidden_field :user_id, value: current_user.id %>
+          <%= f.hidden_field :code, id: "hiddenCode" %> <!-- Combined code for backend -->
 
-        <div class="form-group">
-          <label for="verification_code">Verification Code</label>
-          <%= f.text_field :code, class: "form-control", placeholder: "Enter 6-digit code", maxlength: 6, required: true, pattern: "[0-9]{6}", inputmode: "numeric" %>
+          <div class="form-group">
+            <label class="form-label">Verification Code</label>
+            <div class="code-inputs">
+              <% 6.times do %>
+                <input type="text" class="code-input" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <%= f.submit "Verify Email", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+
+        <!-- Resend code -->
+        <div class="resend-section">
+          <p>Didn't receive the code? <span class="countdown" id="countdown"></span></p>
+          <form id="resendForm" action="<%= resend_verification_code_path %>" method="post">
+            <%= csrf_meta_tags %>
+            <button type="submit" class="btn btn-outline-secondary" id="resendBtn">Resend Code</button>
+          </form>
         </div>
-
-        <div class="form-actions">
-          <%= f.submit "Verify Email", class: "btn btn-primary" %>
-        </div>
-      <% end %>
-
-      <div class="resend-section">
-        <p>Didn't receive the code? </p>
-        <%= button_to "Resend Code", resend_verification_code_path, method: :post, class: "btn btn-outline-secondary" %>
       </div>
     </div>
   </div>
-</div>
 
+  <!-- Notification element -->
+  <div id="notification" class="notification"></div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const codeInputs = document.querySelectorAll('.code-input');
+        const verificationForm = document.getElementById('verificationForm');
+        const hiddenCode = document.getElementById('hiddenCode');
+        const resendForm = document.getElementById('resendForm');
+        const resendBtn = document.getElementById('resendBtn');
+        const countdown = document.getElementById('countdown');
+        const notification = document.getElementById('notification');
+
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/[^0-9]/g, '');
+                if (input.value.length === 1 && index < codeInputs.length - 1) codeInputs[index + 1].focus();
+                checkAllInputsFilled();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value === '' && index > 0) codeInputs[index - 1].focus();
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, codeInputs.length);
+                pasted.split('').forEach((val, i) => codeInputs[i].value = val);
+                const nextIndex = Math.min(pasted.length, codeInputs.length - 1);
+                codeInputs[nextIndex].focus();
+                checkAllInputsFilled();
+            });
+        });
+
+        function checkAllInputsFilled() {
+            const allFilled = Array.from(codeInputs).every(i => i.value.length === 1);
+            if (allFilled) setTimeout(() => verificationForm.dispatchEvent(new Event('submit')), 300);
+        }
+
+        verificationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = Array.from(codeInputs).map(i => i.value).join('');
+            if (code.length !== 6) return showNotification('Please enter complete 6-digit code', 'error');
+
+            hiddenCode.value = code; // Send combined code to backend
+            verificationForm.submit();
+        });
+
+        // Resend code
+        resendForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            resendBtn.disabled = true;
+            showNotification('Verification code resent!', 'success');
+            let timeLeft = 60;
+            countdown.textContent = `(${timeLeft}s)`;
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdown.textContent = `(${timeLeft}s)`;
+                if (timeLeft <= 0) { clearInterval(timer); countdown.textContent=''; resendBtn.disabled=false; }
+            }, 1000);
+
+            resendForm.submit(); // Rails backend
+        });
+
+        function showNotification(msg, type) {
+            if (!notification) return;
+            notification.textContent = msg;
+            notification.className = `notification ${type} show`;
+            setTimeout(() => notification.classList.remove('show'), 5000);
+        }
+    });
+</script>
