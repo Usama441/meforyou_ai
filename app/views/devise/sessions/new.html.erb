@@ -132,66 +132,60 @@
         const authCard = document.getElementById('authCard');
         const hoverGlow = document.getElementById('hoverGlow');
 
-        authCard.addEventListener('mousemove', function(e) {
-            // Get the position of the auth card
-            const rect = authCard.getBoundingClientRect();
+        if (authCard && hoverGlow) {
+            authCard.addEventListener('mousemove', function(e) {
+                const rect = authCard.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-            // Calculate the mouse position relative to the auth card
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            // Position the glow at the mouse position
-            hoverGlow.style.left = x + 'px';
-            hoverGlow.style.top = y + 'px';
-        });
+                hoverGlow.style.left = x + 'px';
+                hoverGlow.style.top = y + 'px';
+            });
+        }
 
         // Toggle password visibility
         const togglePassword = document.querySelector('.toggle-password');
         const passwordInput = document.querySelector('.password-wrapper input');
 
-        togglePassword.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
-        });
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            });
+        }
 
         // Form submission
         const loginForm = document.querySelector('.login-form');
         const notification = document.getElementById('notification');
 
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
 
-            // Get form values
-            const email = document.querySelector('input[type="email"]').value;
-            const password = document.querySelector('input[type="password"]').value;
 
-            // Simple validation
-            if (!email || !password) {
-                showNotification('Please fill in all fields', 'error');
-                return;
-            }
+                const email = document.querySelector('input[type="email"]').value.trim();
+                const password = document.querySelector('input[type="password"]').value.trim();
 
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showNotification('Please enter a valid email address', 'error');
-                return;
-            }
+                if (!email || !password) {
+                    showNotification('Please fill in all fields', 'error');
+                    return;
+                }
 
-            // In a real application, you would send the login request to your server here
-            // For demo purposes, we'll just show a success message
-            showNotification('Login successful! Redirecting...', 'success');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showNotification('Please enter a valid email address', 'error');
+                    return;
+                }
 
-            // Simulate redirect after successful login
-            setTimeout(() => {
-                // window.location.href = '/dashboard';
-                console.log('Redirecting to dashboard...');
-            }, 2000);
-        });
+                setTimeout(() => {
+                    console.log('Redirecting to chat...');
+                    window.location.href = "<%= chat_path %>";
+                }, 2000);
+            });
+        }
 
-        // Show notification
         function showNotification(message, type) {
+            if (!notification) return;
             notification.textContent = message;
             notification.className = `notification ${type} show`;
 
@@ -200,51 +194,44 @@
             }, 5000);
         }
 
-        // Animated text - character by character
+        // Animated text
         const animatedTextElement = document.getElementById('animatedText');
-        const text = `💖 Your emotional health is our priority.
-🌱 Experience personalized guidance, gentle support,
-🛠️ and practical strategies to navigate life’s ups and downs.
-✨ Begin your journey toward clarity, calm, and confidence.`;
+        const text = `💖 Your emotional health is our priority.`;
 
-// Split text by spaces but keep emojis intact
-        const words = text.split(/(\s+)/); // split including spaces
+        if (animatedTextElement) {
+            const words = text.split(/(\s+)/);
 
-        function animateText() {
-            animatedTextElement.innerHTML = '';
+            function animateText() {
+                animatedTextElement.innerHTML = '';
+                let delay = 0;
 
-            let delay = 0;
+                words.forEach(word => {
+                    const wordSpan = document.createElement('span');
 
-            words.forEach(word => {
-                const wordSpan = document.createElement('span');
+                    if (word === '\n') {
+                        wordSpan.innerHTML = '<br>';
+                    } else {
+                        wordSpan.textContent = word;
+                    }
 
-                if (word === '\n') {
-                    wordSpan.innerHTML = '<br>';
-                } else {
-                    wordSpan.textContent = word;
-                }
+                    wordSpan.classList.add('animated-char');
+                    wordSpan.style.animationDelay = `${delay}s`;
+                    animatedTextElement.appendChild(wordSpan);
 
-                wordSpan.classList.add('animated-char');
-                wordSpan.style.animationDelay = `${delay}s`;
-                animatedTextElement.appendChild(wordSpan);
+                    delay += 0.3;
+                });
+            }
 
-                // Increase delay per word (adjust speed here)
-                delay += 0.3;
-            });
-        }
-
-// Start animation
-        animateText();
-
-        // Initial animation
-
-
-        // After the animation completes, restart it
-        const totalAnimationTime = characters.length * 0.1 + 1; // Add 1 second for the last character to fully animate
-        setInterval(() => {
             animateText();
-        }, totalAnimationTime * 1000 + 2000); // Add 2 seconds before restarting
+
+            // Restart animation after it completes
+            const totalAnimationTime = words.length * 0.3 + 1;
+            setInterval(() => {
+                animateText();
+            }, totalAnimationTime * 1000 + 2000);
+        }
     });
+
 </script>
 
 

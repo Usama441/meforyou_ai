@@ -69,7 +69,7 @@
   </div>
 
   <div class="form-content">
-    <%= form_with model: @user, url: user_registration_path, id: "signupForm", data: { turbo: false } do |f| %>
+    <%= form_for(resource, as: :user, url: registration_path(:user), html: { id: "signupForm", autocomplete: "off" }) do |f| %>
       <!-- STEP 1: Name -->
       <div class="step step-1 active">
         <div class="form-group">
@@ -108,9 +108,9 @@
           </div>
 
           <!-- Hidden Rails field actually submitted -->
-          <%= f.hidden_field :date_of_birth, id: "dob_hidden" %>
+          <%= f.hidden_field :dob, id: "dob_hidden" %>
 
-          <% if @user.errors[:date_of_birth].present? %>
+          <% if @user.errors[:dob].present? %>
             <div class="error-message">Please select your date of birth</div>
           <% end %>
         </div>

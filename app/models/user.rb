@@ -1,8 +1,10 @@
 class User < ApplicationRecord
+  # Devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   attr_accessor :contact_input
+  attr_accessor :terms_agree
 
   # Associations
   has_many :chats, dependent: :destroy
@@ -13,25 +15,21 @@ class User < ApplicationRecord
   # Virtual validations
   before_validation :assign_contact_input
   before_validation :set_full_name
+  before_validation :format_phone_number, if: -> { phone_number_changed? }
 
   validate :email_or_phone_present
   validate :validate_contact_input
-  validates :name, :dob, :gender, presence: true  # ✅ Add this line
+  validates :name, :dob, :gender, presence: true
   validates :accept_terms, acceptance: { accept: true, message: "must be accepted" }
+  validates :terms_agree, acceptance: { message: "must be accepted" }
 
   # Conditional email/phone validations
   validates :email, uniqueness: true, allow_blank: true
-  validates :phone, uniqueness: true, allow_blank: true
-
-  # Phone formatting
-  before_validation :format_phone_number, if: -> { phone_number_changed? }
-
+  validates :phone_number, uniqueness: true, allow_blank: true
   validates :phone_number, format: {
     with: /\A\+?[0-9\s\-\(\)]+\z/,
     message: "only allows numbers, spaces, and +() characters"
   }, allow_blank: true
-
-  validates :phone_number, uniqueness: true, if: -> { phone_number.present? }
 
   attribute :email_verified, :boolean, default: false
   attribute :phone_verified, :boolean, default: false
@@ -41,12 +39,10 @@ class User < ApplicationRecord
   # =========================
 
   def email_or_phone_present
-    if email.blank? && phone.blank?
+    if email.blank? && phone_number.blank?
       errors.add(:base, "Either email or phone must be present")
     end
   end
-
-  # app/models/user.rb
 
   def assign_contact_input
     return if contact_input.blank?
@@ -54,7 +50,7 @@ class User < ApplicationRecord
     if contact_input =~ URI::MailTo::EMAIL_REGEXP
       self.email = contact_input
     elsif contact_input =~ /\A(\+92|0)?3[0-9]{9}\z/ || contact_input =~ /\A\+?[1-9]\d{9,14}\z/
-      self.phone = normalize_phone(contact_input)
+      self.phone_number = normalize_phone(contact_input)
     else
       errors.add(:contact_input, "must be a valid email or phone number")
     end
@@ -74,7 +70,7 @@ class User < ApplicationRecord
 
   def normalize_phone(input)
     digits = input.gsub(/\D/, '')
-    input.start_with?('+') ? "+#{digits}" : "+#{digits}"
+    "+#{digits}"
   end
 
   def full_phone_number
@@ -83,7 +79,7 @@ class User < ApplicationRecord
   end
 
   def verified?
-    email_verified? && (phone_number.blank? || phone_verified?)
+    (email.present? && email_verified?) || (phone_number.present? && phone_verified?)
   end
 
   def create_verification_code(type = 'email_verification')
@@ -113,11 +109,10 @@ class User < ApplicationRecord
     return if phone_number.blank?
     self.phone_number = phone_number.gsub(/[\s\-\(\)]/, '').gsub(/^\+/, '')
   end
-end
 
-def set_full_name
-  # Agar name column hai to usme first_name + last_name save karo
-  if self.has_attribute?(:name)
-    self.name = [first_name, last_name].compact.join(' ').strip
+  def set_full_name
+    if self.has_attribute?(:name)
+      self.name = [first_name, last_name].compact.join(' ').strip
+    end
   end
 end
