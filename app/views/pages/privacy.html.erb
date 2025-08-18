@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers at RENATA - Join Our Team</title>
+
+</head>
+<body>
+<!-- Header Section -->
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <div class="logo-icon">R</div>
+      <div class="logo-text">RENATA</div>
+    </div>
+
+    <nav>
+
+      <ul class="nav-menu">
+        <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "About", "#" %></li>
+        <li><%= link_to "Services", "#" %></li>
+        <li><%= link_to "Resources", "#" %></li>
+        <li><%= link_to "Contact", "#" %></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <%= link_to "Log In", new_user_session_path, class: "btn-header btn-login" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "btn-header btn-signup" %>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">Privacy Policy</div>
+    <h1>Your Privacy, Our Priority</h1>
+    <p class="hero-subtitle">At RENATA, we are committed to protecting your personal information with the highest standards of security and transparency. This policy outlines how we collect, use, and safeguard your data.</p>
+  </section>
+
+  <!-- Last Updated -->
+  <div class="last-updated">
+    <strong>Last Updated:</strong> October 15, 2023
+  </div>
+
+  <!-- Table of Contents -->
+  <div class="toc-container">
+    <div class="toc-header">
+      <div class="toc-icon">📋</div>
+      <h2 class="toc-title">Table of Contents</h2>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-item" onclick="scrollToSection('introduction')">
+        <div class="toc-number">1</div>
+        <div class="toc-text">Introduction</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('information-collect')">
+        <div class="toc-number">2</div>
+        <div class="toc-text">Information We Collect</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('how-use')">
+        <div class="toc-number">3</div>
+        <div class="toc-text">How We Use Your Information</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('how-share')">
+        <div class="toc-number">4</div>
+        <div class="toc-text">How We Share Your Information</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('data-security')">
+        <div class="toc-number">5</div>
+        <div class="toc-text">Data Security</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('your-rights')">
+        <div class="toc-number">6</div>
+        <div class="toc-text">Your Rights</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('international')">
+        <div class="toc-number">7</div>
+        <div class="toc-text">International Data Transfers</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('children')">
+        <div class="toc-number">8</div>
+        <div class="toc-text">Children's Privacy</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('changes')">
+        <div class="toc-number">9</div>
+        <div class="toc-text">Changes to This Policy</div>
+      </div>
+      <div class="toc-item" onclick="scrollToSection('contact')">
+        <div class="toc-number">10</div>
+        <div class="toc-text">Contact Us</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Content -->
+  <div class="privacy-content">
+    <div class="privacy-section" id="introduction">
+      <div class="section-header">
+        <div class="section-number">1</div>
+        <h2 class="section-title">Introduction</h2>
+      </div>
+      <p class="privacy-text">
+        Welcome to RENATA. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website, mobile application, and services (collectively, the "Services").
+      </p>
+      <p class="privacy-text">
+        By using our Services, you agree to the collection and use of information in accordance with this policy. Please read this Privacy Policy carefully to understand our views and practices regarding your personal data.
+      </p>
+      <div class="privacy-highlight">
+        <p><strong>RENATA</strong> is an AI-powered emotional support platform designed to provide companionship and mental wellness resources. We take your privacy seriously and implement appropriate technical and organizational measures to protect your personal information.</p>
+      </div>
+    </div>
+
+    <div class="privacy-section" id="information-collect">
+      <div class="section-header">
+        <div class="section-number">2</div>
+        <h2 class="section-title">Information We Collect</h2>
+      </div>
+      <p class="privacy-text">
+        We collect several types of information from and about users of our Services, including:
+      </p>
+      <ul class="privacy-list">
+        <li><strong>Personal Information:</strong> Name, email address, phone number, and other contact information you provide when creating an account or communicating with us.</li>
+        <li><strong>Account Information:</strong> Username, password, profile information, and preferences you set when creating your account.</li>
+        <li><strong>Usage Data:</strong> Information about how you interact with our Services, including features used, session duration, frequency of use, and interaction patterns.</li>
+        <li><strong>Communication Data:</strong> Content of your conversations with our AI companions, including text messages, voice recordings, and emotional state indicators.</li>
+        <li><strong>Device Information:</strong> Information about the device you use to access our Services, including IP address, browser type, operating system, and device identifiers.</li>
+        <li><strong>Location Information:</strong> General location data derived from your IP address, with your explicit consent for precise location data.</li>
+        <li><strong>Cookies and Tracking Technologies:</strong> We use cookies and similar technologies to enhance your experience and collect usage data.</li>
+      </ul>
+      <p class="privacy-text">
+        We collect this information directly from you when you provide it, automatically through your use of our Services, or from third parties with your consent.
+      </p>
+    </div>
+
+    <div class="privacy-section" id="how-use">
+      <div class="section-header">
+        <div class="section-number">3</div>
+        <h2 class="section-title">How We Use Your Information</h2>
+      </div>
+      <p class="privacy-text">
+        We use the information we collect for various purposes, including:
+      </p>
+      <ul class="privacy-list">
+        <li><strong>To Provide and Maintain Our Services:</strong> To operate, deliver, and improve our AI-powered emotional support platform.</li>
+        <li><strong>To Personalize Your Experience:</strong> To tailor our services to your preferences and emotional needs.</li>
+        <li><strong>To Improve Our AI Systems:</strong> To train and enhance our AI models while maintaining your anonymity and privacy.</li>
+        <li><strong>To Communicate With You:</strong> To respond to your inquiries, provide support, and send important service-related communications.</li>
+        <li><strong>For Research and Development:</strong> To conduct research to improve our understanding of emotional support and mental wellness, using anonymized or aggregated data.</li>
+        <li><strong>For Security and Fraud Prevention:</strong> To protect our Services and users from security threats and fraudulent activities.</li>
+        <li><strong>For Legal Compliance:</strong> To comply with applicable laws, regulations, and legal processes.</li>
+      </ul>
+      <div class="privacy-highlight">
+        <p>We do not sell your personal information to third parties. Your conversations with our AI companions are processed with the utmost confidentiality and are used solely to improve your experience and our services.</p>
+      </div>
+    </div>
+
+    <div class="privacy-section" id="how-share">
+      <div class="section-header">
+        <div class="section-number">4</div>
+        <h2 class="section-title">How We Share Your Information</h2>
+      </div>
+      <p class="privacy-text">
+        We may share your information in the following circumstances:
+      </p>
+      <ul class="privacy-list">
+        <li><strong>With Service Providers:</strong> We engage trusted third-party companies to perform functions on our behalf, such as data hosting, analytics, and customer support. These providers have access to your information only to perform these tasks and are obligated to protect it.</li>
+        <li><strong>For Legal Reasons:</strong> We may disclose your information if required by law or in response to valid requests by public authorities.</li>
+        <li><strong>With Your Consent:</strong> We may share your information with third parties when you have given us explicit consent to do so.</li>
+        <li><strong>In Connection with Business Transfers:</strong> If we are involved in a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction.</li>
+        <li><strong>Aggregated or Anonymized Data:</strong> We may share aggregated or anonymized information that cannot reasonably be used to identify you.</li>
+      </ul>
+      <p class="privacy-text">
+        We do not share your personal conversations with our AI companions with any third parties for marketing or advertising purposes.
+      </p>
+    </div>
+
+    <div class="privacy-section" id="data-security">
+      <div class="section-header">
+        <div class="section-number">5</div>
+        <h2 class="section-title">Data Security</h2>
+      </div>
+      <p class="privacy-text">
+        We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These measures include:
+      </p>
+      <ul class="privacy-list">
+        <li><strong>Encryption:</strong> We use industry-standard encryption to protect your data in transit and at rest.</li>
+        <li><strong>Access Controls:</strong> We restrict access to your information to authorized personnel who need it to perform their job functions.</li>
+        <li><strong>Security Audits:</strong> We regularly conduct security assessments and audits to identify and address potential vulnerabilities.</li>
+        <li><strong>Employee Training:</strong> We provide privacy and security training to our employees to ensure they understand their obligations.</li>
+      </ul>
+      <p class="privacy-text">
+        While we take reasonable measures to protect your information, no method of transmission over the internet or method of electronic storage is 100% secure. Therefore, we cannot guarantee absolute security.
+      </p>
+    </div>
+
+    <div class="privacy-section" id="your-rights">
+      <div class="section-header">
+        <div class="section-number">6</div>
+        <h2 class="section-title">Your Rights</h2>
+      </div>
+      <p class="privacy-text">
+        Depending on your jurisdiction, you may have the following rights regarding your personal information:
+      </p>
+      <ul class="privacy-list">
+        <li><strong>Access:</strong> You have the right to request a copy of the personal information we hold about you.</li>
+        <li><strong>Rectification:</strong> You have the right to request correction of inaccurate or incomplete personal information.</li>
+        <li><strong>Deletion:</strong> You have the right to request deletion of your personal information, subject to certain legal exceptions.</li>
+        <li><strong>Restriction:</strong> You have the right to request restriction of processing of your personal information.</li>
+        <li><strong>Data Portability:</strong> You have the right to receive your personal information in a structured, commonly used, and machine-readable format.</li>
+        <li><strong>Objection:</strong> You have the right to object to processing of your personal information.</li>
+        <li><strong>Withdraw Consent:</strong> Where we rely on your consent, you have the right to withdraw it at any time.</li>
+      </ul>
+      <p class="privacy-text">
+        To exercise any of these rights, please contact us using the information provided in the "Contact Us" section below. We will respond to your request in accordance with applicable laws.
+      </p>
+
+      <div class="action-cards">
+        <div class="action-card">
+          <div class="action-icon">📥</div>
+          <h3>Request Your Data</h3>
+          <p>Download a copy of all personal information we have about you.</p>
+          <a href="#" class="action-button">Request Data</a>
+        </div>
+        <div class="action-card">
+          <div class="action-icon">🗑️</div>
+          <h3>Delete Your Account</h3>
+          <p>Permanently delete your account and all associated data.</p>
+          <a href="#" class="action-button">Delete Account</a>
+        </div>
+        <div class="action-card">
+          <div class="action-icon">⚙️</div>
+          <h3>Manage Preferences</h3>
+          <p>Update your privacy settings and communication preferences.</p>
+          <a href="#" class="action-button">Manage Settings</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="privacy-section" id="international">
+      <div class="section-header">
+        <div class="section-number">7</div>
+        <h2 class="section-title">International Data Transfers</h2>
+      </div>
+      <p class="privacy-text">
+        RENATA is a global service, and we may transfer your information to countries other than where you reside. These countries may have data protection laws different from your own.
+      </p>
+      <p class="privacy-text">
+        When we transfer your information internationally, we ensure appropriate safeguards are in place, such as:
+      </p>
+      <ul class="privacy-list">
+        <li>Standard contractual clauses approved by relevant data protection authorities</li>
+        <li>Binding corporate rules for intra-group transfers</li>
+        <li>Compliance with recognized certification mechanisms</li>
+      </ul>
+      <p class="privacy-text">
+        We take steps to ensure that your information receives an adequate level of protection wherever it is processed.
+      </p>
+    </div>
+
+    <div class="privacy-section" id="children">
+      <div class="section-header">
+        <div class="section-number">8</div>
+        <h2 class="section-title">Children's Privacy</h2>
+      </div>
+      <p class="privacy-text">
+        Our Services are not intended for use by children under the age of 13 (or the minimum age required in your jurisdiction). We do not knowingly collect personal information from children under 13.
+      </p>
+      <p class="privacy-text">
+        If we become aware that we have collected personal information from children without verification of parental consent, we will take steps to remove that information from our systems. If you believe we may have collected information from a child under 13, please contact us immediately.
+      </p>
+      <p class="privacy-text">
+        For users between 13 and 18 years of age, we may collect and use their information with appropriate consent from a parent or guardian where required by law.
+      </p>
+    </div>
+
+    <div class="privacy-section" id="changes">
+      <div class="section-header">
+        <div class="section-number">9</div>
+        <h2 class="section-title">Changes to This Policy</h2>
+      </div>
+      <p class="privacy-text">
+        We may update this Privacy Policy from time to time to reflect changes in our practices, services, or for operational, legal, or regulatory reasons.
+      </p>
+      <p class="privacy-text">
+        When we make changes, we will:
+      </p>
+      <ul class="privacy-list">
+        <li>Update the "Last Updated" date at the top of this policy</li>
+        <li>Notify users of material changes through email or prominent notices on our Services</li>
+        <li>Obtain your consent where required by law</li>
+      </ul>
+      <p class="privacy-text">
+        We encourage you to review this Privacy Policy periodically to stay informed about how we are protecting your information.
+      </p>
+    </div>
+
+    <div class="privacy-section" id="contact">
+      <div class="section-header">
+        <div class="section-number">10</div>
+        <h2 class="section-title">Contact Us</h2>
+      </div>
+      <p class="privacy-text">
+        If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please contact us:
+      </p>
+      <ul class="privacy-list">
+        <li><strong>Email:</strong> privacy@renata.ai</li>
+        <li><strong>Mail:</strong> RENATA Privacy Team, 123 Wellness St, Mindful City, MC 12345</li>
+        <li><strong>Phone:</strong> (555) 123-4567</li>
+      </ul>
+      <p class="privacy-text">
+        We will respond to your inquiry within 30 days of receipt. For privacy-related complaints, you may also contact your local data protection authority.
+      </p>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="contact-icon">🔒</div>
+    <h2>Have Questions About Your Privacy?</h2>
+    <p>Our dedicated privacy team is here to help. Contact us with any questions about how we protect your data or exercise your privacy rights.</p>
+
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="contact-item-icon">📧</div>
+        <h3>Email Us</h3>
+        <p>privacy@renata.ai</p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <h3>Call Us</h3>
+        <p>(555) 123-4567</p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <h3>Visit Us</h3>
+        <p>123 Wellness St, Mindful City</p>
+      </div>
+    </div>
+
+    <a href="#" class="contact-button">Contact Privacy Team</a>
+  </section>
+
+</div>
+<!-- Footer -->
+<footer class="app-footer">
+  <div class="footer-container">
+    <div class="footer-column footer-brand">
+      <svg class="footer-name-svg" viewBox="0 0 420 48" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="34" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+              font-weight="800" font-size="32" fill="#7af3ff" letter-spacing="2">
+          RENATA
+        </text>
+      </svg>
+      <p class="footer-tagline">Your futuristic AI companion — built for real emotions, real responses, and the real you.</p>
+
+      <!-- Social Links Section -->
+      <div class="social-section">
+        <h4>Connect With Us</h4>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.405a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link" aria-label="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-column">
+      <h4>Explore</h4>
+      <ul class="footer-links">
+        <li><%= link_to "Features", features_path %></li>
+        <li><%= link_to "Login", login_path %></li>
+        <li><%= link_to "Signup", signup_path %></li>
+        <li><%= link_to "Pricing", pricing_path %></li>
+        <li><%= link_to "API Documentation", api_documentation_path %></li>
+        <li><%= link_to "Blog", blog_path %></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Support</h4>
+      <ul class="footer-links">
+        <li><%= link_to "Help Center", help_center_path %></li>
+        <li><%= link_to "Community Forum", community_forum_path %></li>
+        <li><%= link_to "Contact Us", contact_us_path %></li>
+        <li><%= link_to "Feedback", feedback_path %></li>
+        <li><%= link_to "System Status", system_status_path %></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Company</h4>
+      <ul class="footer-links">
+        <li><%= link_to "About Us", about_us_path %></li>
+        <li><%= link_to "Careers", careers_path %></li>
+        <li><%= link_to "Partners", partners_path %></li>
+        <li><%= link_to "Press Kit", press_kit_path %></li>
+        <li><%= link_to "Newsroom", newsroom_path %></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h4>Legal</h4>
+      <ul class="footer-links">
+        <li><%= link_to "Privacy Policy", privacy_policy_path %></li>
+        <li><%= link_to "Terms of Service", terms_of_service_path %></li>
+        <li><%= link_to "Cookie Policy", cookie_policy_path %></li>
+        <li><%= link_to "Data Processing", data_processing_path %></li>
+        <li><%= link_to "Compliance", compliance_path %></li>
+        <li><%= link_to "Disclaimer", disclaimer_path %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-content">
+      <div>&copy; 2025 RENATA — Built with ❤️ & intelligence.</div>
+    </div>
+  </div>
+</footer>
+<script>
+    // Smooth scrolling function
+    function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    // Add print functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create print button
+        const printButton = document.createElement('button');
+        printButton.innerHTML = '🖨️ Print Policy';
+        printButton.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                padding: 15px 25px;
+                background: var(--gradient-1);
+                color: var(--color-bg);
+                border: none;
+                border-radius: 30px;
+                font-weight: 600;
+                cursor: pointer;
+                z-index: 1000;
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+                transition: all 0.3s ease;
+            `;
+
+        printButton.addEventListener('click', function() {
+            window.print();
+        });
+
+        printButton.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 8px 25px rgba(99, 102, 241, 0.6)';
+        });
+
+        printButton.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.4)';
+        });
+
+        document.body.appendChild(printButton);
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.privacy-section, .toc-container, .contact-section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+    });
+</script>
+</body>
+</html>

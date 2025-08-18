@@ -10,6 +10,37 @@ Rails.application.routes.draw do
     registrations: 'registrations'
   }
 
+  # ✅ PagesController routes (static & informational pages)
+  get "features",          to: "pages#features"
+  get "login",             to: "pages#login"
+  get "signup",            to: "pages#signup"
+  get "pricing",           to: "pages#pricing"
+  get "api-documentation", to: "pages#api_docs"
+  get "blog",              to: "pages#blog"
+
+  get "help-center",       to: "pages#help_center"
+  get "community-forum",   to: "pages#forum"
+  get "contact-us",        to: "pages#contact"
+  get "feedback",          to: "pages#feedback"
+  get "system-status",     to: "pages#status"
+
+  get "about-us",          to: "pages#about"
+  get "careers",           to: "pages#careers"
+  get "partners",          to: "pages#partners"
+  get "press-kit",         to: "pages#press"
+  get "newsroom",          to: "pages#news"
+
+  get "privacy-policy",    to: "pages#privacy"
+  get "terms-of-service",  to: "pages#terms"
+  get "cookie-policy",     to: "pages#cookies"
+  get "data-processing",   to: "pages#data_processing"
+  get "compliance",        to: "pages#compliance"
+  get "disclaimer",        to: "pages#disclaimer"
+
+  get "sitemap",           to: "pages#sitemap"
+  get "accessibility",     to: "pages#accessibility"
+  get "ethics",            to: "pages#ethics"
+
   # 👇 Always land on login page by default
   unauthenticated do
     root to: redirect('/login')
