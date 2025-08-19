@@ -43,7 +43,7 @@
         <div class="resend-section">
           <p>Didn't receive the code? <span class="countdown" id="countdown"></span></p>
           <form id="resendForm" action="<%= resend_verification_code_path %>" method="post">
-            <%= csrf_meta_tags %>
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
             <button type="submit" class="btn btn-outline-secondary" id="resendBtn">Resend Code</button>
           </form>
         </div>

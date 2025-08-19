@@ -5,7 +5,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
     # Make sure we properly extract the reCAPTCHA response
-    # recaptcha_response = params["g-recaptcha-response"]
+     recaptcha_response = params["g-recaptcha-response"]
 
     unless verify_recaptcha_v2(recaptcha_response)
       build_resource(sign_up_params)

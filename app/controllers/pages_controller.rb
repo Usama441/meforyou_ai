@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   # Explore
+  def home; end
   def features; end
   def login; end
   def signup; end

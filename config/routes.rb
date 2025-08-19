@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   }
 
   # ✅ PagesController routes (static & informational pages)
+  get "home", to: "pages#home"
   get "features",          to: "pages#features"
   get "login",             to: "pages#login"
   get "signup",            to: "pages#signup"
@@ -43,8 +44,9 @@ Rails.application.routes.draw do
 
   # 👇 Always land on login page by default
   unauthenticated do
-    root to: redirect('/login')
+    root to: redirect('/home')
   end
+
 
   authenticated :user do
     root to: 'chat#new', as: :authenticated_root
