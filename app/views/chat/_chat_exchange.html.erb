@@ -1,11 +1,4 @@
 <div class="chat-box">
-  <div class="chat-header">
-    <h1>MeForYou.AI</h1>
-  </div>
-
-  <p class="greeting">
-    Hello <%= current_user.name.present? ? current_user.name.capitalize : "there" %>, ask something to your AI companion:
-  </p>
 
   <div class="chat-history" id="chatHistory">
     <% chats.each do |chat| %>
