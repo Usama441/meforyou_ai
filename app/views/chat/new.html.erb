@@ -48,21 +48,14 @@
             style="overflow: visible;"
           >
             <defs>
-              <!-- White gradient for text -->
+              <!-- Simple gradient for text -->
               <linearGradient id="gradWhite" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="rgb(245,245,245)" />
                 <stop offset="100%" stop-color="rgb(200,200,200)" />
               </linearGradient>
 
-              <!-- Glossy shine gradient -->
-              <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="rgba(255,255,255,0)" />
-                <stop offset="50%" stop-color="rgba(255,255,255,0.9)" />
-                <stop offset="100%" stop-color="rgba(255,255,255,0)" />
-              </linearGradient>
-
               <!-- Drop shadow filter -->
-              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%" >
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
                 <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#222" flood-opacity="0.6" />
               </filter>
             </defs>
@@ -78,26 +71,8 @@
               letter-spacing="1"
               filter="url(#shadow)"
             >
-               RENATA
+              RENATA
             </text>
-
-            <!-- Glossy shine overlay -->
-            <rect
-              x="0"
-              y="0"
-              width="40"
-              height="50"
-              fill="url(#shine)"
-              style="mix-blend-mode: screen;"
-            >
-              <animate
-                attributeName="x"
-                from="0"
-                to="200"
-                dur="2.5s"
-                repeatCount="indefinite"
-                />
-            </rect>
 
             <!-- Underline -->
             <line
@@ -112,12 +87,13 @@
               />
           </svg>
         </div>
+
         <div class="user-name">
           <h4>Usama Arshad</h4>
         </div>
-      </div>
 
-      <div class="sidebar-actions">
+      </div>
+        <div class="sidebar-actions">
         <i class="fas fa-ellipsis-v"></i>
       </div>
     </div>
