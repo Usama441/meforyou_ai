@@ -24,7 +24,7 @@ class ConversationsController < ApplicationController
     puts @conversation.inspect
 
     if @conversation.save
-      redirect_to chat_path(id: @conversation.id)
+      redirect_to chat_path, notice: "Conversation created."
     else
       render partial: "chat/modal", status: :unprocessable_entity
     end

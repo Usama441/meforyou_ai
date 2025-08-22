@@ -1,0 +1,61 @@
+<style>
+    .no-conversation {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background: transparent; /* 🔥 transparent background */
+        color: #e5e5e5;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .no-conversation .no-conversation-content {
+        max-width: 500px;
+        padding: 2rem;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.03); /* glass effect */
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .no-conversation .no-conversation-content .title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #ffffff;
+    }
+
+    .no-conversation .no-conversation-content .subtitle {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+        color: #b0b0b0;
+    }
+
+    .no-conversation .no-conversation-content .extra {
+        font-size: 0.9rem;
+        color: #808080;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+</style>
+
+<div class="no-conversation">
+  <div class="no-conversation-content">
+    <h2 class="title">Welcome to Your Private Space</h2>
+    <p class="subtitle">Your chats are <strong>end-to-end encrypted</strong> — secure, private, and just for you.</p>
+    <p class="extra">Select a conversation from the left or start a new one to begin messaging.</p>
+  </div>
+</div>
+

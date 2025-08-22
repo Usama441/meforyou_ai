@@ -8,12 +8,18 @@ class ChatController < ApplicationController
 
   def new
     @conversations = current_user.conversations.order(created_at: :desc)
-    @conversation = current_user.conversations.find_by(id: params[:id]) || current_user.conversations.last || Conversation.new
+
+    if params[:id].present?
+      @conversation = current_user.conversations.find_by(id: params[:id])
+    end
+
+    # If no conversation found → initialize a new one
+    @conversation ||= Conversation.new
+
     @chats = @conversation.persisted? ? @conversation.chats.order(:created_at) : []
-    @messages = @conversation&.messages || []
-    @chats = Chat.where(conversation_id: @conversation.id).order(:created_at)
+    @messages = @conversation.persisted? ? @conversation.messages : []
     @ai_name = @conversation.name.presence
-    @user_name = current_user.name
+
     if request.headers["Turbo-Frame"]
       render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
     else

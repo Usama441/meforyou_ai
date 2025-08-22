@@ -10,4 +10,5 @@ module ChatHelper
     ['Colleague', 'colleague'],
     ['Custom', 'custom']
   ]
+
 end

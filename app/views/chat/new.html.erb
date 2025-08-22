@@ -89,9 +89,16 @@
     </div>
 
     <!-- Chat Messages -->
-    <turbo-frame id="chat_frame">
-      <%= render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation } %>
-    </turbo-frame>
+    <% if @conversation.present? && @conversation.persisted? %>
+      <turbo-frame id="chat_messages">
+        <%= render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation } %>
+      </turbo-frame>
+    <% else %>
+      <div class="no-conversation">
+        <%= render "chat/no_conversation_selected" %>
+      </div>
+    <% end %>
+
   </main>
 </div>
 
