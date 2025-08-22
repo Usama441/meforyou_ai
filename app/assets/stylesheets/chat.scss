@@ -140,7 +140,7 @@ $color-error: #ef4444;
       flex: 1;
       text-align: center;
 
-      .user-name h4 {
+      .user-name {
         margin: 0;
         font-size: 0.85rem;
         font-weight: 500;
@@ -152,6 +152,8 @@ $color-error: #ef4444;
         font-size: 1.1rem;
         font-weight: 600;
         color: #e9edef;
+        align-items: center;
+
       }
     }
 

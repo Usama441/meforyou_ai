@@ -19,7 +19,7 @@ $color-error: #ef4444;
   background: rgba($color-surface, 0.95);
   backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba($color-border, 0.8);
-  padding: 15px 0;
+  padding: 10px 0;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -39,7 +39,7 @@ $color-error: #ef4444;
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 }
 
 .logo-icon {
