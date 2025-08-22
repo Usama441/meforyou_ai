@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Construction - RENATA Emotional Support Platform</title>
+  <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
+
+      :root {
+          --color-bg: #000000;
+          --color-surface: #0a0a0a;
+          --color-muted-surface: #141414;
+          --color-border: #2a2a2a;
+          --color-text-secondary: #888888;
+          --color-text-primary: #e0e0e0;
+          --color-heading: #ffffff;
+          --color-accent: #4f46e5;
+          --color-accent-secondary: #6366f1;
+          --color-accent-tertiary: #8b5cf6;
+          --gradient-1: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
+          --gradient-2: linear-gradient(135deg, var(--color-accent-secondary), var(--color-accent-tertiary));
+          --gradient-3: linear-gradient(135deg, #3b82f6, #06b6d4);
+      }
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Inter', sans-serif;
+      }
+
+      body {
+          background: var(--color-bg);
+          min-height: 100vh;
+          color: var(--color-text-primary);
+          overflow-x: hidden;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      /* Main Container */
+      .construction-container {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 80px 40px;
+          text-align: center;
+          width: 100%;
+      }
+
+      /* Construction Card */
+      .construction-card {
+          background: rgba(10, 10, 10, 0.95);
+          border: 1px solid rgba(42, 42, 42, 0.3);
+          border-radius: 16px;
+          padding: 120px 80px;
+          position: relative;
+          overflow: hidden;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      }
+
+      .construction-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: var(--gradient-1);
+          opacity: 0.6;
+      }
+
+      /* Status */
+      .status {
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--color-accent);
+          text-transform: uppercase;
+          letter-spacing: 3px;
+          margin-bottom: 40px;
+          opacity: 0.8;
+      }
+
+      /* Title */
+      .construction-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 64px;
+          font-weight: 900;
+          margin-bottom: 30px;
+          background: var(--gradient-1);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          line-height: 1.1;
+          letter-spacing: -2px;
+      }
+
+      /* Subtitle */
+      .construction-subtitle {
+          font-size: 18px;
+          color: var(--color-text-secondary);
+          margin-bottom: 80px;
+          line-height: 1.8;
+          font-weight: 300;
+          max-width: 580px;
+          margin-left: auto;
+          margin-right: auto;
+          letter-spacing: 0.5px;
+      }
+
+      /* Divider */
+      .divider {
+          width: 40px;
+          height: 1px;
+          background: var(--gradient-1);
+          margin: 0 auto 80px;
+          opacity: 0.6;
+      }
+
+      /* Progress Section */
+      .progress-section {
+          margin-bottom: 100px;
+      }
+
+      .progress-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: 25px;
+      }
+
+      .progress-label {
+          font-size: 12px;
+          color: var(--color-text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          font-weight: 500;
+          opacity: 0.7;
+      }
+
+      .progress-value {
+          font-size: 28px;
+          font-weight: 300;
+          color: var(--color-accent);
+          font-family: 'Playfair Display', serif;
+      }
+
+      .progress-bar {
+          width: 100%;
+          height: 2px;
+          background: rgba(42, 42, 42, 0.3);
+          border-radius: 1px;
+          overflow: hidden;
+      }
+
+      .progress-fill {
+          height: 100%;
+          background: var(--gradient-1);
+          border-radius: 1px;
+          width: 0%;
+          transition: width 3s ease-out;
+      }
+
+      /* Timeline */
+      .timeline {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin: 100px 0;
+          position: relative;
+      }
+
+      .timeline::before {
+          content: '';
+          position: absolute;
+          top: 8px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: rgba(42, 42, 42, 0.2);
+      }
+
+      .timeline-item {
+          position: relative;
+          flex: 1;
+          text-align: left;
+          padding-left: 20px;
+      }
+
+      .timeline-item:first-child {
+          padding-left: 0;
+      }
+
+      .timeline-item:last-child {
+          text-align: right;
+          padding-right: 0;
+          padding-left: 0;
+      }
+
+      .timeline-dot {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          margin-bottom: 15px;
+          position: relative;
+          z-index: 2;
+      }
+
+      .timeline-dot.completed {
+          background: var(--gradient-1);
+      }
+
+      .timeline-dot.current {
+          background: var(--gradient-1);
+          box-shadow: 0 0 20px rgba(79, 70, 229, 0.6);
+      }
+
+      .timeline-dot.upcoming {
+          background: rgba(42, 42, 42, 0.3);
+      }
+
+      .timeline-phase {
+          font-size: 11px;
+          color: var(--color-text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          margin-bottom: 5px;
+          opacity: 0.7;
+      }
+
+      .timeline-status {
+          font-size: 13px;
+          color: var(--color-accent);
+          font-weight: 500;
+      }
+
+      /* Notification Section */
+      .notification-section {
+          background: rgba(20, 20, 20, 0.5);
+          border: 1px solid rgba(42, 42, 42, 0.2);
+          border-radius: 12px;
+          padding: 60px;
+          margin-top: 100px;
+          position: relative;
+      }
+
+      .notification-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 28px;
+          font-weight: 700;
+          margin-bottom: 20px;
+          color: var(--color-heading);
+      }
+
+      .notification-description {
+          font-size: 16px;
+          color: var(--color-text-secondary);
+          margin-bottom: 40px;
+          line-height: 1.7;
+          font-weight: 300;
+          max-width: 480px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+
+      .notification-form {
+          display: flex;
+          gap: 20px;
+          max-width: 500px;
+          margin: 0 auto;
+      }
+
+      .email-input {
+          flex: 1;
+          padding: 20px 30px;
+          background: rgba(10, 10, 10, 0.8);
+          border: 1px solid rgba(42, 42, 42, 0.3);
+          border-radius: 8px;
+          color: var(--color-text-primary);
+          font-size: 16px;
+          font-weight: 400;
+          transition: all 0.3s ease;
+      }
+
+      .email-input:focus {
+          outline: none;
+          border-color: var(--color-accent);
+          background: rgba(10, 10, 10, 0.9);
+      }
+
+      .email-input::placeholder {
+          color: var(--color-text-secondary);
+          opacity: 0.4;
+      }
+
+      .submit-button {
+          padding: 20px 40px;
+          background: var(--gradient-1);
+          color: var(--color-bg);
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          font-size: 13px;
+          white-space: nowrap;
+      }
+
+      .submit-button:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+      }
+
+      /* Contact Information */
+      .contact-information {
+          margin-top: 80px;
+          padding-top: 40px;
+          border-top: 1px solid rgba(42, 42, 42, 0.2);
+      }
+
+      .contact-grid {
+          display: flex;
+          justify-content: center;
+          gap: 60px;
+          flex-wrap: wrap;
+      }
+
+      .contact-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+      }
+
+      .contact-label {
+          font-size: 11px;
+          color: var(--color-text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          opacity: 0.6;
+      }
+
+      .contact-value {
+          font-size: 15px;
+          color: var(--color-text-primary);
+          font-weight: 400;
+          letter-spacing: 0.5px;
+      }
+
+      /* Success Message */
+      .success-notification {
+          position: fixed;
+          top: 40px;
+          right: 40px;
+          background: rgba(16, 185, 129, 0.08);
+          border: 1px solid rgba(16, 185, 129, 0.2);
+          border-radius: 8px;
+          padding: 24px 32px;
+          color: #10b981;
+          font-weight: 500;
+          font-size: 14px;
+          transform: translateX(500px);
+          transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 1000;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .success-notification.show {
+          transform: translateX(0);
+      }
+
+      /* Mobile responsive */
+      @media (max-width: 768px) {
+          .construction-card {
+              padding: 80px 40px;
+          }
+
+          .construction-title {
+              font-size: 48px;
+          }
+
+          .construction-subtitle {
+              font-size: 16px;
+              margin-bottom: 60px;
+          }
+
+          .timeline {
+              flex-direction: column;
+              gap: 40px;
+          }
+
+          .timeline::before {
+              display: none;
+          }
+
+          .timeline-item {
+              text-align: center;
+              padding-left: 0;
+              padding-right: 0;
+          }
+
+          .notification-form {
+              flex-direction: column;
+          }
+
+          .contact-grid {
+              gap: 30px;
+          }
+
+          .success-notification {
+              top: 20px;
+              right: 20px;
+              left: 20px;
+              transform: translateY(-100px);
+          }
+
+          .success-notification.show {
+              transform: translateY(0);
+          }
+      }
+  </style>
+</head>
+<body>
+
+<%= render "shared/header" %>
+
+<div class="construction-container">
+  <div class="construction-card">
+    <!-- Status -->
+    <div class="status">Development Phase</div>
+
+    <!-- Title -->
+    <h1 class="construction-title">RENATA</h1>
+    <p class="construction-subtitle">
+      Our platform is currently undergoing final development to ensure the highest standards of quality and user experience. We appreciate your patience during this period.
+    </p>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Completion Status</span>
+        <span class="progress-value">75%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot completed"></div>
+        <div class="timeline-phase">Research</div>
+        <div class="timeline-status">Completed</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot completed"></div>
+        <div class="timeline-phase">Design</div>
+        <div class="timeline-status">Completed</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot current"></div>
+        <div class="timeline-phase">Development</div>
+        <div class="timeline-status">Active</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot upcoming"></div>
+        <div class="timeline-phase">Testing</div>
+        <div class="timeline-status">Pending</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot upcoming"></div>
+        <div class="timeline-phase">Launch</div>
+        <div class="timeline-status">Q4 2023</div>
+      </div>
+    </div>
+
+    <!-- Notification Section -->
+    <div class="notification-section">
+      <h2 class="notification-title">Launch Notification</h2>
+      <p class="notification-description">
+        Enter your email to receive an exclusive invitation when our platform becomes available. We respect your privacy and will not share your information.
+      </p>
+      <form class="notification-form" id="notificationForm">
+        <input type="email" class="email-input" placeholder="Professional email address" required>
+        <button type="submit" class="submit-button">Notify Me</button>
+      </form>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="contact-information">
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-label">General Inquiries</div>
+          <div class="contact-value">hello@renata.ai</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Media Relations</div>
+          <div class="contact-value">media@renata.ai</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Partnership Opportunities</div>
+          <div class="contact-value">partners@renata.ai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Notification -->
+<div class="success-notification" id="successNotification">
+  Thank you for your interest. We will notify you upon launch.
+</div>
+
+<%= render "shared/footer" %>
+
+<script>
+    // Animate progress bar on page load
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            document.querySelector('.progress-fill').style.width = '75%';
+        }, 300);
+    });
+
+    // Form submission
+    document.getElementById('notificationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = this.querySelector('.email-input').value;
+        const button = this.querySelector('.submit-button');
+        const successNotification = document.getElementById('successNotification');
+        const originalText = button.textContent;
+
+        // Update button state
+        button.textContent = 'Processing';
+        button.disabled = true;
+
+        // Simulate API processing
+        setTimeout(() => {
+            // Reset form
+            this.reset();
+
+            // Show success notification
+            successNotification.classList.add('show');
+
+            // Update button
+            button.textContent = 'Registered';
+            button.style.background = 'var(--gradient-2)';
+
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                successNotification.classList.remove('show');
+            }, 5000);
+
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+                button.disabled = false;
+            }, 3000);
+        }, 1500);
+    });
+
+    // Add subtle entrance animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.notification-section, .contact-information').forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 1s ease, transform 1s ease';
+        observer.observe(element);
+    });
+</script>
+</body>
+</html>
