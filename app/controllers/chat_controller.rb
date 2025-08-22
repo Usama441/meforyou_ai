@@ -13,7 +13,7 @@ class ChatController < ApplicationController
     @messages = @conversation&.messages || []
     @chats = Chat.where(conversation_id: @conversation.id).order(:created_at)
     @ai_name = @conversation.name.presence
-
+    @user_name = current_user.name
     if request.headers["Turbo-Frame"]
       render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation }
     else
