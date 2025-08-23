@@ -18,32 +18,27 @@
         --gradient-2: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
     }
 
+    * {
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
     .no-conversation {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100%;
-        background: transparent; /* 🔥 transparent background */
+        height: 100vh;
+        background: transparent;
         color: #e5e5e5;
         text-align: center;
         padding: 2rem;
     }
 
-    .no-conversation::before {
-        max-width: 500px;
-        padding: 2rem;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.03); /* glass effect */
-        backdrop-filter: blur(12px);
-        animation: fadeIn 0.8s ease-in-out;
-        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.6);
-    }
-
     .no-conversation-content {
-        max-width: 800px;
-        width: 100%;
-        padding: 2.5rem;
-        border-radius: 20px;
+        width: 400px;
+        height: 200px;
+        padding: 1rem;
+        border-radius: 16px;
         background: rgba(30, 41, 59, 0.7);
         backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 255, 255, 0.05);
@@ -54,13 +49,15 @@
         animation: fadeIn 0.8s ease-in-out;
         position: relative;
         z-index: 1;
-        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
     .title {
-        font-size: 2.25rem;
+        font-size: 1rem;
         font-weight: 800;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.4rem;
         background: var(--gradient-1);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -71,11 +68,11 @@
     }
 
     .subtitle {
-        font-size: 1.125rem;
+        font-size: 0.7rem;
         font-weight: 500;
-        margin-bottom: 2rem;
+        margin-bottom: 0.5rem;
         color: var(--text-secondary);
-        line-height: 1.6;
+        line-height: 1.3;
         text-align: center;
     }
 
@@ -85,24 +82,29 @@
     }
 
     .extra {
-        font-size: 1rem;
+        font-size: 0.65rem;
         color: var(--text-muted);
-        line-height: 1.5;
+        line-height: 1.3;
         text-align: center;
-        margin-top: 2rem;
+        margin-top: auto;
+        padding-top: 0.3rem;
     }
 
     .flow-diagram {
         position: relative;
-        padding: 2rem 0;
-        margin-top: 1rem;
+        padding: 0.5rem 0;
+        margin-top: 0.2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .flow-line {
         position: absolute;
-        top: 30%;
-        left: 0;
-        right: 0;
+        top: 40%;
+        left: 5%;
+        right: 5%;
         height: 2px;
         background: linear-gradient(90deg,
         transparent 0%,
@@ -125,25 +127,19 @@
         flex-direction: column;
         align-items: center;
         position: relative;
-        width: 140px;
-        transition: transform 0.3s ease;
-    }
-
-    .flow-node:hover {
-        transform: translateY(-5px);
+        width: 60px;
     }
 
     .node-icon {
-        width: 70px;
-        height: 70px;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         background: var(--bg-tertiary);
         border: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
+        margin-bottom: 0.3rem;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         position: relative;
         overflow: hidden;
@@ -158,7 +154,6 @@
         bottom: 0;
         background: var(--gradient-1);
         opacity: 0;
-        transition: opacity 0.3s ease;
         z-index: 0;
     }
 
@@ -167,11 +162,11 @@
     }
 
     .node-icon svg {
-        width: 30px;
-        height: 30px;
+        width: 14px;
+        height: 14px;
         position: relative;
         z-index: 1;
-        transition: all 0.3s ease;
+        transition: opacity 0.3s ease;
     }
 
     .node-icon.primary svg {
@@ -182,38 +177,41 @@
         fill: var(--text-secondary);
     }
 
-    .node-icon:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+    .node-icon .encrypt-icon,
+    .node-icon .decrypt-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 14px;
+        height: 14px;
+        transition: opacity 0.5s ease;
     }
 
-    .node-icon:hover::before {
-        opacity: 0.25;
+    .node-icon .decrypt-icon {
+        opacity: 0;
     }
 
     .node-label {
-        font-size: 1rem;
+        font-size: 0.6rem;
         font-weight: 600;
         color: var(--text-primary);
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.1rem;
     }
 
     .node-description {
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        text-align: center;
-        line-height: 1.3;
+        display: none; /* Hide descriptions to save space */
     }
 
     .flow-arrows {
         position: absolute;
-        top: 30%;
+        top: 40%;
         left: 0;
         right: 0;
         display: flex;
         justify-content: space-between;
-        padding: 0 101px;
+        padding: 0 45px;
         z-index: 0;
     }
 
@@ -221,11 +219,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 2px;
     }
 
     .arrow {
-        width: 70px;
+        width: 30px;
         height: 2px;
         background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
         position: relative;
@@ -235,7 +233,7 @@
     .arrow::after {
         content: '';
         position: absolute;
-        width: 8px;
+        width: 4px;
         height: 2px;
         background: inherit;
     }
@@ -265,7 +263,7 @@
     }
 
     .arrow-label {
-        font-size: 0.7rem;
+        font-size: 0.5rem;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -273,30 +271,93 @@
 
     .encryption-indicator {
         position: absolute;
-        bottom: -15px;
+        bottom: 3px;
         left: 50%;
         transform: translateX(-50%);
         background: var(--bg-primary);
         border: 1px solid var(--border);
         border-radius: 20px;
-        padding: 0.4rem 1rem;
+        padding: 0.2rem 0.5rem;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.2rem;
         z-index: 2;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .encryption-indicator svg {
-        width: 16px;
-        height: 16px;
+        width: 10px;
+        height: 10px;
         fill: var(--primary);
     }
 
     .encryption-text {
-        font-size: 0.75rem;
+        font-size: 0.5rem;
         font-weight: 600;
         color: var(--text-secondary);
+    }
+
+    /* Professional Moving Arrow Animation */
+    .moving-arrow-container {
+        position: absolute;
+        top: 40%;
+        left: 5%;
+        right: 5%;
+        height: 20px;
+        z-index: 3;
+        pointer-events: none;
+        transform: translateY(-50%);
+    }
+
+    .moving-arrow {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: moveArrow 12s infinite linear;
+    }
+
+    .moving-arrow::before {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--primary);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    .moving-arrow::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+        left: 10px;
+        top: 7px;
+    }
+
+    /* SVG swap animations */
+    .encrypt-node .encrypt-icon {
+        animation: showEncryptIcon 12s infinite linear;
+    }
+
+    .encrypt-node .decrypt-icon {
+        animation: showDecryptIconAtEncrypt 12s infinite linear;
+    }
+
+    .decrypt-node .encrypt-icon {
+        animation: showEncryptIconAtDecrypt 12s infinite linear;
+    }
+
+    .decrypt-node .decrypt-icon {
+        animation: showDecryptIcon 12s infinite linear;
     }
 
     @keyframes fadeIn {
@@ -310,31 +371,72 @@
         }
     }
 
-    @media (max-width: 768px) {
-        .no-conversation-content {
-            padding: 1.5rem;
+    @keyframes moveArrow {
+        0% {
+            left: 0;
         }
-
-        .title {
-            font-size: 1.8rem;
+        45% {
+            left: calc(100% - 16px);
         }
-
-        .flow-nodes {
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
+        50% {
+            left: calc(100% - 16px);
         }
-
-        .flow-node {
-            width: 120px;
+        95% {
+            left: 0;
         }
-
-        .flow-arrows {
-            display: none;
+        100% {
+            left: 0;
         }
+    }
 
-        .flow-line {
-            display: none;
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes showEncryptIcon {
+        0%, 49% {
+            opacity: 1;
+        }
+        50%, 100% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes showDecryptIconAtEncrypt {
+        0%, 49% {
+            opacity: 0;
+        }
+        50%, 100% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes showEncryptIconAtDecrypt {
+        0%, 49% {
+            opacity: 1;
+        }
+        50%, 100% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes showDecryptIcon {
+        0%, 49% {
+            opacity: 0;
+        }
+        50%, 100% {
+            opacity: 1;
         }
     }
 </style>
@@ -346,7 +448,6 @@
 
     <div class="flow-diagram">
       <div class="flow-line"></div>
-
       <div class="flow-nodes">
         <div class="flow-node">
           <div class="node-icon primary">
@@ -355,19 +456,20 @@
             </svg>
           </div>
           <div class="node-label">User</div>
-          <div class="node-description">Initiates secure communication</div>
         </div>
-
         <div class="flow-node">
-          <div class="node-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <div class="node-icon encrypt-node">
+            <!-- Encrypt Icon (Lock) -->
+            <svg class="encrypt-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            <!-- Decrypt Icon (Unlock) -->
+            <svg class="decrypt-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
             </svg>
           </div>
           <div class="node-label">Encrypt</div>
-          <div class="node-description">Data encrypted before transmission</div>
         </div>
-
         <div class="flow-node">
           <div class="node-icon">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -375,49 +477,44 @@
             </svg>
           </div>
           <div class="node-label">Server</div>
-          <div class="node-description">Securely routes encrypted data</div>
         </div>
-
         <div class="flow-node">
-          <div class="node-icon">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 11c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm2.7-11H9.3V6c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7v2z"/>
+          <div class="node-icon decrypt-node">
+            <!-- Encrypt Icon (Lock) -->
+            <svg class="encrypt-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            <!-- Decrypt Icon (Unlock) -->
+            <svg class="decrypt-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
             </svg>
           </div>
           <div class="node-label">Decrypt</div>
-          <div class="node-description">Data decrypted upon receipt</div>
         </div>
-
         <div class="flow-node">
           <div class="node-icon primary">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 11.5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9c-.5 0-.9.4-.9.9s.4.9.9.9zm-1.5 1.5c-.5 0-.9.4-.9.9s.4.9.9.9c.5 0 .9-.4.9-.9s-.4-.9-.9-.9zm1.5-4.5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9c-.5 0-.9.4-.9.9s.4.9.9.9zm-1.5 7.5c-.5 0-.9.4-.9.9s.4.9.9.9c.5 0 .9-.4.9-.9s-.4-.9-.9-.9zm-13-6c0-.8.7-1.5 1.5-1.5S10 9.2 10 10s-.7 1.5-1.5 1.5S7 10.8 7 10zm9.5-2.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zm0 5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zM15 9c0-.8.7-1.5 1.5-1.5S18 8.2 18 9s-.7 1.5-1.5 1.5S15 9.8 15 9zm-3 6c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S12 15.8 12 15zm0-5c0-.8.7-1.5 1.5-1.5S15 9.2 15 10s-.7 1.5-1.5 1.5S12 10.8 12 10zm0 10c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S12 19.8 12 19zm-3-6c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S9 13.8 9 13zm0-5c0-.8.7-1.5 1.5-1.5S12 7.2 12 8s-.7 1.5-1.5 1.5S9 8.8 9 8zm0 10c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S9 17.8 9 17zm-3-6c0-.8.7-1.5 1.5-1.5S9 10.2 9 11s-.7 1.5-1.5 1.5S6 11.8 6 11zm0-5c0-.8.7-1.5 1.5-1.5S9 5.2 9 6s-.7 1.5-1.5 1.5S6 6.8 6 6zm0 10c0-.8.7-1.5 1.5-1.5S9 15.2 9 16s-.7 1.5-1.5 1.5S6 16.8 6 16z"/>
+              <path d="M21 11.5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9c-.5 0-.9.4-.9.9s.4.9.9.9zm-1.5 1.5c-.5 0-.9.4-.9.9s.4.9.9.9c.5 0 .9-.4.9-.9s-.4-.9-.9-.9zm1.5-4.5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9c-.5 0-.9.4-.9.9s.4.9.9.9zm-1.5 7.5c-.5 0-.9.4-.9.9s.4-.9.9.9c.5 0 .9-.4.9-.9s-.4-.9-.9-.9zm-13-6c0-.8.7-1.5 1.5-1.5S10 9.2 10 10s-.7 1.5-1.5 1.5S7 10.8 7 10zm9.5-2.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zm0 5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zM15 9c0-.8.7-1.5 1.5-1.5S18 8.2 18 9s-.7 1.5-1.5 1.5S15 9.8 15 9zm-3 6c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S12 15.8 12 15zm0-5c0-.8.7-1.5 1.5-1.5S15 9.2 15 10s-.7 1.5-1.5 1.5S12 10.8 12 10zm0 10c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S12 19.8 12 19zm-3-6c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S9 13.8 9 13zm0-5c0-.8.7-1.5 1.5-1.5S12 7.2 12 8s-.7 1.5-1.5 1.5S9 8.8 9 8zm0 10c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S9 17.8 9 17zm-3-6c0-.8.7-1.5 1.5-1.5S9 10.2 9 11s-.7 1.5-1.5 1.5S6 11.8 6 11zm0-5c0-.8.7-1.5 1.5-1.5S9 5.2 9 6s-.7 1.5-1.5 1.5S6 6.8 6 6zm0 10c0-.8.7-1.5 1.5-1.5S9 15.2 9 16s-.7 1.5-1.5 1.5S6 16.8 6 16z"/>
             </svg>
           </div>
           <div class="node-label">AI</div>
-          <div class="node-description">Processes data securely</div>
         </div>
       </div>
 
-      <div class="flow-arrows">
-        <div class="arrow-group">
-          <div class="arrow top"></div>
-          <div class="arrow-label">Outgoing</div>
-        </div>
-        <div class="arrow-group">
-          <div class="arrow bottom"></div>
-          <div class="arrow-label">Incoming</div>
-        </div>
+      <!-- Professional Moving Arrow Animation -->
+      <div class="moving-arrow-container">
+        <div class="moving-arrow"></div>
       </div>
 
-      <div class="encryption-indicator">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-        </svg>
-        <div class="encryption-text">256-bit AES Encryption</div>
-      </div>
+
     </div>
 
     <p class="extra">Select a conversation from the left or start a new one to begin messaging.</p>
+    <div class="encryption-indicator">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+      </svg>
+      <div class="encryption-text">256-bit AES Encryption</div>
+    </div>
   </div>
 </div>
