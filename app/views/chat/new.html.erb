@@ -75,21 +75,22 @@
   <!-- ✅ CHAT AREA -->
   <main class="chat-wrapper">
     <!-- Top Chat Header -->
-    <div class="chat-header-bar">
-      <div class="avatar"></div>
-      <div class="chat-contact-info">
-        <span class="chat-name"><%= @conversation&.name || "Select a conversation" %></span>
-        <span class="chat-status">online</span>
-      </div>
-      <div class="chat-actions">
-        <i class="fas fa-search"></i>
-        <i class="fas fa-paperclip"></i>
-        <i class="fas fa-ellipsis-v"></i>
-      </div>
-    </div>
 
     <!-- Chat Messages -->
     <% if @conversation.present? && @conversation.persisted? %>
+      <div class="chat-header-bar">
+        <div class="avatar"></div>
+        <div class="chat-contact-info">
+          <span class="chat-name"><%= @conversation&.name || "Select a conversation" %></span>
+          <span class="chat-status">online</span>
+        </div>
+        <div class="chat-actions">
+          <i class="fas fa-search"></i>
+          <i class="fas fa-paperclip"></i>
+          <i class="fas fa-ellipsis-v"></i>
+        </div>
+      </div>
+
       <turbo-frame id="chat_messages">
         <%= render partial: "chat/chat_exchange", locals: { chats: @chats, conversation: @conversation } %>
       </turbo-frame>

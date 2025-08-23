@@ -1,4 +1,23 @@
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #8b5cf6;
+        --accent: #ec4899;
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border: rgba(148, 163, 184, 0.1);
+        --shadow: rgba(15, 23, 42, 0.5);
+        --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        --gradient-2: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    }
+
     .no-conversation {
         display: flex;
         align-items: center;
@@ -10,38 +29,280 @@
         padding: 2rem;
     }
 
-    .no-conversation .no-conversation-content {
+    .no-conversation::before {
         max-width: 500px;
         padding: 2rem;
         border-radius: 20px;
         background: rgba(255, 255, 255, 0.03); /* glass effect */
         backdrop-filter: blur(12px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         animation: fadeIn 0.8s ease-in-out;
+        box-shadow: 0 6px 15px rgba(79, 70, 229, 0.6);
     }
 
-    .no-conversation .no-conversation-content .title {
-        font-size: 1.8rem;
+    .no-conversation-content {
+        max-width: 800px;
+        width: 100%;
+        padding: 2.5rem;
+        border-radius: 20px;
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.3),
+                0 10px 10px -5px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        animation: fadeIn 0.8s ease-in-out;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 2rem;
+    }
+
+    .title {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .subtitle {
+        font-size: 1.125rem;
+        font-weight: 500;
+        margin-bottom: 2rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    .subtitle strong {
+        color: var(--text-primary);
         font-weight: 600;
-        margin-bottom: 1rem;
-        color: #ffffff;
     }
 
-    .no-conversation .no-conversation-content .subtitle {
+    .extra {
         font-size: 1rem;
-        margin-bottom: 0.8rem;
-        color: #b0b0b0;
+        color: var(--text-muted);
+        line-height: 1.5;
+        text-align: center;
+        margin-top: 2rem;
     }
 
-    .no-conversation .no-conversation-content .extra {
-        font-size: 0.9rem;
-        color: #808080;
+    .flow-diagram {
+        position: relative;
+        padding: 2rem 0;
+        margin-top: 1rem;
+    }
+
+    .flow-line {
+        position: absolute;
+        top: 30%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(99, 102, 241, 0.3) 10%,
+        rgba(99, 102, 241, 0.3) 90%,
+        transparent 100%);
+        z-index: 0;
+    }
+
+    .flow-nodes {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .flow-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        width: 140px;
+        transition: transform 0.3s ease;
+    }
+
+    .flow-node:hover {
+        transform: translateY(-5px);
+    }
+
+    .node-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .node-icon::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+    }
+
+    .node-icon.primary::before {
+        opacity: 0.15;
+    }
+
+    .node-icon svg {
+        width: 30px;
+        height: 30px;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+
+    .node-icon.primary svg {
+        fill: var(--primary);
+    }
+
+    .node-icon:not(.primary) svg {
+        fill: var(--text-secondary);
+    }
+
+    .node-icon:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+    }
+
+    .node-icon:hover::before {
+        opacity: 0.25;
+    }
+
+    .node-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .node-description {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    .flow-arrows {
+        position: absolute;
+        top: 30%;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 101px;
+        z-index: 0;
+    }
+
+    .arrow-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .arrow {
+        width: 70px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        position: relative;
+    }
+
+    .arrow::before,
+    .arrow::after {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 2px;
+        background: inherit;
+    }
+
+    .arrow.top::before {
+        right: 0;
+        top: -3px;
+        transform: rotate(45deg);
+    }
+
+    .arrow.top::after {
+        right: 0;
+        bottom: -3px;
+        transform: rotate(-45deg);
+    }
+
+    .arrow.bottom::before {
+        left: 0;
+        top: -3px;
+        transform: rotate(-45deg);
+    }
+
+    .arrow.bottom::after {
+        left: 0;
+        bottom: -3px;
+        transform: rotate(45deg);
+    }
+
+    .arrow-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .encryption-indicator {
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--bg-primary);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 0.4rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .encryption-indicator svg {
+        width: 16px;
+        height: 16px;
+        fill: var(--primary);
+    }
+
+    .encryption-text {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-secondary);
     }
 
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(15px);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
@@ -49,13 +310,114 @@
         }
     }
 
+    @media (max-width: 768px) {
+        .no-conversation-content {
+            padding: 1.5rem;
+        }
+
+        .title {
+            font-size: 1.8rem;
+        }
+
+        .flow-nodes {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .flow-node {
+            width: 120px;
+        }
+
+        .flow-arrows {
+            display: none;
+        }
+
+        .flow-line {
+            display: none;
+        }
+    }
 </style>
 
 <div class="no-conversation">
   <div class="no-conversation-content">
-    <h2 class="title">Welcome to Your Private Space</h2>
-    <p class="subtitle">Your chats are <strong>end-to-end encrypted</strong> — secure, private, and just for you.</p>
+    <h2 class="title">Your Privacy is Our Concern</h2>
+    <p class="subtitle">We prioritize your data security with <strong>end-to-end encryption</strong> and strict privacy controls.</p>
+
+    <div class="flow-diagram">
+      <div class="flow-line"></div>
+
+      <div class="flow-nodes">
+        <div class="flow-node">
+          <div class="node-icon primary">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="node-label">User</div>
+          <div class="node-description">Initiates secure communication</div>
+        </div>
+
+        <div class="flow-node">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+          </div>
+          <div class="node-label">Encrypt</div>
+          <div class="node-description">Data encrypted before transmission</div>
+        </div>
+
+        <div class="flow-node">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+            </svg>
+          </div>
+          <div class="node-label">Server</div>
+          <div class="node-description">Securely routes encrypted data</div>
+        </div>
+
+        <div class="flow-node">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 11c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm2.7-11H9.3V6c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7v2z"/>
+            </svg>
+          </div>
+          <div class="node-label">Decrypt</div>
+          <div class="node-description">Data decrypted upon receipt</div>
+        </div>
+
+        <div class="flow-node">
+          <div class="node-icon primary">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 11.5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9c-.5 0-.9.4-.9.9s.4.9.9.9zm-1.5 1.5c-.5 0-.9.4-.9.9s.4.9.9.9c.5 0 .9-.4.9-.9s-.4-.9-.9-.9zm1.5-4.5c.5 0 .9-.4.9-.9s-.4-.9-.9-.9c-.5 0-.9.4-.9.9s.4.9.9.9zm-1.5 7.5c-.5 0-.9.4-.9.9s.4.9.9.9c.5 0 .9-.4.9-.9s-.4-.9-.9-.9zm-13-6c0-.8.7-1.5 1.5-1.5S10 9.2 10 10s-.7 1.5-1.5 1.5S7 10.8 7 10zm9.5-2.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zm0 5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zM15 9c0-.8.7-1.5 1.5-1.5S18 8.2 18 9s-.7 1.5-1.5 1.5S15 9.8 15 9zm-3 6c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S12 15.8 12 15zm0-5c0-.8.7-1.5 1.5-1.5S15 9.2 15 10s-.7 1.5-1.5 1.5S12 10.8 12 10zm0 10c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S12 19.8 12 19zm-3-6c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S9 13.8 9 13zm0-5c0-.8.7-1.5 1.5-1.5S12 7.2 12 8s-.7 1.5-1.5 1.5S9 8.8 9 8zm0 10c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5S9 17.8 9 17zm-3-6c0-.8.7-1.5 1.5-1.5S9 10.2 9 11s-.7 1.5-1.5 1.5S6 11.8 6 11zm0-5c0-.8.7-1.5 1.5-1.5S9 5.2 9 6s-.7 1.5-1.5 1.5S6 6.8 6 6zm0 10c0-.8.7-1.5 1.5-1.5S9 15.2 9 16s-.7 1.5-1.5 1.5S6 16.8 6 16z"/>
+            </svg>
+          </div>
+          <div class="node-label">AI</div>
+          <div class="node-description">Processes data securely</div>
+        </div>
+      </div>
+
+      <div class="flow-arrows">
+        <div class="arrow-group">
+          <div class="arrow top"></div>
+          <div class="arrow-label">Outgoing</div>
+        </div>
+        <div class="arrow-group">
+          <div class="arrow bottom"></div>
+          <div class="arrow-label">Incoming</div>
+        </div>
+      </div>
+
+      <div class="encryption-indicator">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+        </svg>
+        <div class="encryption-text">256-bit AES Encryption</div>
+      </div>
+    </div>
+
     <p class="extra">Select a conversation from the left or start a new one to begin messaging.</p>
   </div>
 </div>
-
