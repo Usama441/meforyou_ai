@@ -6,7 +6,7 @@ gem 'dotenv-rails'
 
 gem 'devise'
 gem 'openai'
-gem 'twilio-ruby', '~> 5.77', require: false
+gem 'twilio-ruby', '~> 7.8', require: false
 gem 'mailersend-ruby'
 gem 'recaptcha', require: 'recaptcha/rails'
 
